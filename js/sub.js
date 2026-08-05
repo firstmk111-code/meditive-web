@@ -230,6 +230,89 @@ historyItem.forEach((obj, index) => {
 
 window.addEventListener("resize", ScrollTrigger.refresh())
 
+/* ************************
+* Func : 제작 프로세스 - 스크롤 순차 활성화 + 연결선 진행 채움
+* .mgp-process-list 가 있는 페이지에서만 동작 (없으면 아무 것도 하지 않음)
+************************ */
+;(function () {
+	var $lists = $('.mgp-process-list');
+	if ( !$lists.length ) return;
+
+	var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	$lists.each(function () {
+		var list = this;
+		var $items = $(list).children('.process-list-item');
+		if ( !$items.length ) return;
+
+		$(list).addClass('is-process-js');
+
+		var firstCenter = 0, trackLen = 0;
+
+		function measure () {
+			var listRect = list.getBoundingClientRect();
+			var first = $items.first().find('.step-box')[0];
+			var last  = $items.last().find('.step-box')[0];
+			if ( !first || !last ) return;
+			var fr = first.getBoundingClientRect();
+			var lr = last.getBoundingClientRect();
+			firstCenter = fr.top - listRect.top + fr.height / 2;
+			trackLen = (lr.top - listRect.top + lr.height / 2) - firstCenter;
+			list.style.setProperty('--process-x', (fr.left - listRect.left + fr.width / 2) + 'px');
+			list.style.setProperty('--process-top', firstCenter + 'px');
+			list.style.setProperty('--process-track', trackLen + 'px');
+		}
+
+		function update () {
+			var baseLine = window.innerHeight * 0.62;	// 화면 62% 지점을 '현재 단계' 기준선으로
+			var currentIdx = -1;
+
+			$items.each(function (i) {
+				var box = $(this).find('.step-box')[0] || this;
+				var r = box.getBoundingClientRect();
+				if ( r.top + r.height / 2 <= baseLine ) {
+					$(this).addClass('is-shown');
+					currentIdx = i;
+				} else {
+					$(this).removeClass('is-shown');
+				}
+			});
+
+			$items.removeClass('is-current');
+			if ( currentIdx > -1 ) $items.eq(currentIdx).addClass('is-current');
+
+			var absFirst = list.getBoundingClientRect().top + firstCenter;
+			var fill = Math.max(0, Math.min(trackLen, baseLine - absFirst));
+			list.style.setProperty('--process-fill', fill + 'px');
+		}
+
+		var ticking = false;
+		function onScroll () {
+			if ( ticking ) return;
+			ticking = true;
+			window.requestAnimationFrame(function () { update(); ticking = false; });
+		}
+
+		/* 모션 최소화 설정이면 : 모든 단계를 활성 상태로 고정하고 연결선도 끝까지 채워 둔다 */
+		function staticState () {
+			measure();
+			$items.addClass('is-shown').removeClass('is-current');
+			list.style.setProperty('--process-fill', trackLen + 'px');
+		}
+
+		if ( reduceMotion ) {
+			staticState();
+			$(window).on('resize load', staticState);
+			return;
+		}
+
+		measure();
+		update();
+		$(window).on('scroll', onScroll);
+		$(window).on('resize load', function () { measure(); update(); });
+	});
+})();
+
 /* 버튼 오버 효과 */
 setTimeout(function(){
 	$('.cm-fill-btn').on('mouseenter', function(e){

@@ -455,12 +455,12 @@ table, th, td{word-break:break-word;}
 #topMenu04 .menu-location.location2 > .cur-location span {color: var(--main-color);} */
 
 #topMenu04 .menu-location .location-menu-con{display:none; position:absolute; min-width: 17rem; top:100%; left:50%; transform:translateX(-50%); background-color:#fff; border-radius: 1rem; z-index:11; padding: 1.5rem 0;}
-#topMenu04 .menu-location .location-menu-con li a{display:block; text-align: center; padding:0.6rem; font-size:1.5rem; font-weight: 600; word-break:keep-all; line-height:1.4; color: rgba(0,0,0,0.4);}
+#topMenu04 .menu-location .location-menu-con li a{display:block; text-align: center; padding:0.6rem; font-size:1.5rem; font-weight: 600; word-break:keep-all; line-height:1.4; color: rgba(0,0,0,0.55);}
 #topMenu04 .menu-location .location-menu-con li.on{position:relative;}
 #topMenu04 .menu-location .location-menu-con li.on a{color:var(--main-color); font-weight:500;}
 
 #topMenu04 .menu-location.location2 .location-menu-con {background-color:var(--main-color);}
-#topMenu04 .menu-location.location2 .location-menu-con li a {color: #eea1b2;}
+#topMenu04 .menu-location.location2 .location-menu-con li a {color: rgba(255,255,255,0.7);}
 #topMenu04 .menu-location.location2 .location-menu-con li.on a {color: #fff;}
 
 /* 선택된메뉴앞에 bullet 넣을때 */

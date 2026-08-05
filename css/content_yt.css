@@ -660,14 +660,41 @@
 .mgp-bio-graph-area .img-box {display: flex; align-items: center; justify-content: center; padding: 4.5rem; box-sizing: border-box;}
 .mgp-bio-graph-area .img-box img {max-width: 100%;}
 
-.mgp-process-list {padding: 1rem 4.5rem; border-radius: 1rem; box-sizing: border-box; overflow: hidden; background-color: #f5f5f5;}
-.mgp-process-list .process-list-item {display: flex; align-items: center; padding: 4rem 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1);}
+/* 제작 프로세스 : 전체를 감싸던 그레이 배경 / 라운드 박스 / 외곽 테두리 / 박스 그림자 제거 (단계 컬러·아이콘·내용·순서·반응형은 그대로) */
+.mgp-process-list {position: relative; padding: 1rem 0; box-sizing: border-box; background-color: transparent; border: 0; border-radius: 0; box-shadow: none;}
+/* 단계 연결선 : 회색 트랙(:before) + 스크롤 진행에 따라 채워지는 민트 선(:after) */
+.mgp-process-list:before,
+.mgp-process-list:after {content: ''; position: absolute; left: var(--process-x, 4.5rem); top: var(--process-top, 9.5rem); width: 2px; margin-left: -1px; border-radius: 2px; pointer-events: none;}
+.mgp-process-list:before {height: var(--process-track, calc(100% - 19rem)); background-color: rgba(0, 0, 0, 0.1);}
+.mgp-process-list:after {height: var(--process-fill, 0px); background-color: var(--main-color); transition: height 0.15s linear;}
+.mgp-process-list .process-list-item {position: relative; display: flex; align-items: center; padding: 4rem 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1);}
 .mgp-process-list .process-list-item:last-child {border-bottom: none;}
-.mgp-process-list .process-list-item .step-box {display: flex; flex-direction: column; align-items: center; justify-content: center; width: 9rem; height: 9rem; background-color: #64D3CE; border-radius: 100%; font-size: 3rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; color: #fff;}
+.mgp-process-list .process-list-item .step-box {position: relative; z-index: 1; flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 9rem; height: 9rem; background-color: #64D3CE; border-radius: 100%; font-size: 3rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; color: #fff;}
 .mgp-process-list .process-list-item .step-box span {font-size: 1.2rem; font-weight: 500;}
 .mgp-process-list .process-list-item .txt-box {width: calc(100% - 12rem); margin-left: 3rem;}
 .mgp-process-list .process-list-item .process-list-tit {margin-bottom: 1.2rem; font-size: 2.4rem; font-weight: 700; letter-spacing: -0.05em; line-height: 1.4; color: #000;}
 .mgp-process-list .process-list-item .process-list-txt {font-size: 1.6rem; font-weight: 400; letter-spacing: -0.05em; line-height: 1.75; color: #666;}
+/* 스크롤에 따라 단계가 순차 활성화 (JS 가 .is-process-js 를 붙였을 때만 동작 → JS 미동작 시 전부 그대로 노출) */
+.mgp-process-list.is-process-js .process-list-item {opacity: 0.25; transform: translate3d(0, 2.4rem, 0); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);}
+.mgp-process-list.is-process-js .process-list-item .step-box {transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.45s ease;}
+.mgp-process-list.is-process-js .process-list-item .process-list-tit,
+.mgp-process-list.is-process-js .process-list-item .process-list-txt {opacity: 0; transform: translate3d(0, 1.2rem, 0); transition: opacity 0.55s ease 0.1s, transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) 0.1s;}
+.mgp-process-list.is-process-js .process-list-item.is-shown {opacity: 1; transform: none;}
+.mgp-process-list.is-process-js .process-list-item.is-shown .process-list-tit {opacity: 1; transform: none;}
+.mgp-process-list.is-process-js .process-list-item.is-shown .process-list-txt {opacity: 1; transform: none; transition-delay: 0.2s;}
+/* 현재 단계 강조 */
+.mgp-process-list.is-process-js .process-list-item.is-current .step-box {transform: scale(1.06); box-shadow: 0 0 0 0.8rem rgba(100, 211, 206, 0.18);}
+@media (prefers-reduced-motion: reduce) {
+	.mgp-process-list:after,
+	.mgp-process-list .process-list-item,
+	.mgp-process-list .process-list-item .step-box,
+	.mgp-process-list .process-list-item .process-list-tit,
+	.mgp-process-list .process-list-item .process-list-txt {transition: none !important;}
+	.mgp-process-list.is-process-js .process-list-item,
+	.mgp-process-list.is-process-js .process-list-item .process-list-tit,
+	.mgp-process-list.is-process-js .process-list-item .process-list-txt {opacity: 1; transform: none;}
+	.mgp-process-list.is-process-js .process-list-item.is-current .step-box {transform: none; box-shadow: none;}
+}
 
 .mgp-change-list {display: flex; flex-wrap:wrap; margin: -0.5rem; padding: 5rem; background-color: #fff; box-sizing: border-box;}
 .mgp-change-list .change-list-item {position: relative; width: calc(50% - 1rem); margin: 0.5rem; display: flex; align-items: center; padding: 1.8rem 3rem 1.8rem 4rem; background-color: #f5f5f5;  border-radius: 0.5rem; box-sizing: border-box;}
@@ -691,9 +718,13 @@
 @media all and (max-width: 800px) {
 	.mgp-bio-graph-area .img-box {padding: 3rem;}
 
-	.mgp-process-list {padding: 1rem 2.5rem;}
+	.mgp-process-list {padding: 1rem 0;}
+	.mgp-process-list:before,
+	.mgp-process-list:after {left: var(--process-x, 3.5rem); top: var(--process-top, 7.5rem);}
+	.mgp-process-list:before {height: var(--process-track, calc(100% - 15rem));}
 	.mgp-process-list .process-list-item {padding: 3rem 0;}
 	.mgp-process-list .process-list-item .step-box {width: 7rem; height: 7rem; font-size: 2rem;}
+	.mgp-process-list.is-process-js .process-list-item.is-current .step-box {box-shadow: 0 0 0 0.6rem rgba(100, 211, 206, 0.18);}
 	.mgp-process-list .process-list-item .txt-box {width: calc(100% - 8.5rem); margin-left: 1.5rem;}
 	.mgp-process-list .process-list-item .process-list-tit {margin-bottom: 0.6rem; font-size: 2rem;}
 

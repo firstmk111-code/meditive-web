@@ -72,6 +72,8 @@
 	.service-cover-list .list-item .inner:after{display: none;}
 	.service-cover-list .list-item .inner .txt-box{top:0 !important; bottom:auto !important; height:14rem; padding:0 2.8rem; justify-content:center;}
 	.service-cover-list .list-item .inner .txt-box .tit {font-size: 3rem;}
+	/* 모바일은 가로형 박스 → 텍스트가 놓인 좌측 위주로 그라데이션 */
+	.service-cover-list .list-item .inner .txt-box:before{height:100%; background:linear-gradient(to right, rgba(62,77,84,0.88) 0%, rgba(62,77,84,0.78) 42%, rgba(62,77,84,0.34) 100%);}
 }
 
 /* -------- 메인 컨텐츠 :: 컨텐츠3(Product) -------- */
@@ -121,6 +123,8 @@
 /* -------- 메인 컨텐츠 :: 컨텐츠5(FIXED 배너) -------- */
 @media all and ( max-width: 800px ){
 	#mainContact {padding: 10rem 0;}
+	/* 모바일은 배경이 크게 확대되어 밝은 명함면이 텍스트와 겹치므로 오버레이만 조금 더 진하게 */
+	#mainContact {background-image:linear-gradient(rgba(22,34,38,0.72), rgba(22,34,38,0.72)), url(../images/main/main_contact_bg.jpg?ver=260805);}
 	.main-contact-con {flex-wrap: wrap; justify-content: end;}
 	.main-contact-con .main-tit-box {width: 100%;}
 	.main-contact-btn {margin-top: 3rem;}

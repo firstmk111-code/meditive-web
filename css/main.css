@@ -253,6 +253,8 @@
 .service-cover-list .list-item .inner .txt-box{position: absolute; bottom:0; left:0; width:100%; height:calc(100% - 100px); display: flex; flex-direction:column; justify-content:flex-end; padding:7rem 5.7rem; box-sizing:border-box;}
 .service-cover-list .list-item .inner .txt-box .tit{font-size:4.6rem; line-height:1.3; letter-spacing:-0.02em; color:#fff; font-weight:600;}
 .service-cover-list .list-item .inner .txt-box .txt{font-size:2rem; line-height:1.5; letter-spacing:-0.05em; color:rgba(255,255,255,0.6); font-weight:500; margin-top:0.5rem;}
+/* 교체 이미지(밝은 인쇄물 목업) 위 기존 흰색 텍스트 가독성 확보용 하단 그라데이션 — 텍스트 컬러/크기/위치는 그대로 */
+.service-cover-list .list-item .inner .txt-box:before{position: absolute; content:''; left:0; bottom:0; width:100%; height:70%; z-index:-1; pointer-events:none; background:linear-gradient(to top, rgba(62,77,84,0.85) 0%, rgba(62,77,84,0.72) 22%, rgba(62,77,84,0.30) 55%, rgba(62,77,84,0) 100%);}
 .service-cover-list .list-item .inner:before{position: absolute; content:''; width:100%; height:100px; background:#fff; left:0; top:0px;}
 .service-cover-list .list-item .inner:after{position: absolute; content:''; width:100%; height:100px; background:#fff; left:0; bottom:0px;}
 .service-cover-list .list-item .inner .plus{position: absolute; width:4rem;height:4rem; background:#fff; background: radial-gradient(circle at 0 0, transparent 66%, #fff 72%); }
@@ -270,16 +272,16 @@
 /* nth-child */
 .service-cover-list .list-item:nth-child(1){ border-radius:4rem 0 0 4rem}
 .service-cover-list .list-item:nth-child(3){ border-radius:0 4rem 4rem 0}
-.service-cover-list .list-item:nth-child(1) .bg{background-image:url('../images/main/main_service_bg01.jpg?ver=260804'); background-position: 0% center;}
-.service-cover-list .list-item:nth-child(2) .bg{background-image:url('../images/main/main_service_bg02.jpg?ver=260804'); background-position: 50% center;}
-.service-cover-list .list-item:nth-child(3) .bg{background-image:url('../images/main/main_service_bg03.jpg?ver=260804'); background-position: 100% center;}
+.service-cover-list .list-item:nth-child(1) .bg{background-image:url('../images/main/main_service_bg01.jpg?ver=260805'); background-position: 50% center;}
+.service-cover-list .list-item:nth-child(2) .bg{background-image:url('../images/main/main_service_bg02.jpg?ver=260805'); background-position: 50% center;}
+.service-cover-list .list-item:nth-child(3) .bg{background-image:url('../images/main/main_service_bg03.jpg?ver=260805'); background-position: 50% center;}
 /* cover */
 .main-service-img-box{position: relative; background:#fff;}
 .service-hover-bg{position: absolute; top:0; left:0; width:100%; height:100%; border-radius:4rem; overflow:hidden;}
 .service-hover-bg .list-item{position: absolute; width:calc(100% - 1px); height:calc(100% + 20rem); top:-20rem; left:0; background:no-repeat; background-size:cover; transition:opacity 0.4s; opacity:0;}
-.service-hover-bg .list-item:nth-child(1){background-image:url('../images/main/main_service_bg01.jpg?ver=260804'); background-position: 0% center;}
-.service-hover-bg .list-item:nth-child(2){background-image:url('../images/main/main_service_bg02.jpg?ver=260804'); background-position: 50% center;}
-.service-hover-bg .list-item:nth-child(3){background-image:url('../images/main/main_service_bg03.jpg?ver=260804'); background-position: 100% center;}
+.service-hover-bg .list-item:nth-child(1){background-image:url('../images/main/main_service_bg01.jpg?ver=260805'); background-position: 50% center;}
+.service-hover-bg .list-item:nth-child(2){background-image:url('../images/main/main_service_bg02.jpg?ver=260805'); background-position: 50% center;}
+.service-hover-bg .list-item:nth-child(3){background-image:url('../images/main/main_service_bg03.jpg?ver=260805'); background-position: 50% center;}
 
 
 /* -------- 硫붿씤 而⑦뀗痢?:: 而⑦뀗痢?(Product) -------- */
@@ -316,7 +318,7 @@
 .main-news-list li a:hover:before {width: 100%;}
 
 /* -------- 硫붿씤 而⑦뀗痢?:: 而⑦뀗痢?(FIXED 諛곕꼫) -------- */
-#mainContact{padding:15rem 0; background:url(../images/main/main_contact_bg.jpg) no-repeat 50% 50%; background-size:cover; }
+#mainContact{padding:15rem 0; background:linear-gradient(rgba(22,34,38,0.62), rgba(22,34,38,0.62)), url(../images/main/main_contact_bg.jpg?ver=260805) no-repeat 50% 50%; background-size:cover; }
 body:not(.ie-browser) #mainContact{background-attachment:fixed}
 
 .main-contact-con {display: flex; align-items: center; justify-content: space-between; box-sizing: border-box;}
