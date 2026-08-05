@@ -1,0 +1,19 @@
+# 개발용 스크립트 (호스팅 대상 아님)
+_*.ps1
+_expr*.txt
+_home_full_backup.html
+
+# 작업용 참고자료 / 스크린샷
+_ref/
+_shots/
+
+# 이미지 백업본 · 사이트에서 참조하지 않는 원본
+images/**/_backup_*/
+images/portfolio/_dl/
+images/portfolio/_shared/
+
+# 에디터 / OS
+.claude/
+.DS_Store
+Thumbs.db
+desktop.ini

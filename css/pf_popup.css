@@ -1,0 +1,168 @@
+@charset "utf-8";
+/* ===============================================
+ * 포트폴리오 작업물 이미지 팝업 (magnific-popup 확장 스킨)
+ * - 이미지 중심 구성 (측면 정보 박스 없음)
+ * - 라운딩 박스 + 어두운 배경
+ * =============================================== */
+
+.pf-thumb {
+	cursor: zoom-in;
+}
+
+/* 배경 */
+.mfp-pf.mfp-bg {
+	background: #1E282C;
+	opacity: 0;
+	transition: opacity .35s ease;
+}
+.mfp-pf.mfp-bg.mfp-ready {
+	opacity: .92;
+}
+.mfp-pf.mfp-bg.mfp-removing {
+	opacity: 0;
+}
+
+/* 컨테이너 */
+.mfp-pf.mfp-wrap {
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+}
+.mfp-pf .mfp-container {
+	padding: 0 7rem;
+}
+.mfp-pf .mfp-content {
+	width: 100%;
+	max-width: 68rem;
+	margin: 0 auto;
+	opacity: 0;
+	transform: scale(.96);
+	transition: opacity .35s ease, transform .35s cubic-bezier(.16, .84, .44, 1);
+}
+.mfp-pf.mfp-ready .mfp-content {
+	opacity: 1;
+	transform: scale(1);
+}
+.mfp-pf.mfp-removing .mfp-content {
+	opacity: 0;
+	transform: scale(.96);
+}
+
+/* 이미지 박스 */
+.mfp-pf .mfp-figure:after {
+	display: none;
+}
+.mfp-pf .mfp-figure figure {
+	line-height: 0;
+}
+.mfp-pf img.mfp-img {
+	padding: 0;
+	/* 원본 작업물 이미지가 370px 폭이라 과도한 확대는 화질이 무너진다. 약 1.8배까지만 확대. */
+	width: 100%;
+	max-width: none;
+	background: #fff;
+	border-radius: 1.6rem;
+	box-shadow: 0 3rem 8rem rgba(0, 0, 0, .5);
+}
+/* 캡션/정보 영역 제거 */
+.mfp-pf .mfp-bottom-bar {
+	display: none;
+}
+
+/* 닫기 버튼 */
+.mfp-pf .mfp-close {
+	top: -6rem;
+	right: -1rem;
+	width: 4.6rem;
+	height: 4.6rem;
+	line-height: 4.6rem;
+	padding: 0;
+	color: #fff;
+	opacity: .7;
+	transition: opacity .3s, color .3s;
+}
+.mfp-pf .mfp-close:after {
+	font-size: 3rem;
+}
+.mfp-pf .mfp-close:hover {
+	opacity: 1;
+	color: #64D3CE;
+}
+
+/* 이전 / 다음 */
+.mfp-pf .mfp-arrow {
+	width: 5.6rem;
+	height: 5.6rem;
+	margin-top: -2.8rem;
+	border-radius: 100%;
+	background: rgba(255, 255, 255, .1);
+	opacity: 1;
+	transition: background .3s;
+}
+.mfp-pf .mfp-arrow:hover {
+	background: #64D3CE;
+}
+.mfp-pf .mfp-arrow:before,
+.mfp-pf .mfp-arrow:after {
+	display: block;
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 1.2rem;
+	height: 1.2rem;
+	margin: -0.6rem 0 0 -0.6rem;
+	border: 0;
+	border-top: 2px solid #fff;
+	border-right: 2px solid #fff;
+	opacity: 1;
+}
+.mfp-pf .mfp-arrow-left:before,
+.mfp-pf .mfp-arrow-left:after {
+	transform: rotate(-135deg);
+	margin-left: -0.3rem;
+}
+.mfp-pf .mfp-arrow-right:before,
+.mfp-pf .mfp-arrow-right:after {
+	transform: rotate(45deg);
+	margin-left: -0.9rem;
+}
+.mfp-pf .mfp-arrow-left {
+	left: 2rem;
+}
+.mfp-pf .mfp-arrow-right {
+	right: 2rem;
+}
+
+/* 카운터 */
+.mfp-pf .mfp-counter {
+	top: -4.6rem;
+	right: 6rem;
+	font-family: var(--font-family2, 'Outfit', sans-serif);
+	font-size: 1.5rem;
+	letter-spacing: .06em;
+	color: rgba(255, 255, 255, .65);
+}
+
+@media all and (max-width:1024px) {
+	.mfp-pf .mfp-container {
+		padding: 0 2rem;
+	}
+	.mfp-pf .mfp-close {
+		top: -5rem;
+		right: 0;
+	}
+	.mfp-pf .mfp-arrow {
+		width: 4.4rem;
+		height: 4.4rem;
+		margin-top: -2.2rem;
+	}
+	.mfp-pf .mfp-arrow-left {
+		left: .4rem;
+	}
+	.mfp-pf .mfp-arrow-right {
+		right: .4rem;
+	}
+	.mfp-pf .mfp-counter {
+		right: 5rem;
+	}
+}
