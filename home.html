@@ -65,6 +65,7 @@
 <link rel="stylesheet" type="text/css" href="css/plugin/swiper.css" />
 <link rel="stylesheet" type="text/css" href="css/plugin/spotlight.css" />
 
+<link rel="stylesheet" href="css/shop.css?ver=260806">
 <script type="text/javascript" src="js/vendor/jquery-3.6.0.min.js"></script>
 <script src="js/utile.js"></script>
 
@@ -100,7 +101,7 @@
 							<li><a href="#">EN</a></li>
 						</ul>
 					</div>
-										<a href="kr/member/login.html" class="header-member-btn" title="마이페이지"><i class="xi-profile-o"></i></a>
+										<a href="kr/shop/cart.html" class="header-cart-btn" title="장바구니"><i class="xi-cart-o"></i><em class="cart-count">0</em></a><a href="kr/shop/mypage.html" class="header-member-btn" title="마이페이지"><i class="xi-profile-o"></i></a>
 										<!-- 사이트맵 style 02,03,04,05 -->
 					<button class="sitemap-line-btn cm-sitemap-open-btn" title="Open the sitemap">
 						<span class="line line1"></span><span class="line line2">
@@ -131,6 +132,17 @@
 							</div>
 						</li>
 						<li class="gnb2">
+							<a href="kr/shop/list.html?cat=all">상품몰</a>
+							<div class="gnb-2dep"><ul>
+								<li><a href="kr/shop/list.html?cat=print"><span>병원 인쇄물</span></a></li>
+								<li><a href="kr/shop/list.html?cat=promo"><span>홍보물</span></a></li>
+								<li><a href="kr/shop/list.html?cat=form"><span>서식류</span></a></li>
+								<li><a href="kr/shop/list.html?cat=card"><span>명함/봉투</span></a></li>
+								<li><a href="kr/shop/list.html?cat=package"><span>개원 패키지</span></a></li>
+								<li><a href="kr/shop/list.html?cat=reorder"><span>재주문 상품</span></a></li>
+							</ul></div>
+						</li>
+						<li class="gnb3">
 							<a href="kr/portfolio/all.html">포트폴리오</a>
 							<div class="gnb-2dep">
 								<ul>
@@ -138,7 +150,7 @@
 								</ul>
 							</div>
 						</li>
-						<li class="gnb3">
+						<li class="gnb4">
 							<a href="kr/guide/binding.html">인쇄 가이드</a>
 							<div class="gnb-2dep">
 								<ul>
@@ -148,7 +160,7 @@
 								</ul>
 							</div>
 						</li>
-						<li class="gnb4">
+						<li class="gnb5">
 							<a href="kr/marketing/all_in_one.html">병원 마케팅</a>
 							<div class="gnb-2dep">
 								<ul>
@@ -156,7 +168,7 @@
 								</ul>
 							</div>
 						</li>
-						<li class="gnb5">
+						<li class="gnb6">
 							<a href="kr/contact/inquiry.html">문의</a>
 							<div class="gnb-2dep">
 								<ul>
@@ -505,6 +517,104 @@
 					</div>
 				</div>
 			</article>
+						<!-- ****************** 상품몰 : BEST PRODUCT ********************** -->
+			<article class="main-shop main-shop-best" data-scroll>
+				<div class="main-shop-con area" id="mainShopBest">
+					<div class="main-shop-head">
+						<div>
+							<strong class="main-sub-tit font-outfit">Best Product</strong>
+							<h4 class="main-tit">병원에서 가장 많이 찾는 <br class="pc-br"><b>인기 상품입니다.</b></h4>
+						</div>
+						<a href="kr/shop/list.html?cat=all" class="main-shop-more">상품 전체보기 <i class="xi-angle-right-min"></i></a>
+					</div>
+					<ul class="shop-grid" id="bestGrid"></ul>
+				</div>
+			</article>
+
+			<!-- ****************** 상품몰 : CATEGORY ********************** -->
+			<article class="main-shop main-shop-cat" style="background:#FAFCFC;" data-scroll>
+				<div class="main-shop-con area">
+					<div class="main-shop-head">
+						<div>
+							<strong class="main-sub-tit font-outfit">Category</strong>
+							<h4 class="main-tit">필요한 디자인을 <br class="pc-br"><b>카테고리에서 찾아보세요.</b></h4>
+						</div>
+						<a href="kr/shop/list.html?cat=all" class="main-shop-more">전체 카테고리 <i class="xi-angle-right-min"></i></a>
+					</div>
+					<ul class="main-cat-grid">
+						<li><a href="kr/shop/list.html?cat=print">
+							<span class="num font-outfit">01</span>
+							<strong class="tit">병원 인쇄물</strong>
+							<span class="txt">진료카드 · 예약카드 · 차트홀더 · 사인물</span>
+							<i class="arw xi-arrow-right"></i>
+						</a></li>
+						<li><a href="kr/shop/list.html?cat=promo">
+							<span class="num font-outfit">02</span>
+							<strong class="tit">홍보물</strong>
+							<span class="txt">브로슈어 · 리플렛 · 포스터 · 배너</span>
+							<i class="arw xi-arrow-right"></i>
+						</a></li>
+						<li><a href="kr/shop/list.html?cat=form">
+							<span class="num font-outfit">03</span>
+							<strong class="tit">서식류</strong>
+							<span class="txt">문진표 · 동의서 · 진료기록지 · 안내문</span>
+							<i class="arw xi-arrow-right"></i>
+						</a></li>
+						<li><a href="kr/shop/list.html?cat=card">
+							<span class="num font-outfit">04</span>
+							<strong class="tit">명함 · 봉투</strong>
+							<span class="txt">원장 명함 · 직원 명함 · 약봉투 · 대봉투</span>
+							<i class="arw xi-arrow-right"></i>
+						</a></li>
+						<li><a href="kr/shop/list.html?cat=package">
+							<span class="num font-outfit">05</span>
+							<strong class="tit">개원 패키지</strong>
+							<span class="txt">개원 · 리뉴얼에 필요한 구성을 한 번에</span>
+							<i class="arw xi-arrow-right"></i>
+						</a></li>
+						<li><a href="kr/shop/list.html?cat=reorder">
+							<span class="num font-outfit">06</span>
+							<strong class="tit">재주문 상품</strong>
+							<span class="txt">이전 조건 그대로 다시 주문하기</span>
+							<i class="arw xi-arrow-right"></i>
+						</a></li>
+					</ul>
+				</div>
+			</article>
+
+			<!-- ****************** 상품몰 : PACKAGE ********************** -->
+			<article class="main-shop main-shop-pkg" data-scroll>
+				<div class="main-shop-con area">
+					<div class="main-shop-head">
+						<div>
+							<strong class="main-sub-tit font-outfit">Package</strong>
+							<h4 class="main-tit">개원과 리뉴얼에 필요한 모든 것을 <br class="pc-br"><b>하나의 톤으로 준비합니다.</b></h4>
+						</div>
+						<a href="kr/shop/list.html?cat=package" class="main-shop-more">패키지 전체보기 <i class="xi-angle-right-min"></i></a>
+					</div>
+					<ul class="main-pkg-grid">
+						<li><a href="kr/shop/detail.html?id=pk02">
+							<span class="bg" style="background-image:url(images/portfolio/p02.jpg);"></span>
+							<span class="badge font-outfit">OPENING</span>
+							<div class="inner">
+								<strong class="tit">개원 패키지</strong>
+								<p class="txt">명함 · 진료카드 · 봉투 · 서식 · 리플렛까지, <br class="pc-br">개원에 필요한 인쇄물을 하나의 브랜드 톤으로 완성합니다.</p>
+								<span class="price font-outfit">1,280,000원~ <em>VAT 별도</em></span>
+							</div>
+						</a></li>
+						<li><a href="kr/shop/detail.html?id=pk03">
+							<span class="bg" style="background-image:url(images/portfolio/p06.jpg);"></span>
+							<span class="badge font-outfit">RENEWAL</span>
+							<div class="inner">
+								<strong class="tit">리뉴얼 패키지</strong>
+								<p class="txt">이미 운영 중인 병원의 인쇄물 톤을 <br class="pc-br">하나로 다시 정리해 드립니다.</p>
+								<span class="price font-outfit">1,680,000원~ <em>VAT 별도</em></span>
+							</div>
+						</a></li>
+					</ul>
+				</div>
+			</article>
+
 			<!-- ****************** 메인컨텐츠 3 (Product) ********************** -->
 			<article id="mainProduct">
 				<div class="main-prd-con">
@@ -734,6 +844,7 @@
 							<div class="footer-sitemap-list font-outfit">
 								<ul>
 									<li><a href="kr/service/logo.html"><span>Service</span></a></li>
+						<li><a href="kr/shop/list.html?cat=all"><span>Shop</span></a></li>
 									<li><a href="kr/portfolio/all.html"><span>Portfolio</span></a></li>
 									<li><a href="kr/guide/binding.html"><span>Print Guide</span></a></li>
 									<li><a href="kr/marketing/all_in_one.html"><span>Hospital Marketing</span></a></li>
@@ -847,7 +958,16 @@
 	<script type="text/javascript" src="js/nav.js"></script>
 	<script type="text/javascript" src="js/layer_popup.js"></script>
 	<script type="text/javascript" src="js/common.js?ver=251216"></script><script type="text/javascript" src="js/main.js?ver=251222"></script>
-
+	<script>window.SHOP_BASE='';</script>
+	<script type="text/javascript" src="js/shop.js?ver=260806"></script>
+	<script>
+	(function(){
+		var S = window.MTShop; if (!S) return;
+		var best = [], i;
+		for (i = 0; i < S.PRODUCTS.length && best.length < 3; i++) if (S.PRODUCTS[i].best) best.push(S.PRODUCTS[i]);
+		S.renderGrid(document.getElementById('bestGrid'), best);
+	})();
+	</script>
 </body>
 </html>
 

@@ -33,12 +33,13 @@
 <link rel="stylesheet" type="text/css" href="../../css/plugin/magnific-popup.css">
 <link rel="stylesheet" type="text/css" href="../../css/plugin/swiper.css" />
 <link rel="stylesheet" type="text/css" href="../../css/plugin/spotlight.css" />
+<link rel="stylesheet" href="../../css/shop.css?ver=260806">
 <script type="text/javascript" src="../../js/vendor/jquery-3.6.0.min.js"></script>
 <script src="../../js/utile.js"></script>
 <style>
 	#content.wide{padding:0;}
 </style>
-<script>dep1=3; dep2=2; dep3="";</script>
+<script>dep1=4; dep2=2; dep3="";</script>
 </head>
 <body>
 <div class="cm-accessibility"><a href="#container">본문바로가기</a></div>
@@ -60,7 +61,7 @@
 							<li><a href="#">EN</a></li>
 						</ul>
 					</div>
-					<a href="../../kr/member/login.html" class="header-member-btn" title="마이페이지"><i class="xi-profile-o"></i></a>
+					<a href="../../kr/shop/cart.html" class="header-cart-btn" title="장바구니"><i class="xi-cart-o"></i><em class="cart-count">0</em></a><a href="../../kr/shop/mypage.html" class="header-member-btn" title="마이페이지"><i class="xi-profile-o"></i></a>
 					<button class="sitemap-line-btn cm-sitemap-open-btn" title="Open the sitemap">
 						<span class="line line1"></span><span class="line line2">
 					</button>
@@ -81,12 +82,23 @@
 						</ul></div>
 					</li>
 					<li class="gnb2">
+						<a href="../../kr/shop/list.html?cat=all">상품몰</a>
+						<div class="gnb-2dep"><ul>
+							<li><a href="../../kr/shop/list.html?cat=print"><span>병원 인쇄물</span></a></li>
+							<li><a href="../../kr/shop/list.html?cat=promo"><span>홍보물</span></a></li>
+							<li><a href="../../kr/shop/list.html?cat=form"><span>서식류</span></a></li>
+							<li><a href="../../kr/shop/list.html?cat=card"><span>명함/봉투</span></a></li>
+							<li><a href="../../kr/shop/list.html?cat=package"><span>개원 패키지</span></a></li>
+							<li><a href="../../kr/shop/list.html?cat=reorder"><span>재주문 상품</span></a></li>
+						</ul></div>
+					</li>
+					<li class="gnb3">
 						<a href="../../kr/portfolio/all.html">포트폴리오</a>
 						<div class="gnb-2dep"><ul>
 							<li><a href="../../kr/portfolio/all.html"><span>전체 작업물</span></a></li>
 						</ul></div>
 					</li>
-					<li class="gnb3">
+					<li class="gnb4">
 						<a href="../../kr/guide/binding.html">인쇄 가이드</a>
 						<div class="gnb-2dep"><ul>
 							<li><a href="../../kr/guide/binding.html"><span>제본 종류</span></a></li>
@@ -94,13 +106,13 @@
 							<li><a href="../../kr/guide/brochure_size.html"><span>브로슈어 크기 안내</span></a></li>
 						</ul></div>
 					</li>
-					<li class="gnb4">
+					<li class="gnb5">
 						<a href="../../kr/marketing/all_in_one.html">병원 마케팅</a>
 						<div class="gnb-2dep"><ul>
 							<li><a href="../../kr/marketing/all_in_one.html"><span>병원 마케팅 올인원 안내</span></a></li>
 						</ul></div>
 					</li>
-					<li class="gnb5">
+					<li class="gnb6">
 						<a href="../../kr/contact/inquiry.html">문의</a>
 						<div class="gnb-2dep"><ul>
 							<li><a href="../../kr/contact/inquiry.html"><span>견적 문의 양식</span></a></li>
@@ -136,6 +148,7 @@
 											<button class="cur-location cm-drop-open-btn-JS"><span>인쇄 가이드</span></button>
 											<ul class="location-menu-con cm-drop-list-JS">
 												<li><a href="../../kr/service/logo.html">서비스</a></li>
+												<li><a href="../../kr/shop/list.html?cat=all">상품몰</a></li>
 												<li><a href="../../kr/portfolio/all.html">포트폴리오</a></li>
 												<li><a href="../../kr/guide/binding.html">인쇄 가이드</a></li>
 												<li><a href="../../kr/marketing/all_in_one.html">병원 마케팅</a></li>
@@ -463,6 +476,7 @@
 				<div class="footer-top-right">
 					<div class="footer-sitemap-list font-outfit"><ul>
 						<li><a href="../../kr/service/logo.html"><span>Service</span></a></li>
+						<li><a href="../../kr/shop/list.html?cat=all"><span>Shop</span></a></li>
 						<li><a href="../../kr/portfolio/all.html"><span>Portfolio</span></a></li>
 						<li><a href="../../kr/guide/binding.html"><span>Print Guide</span></a></li>
 						<li><a href="../../kr/marketing/all_in_one.html"><span>Hospital Marketing</span></a></li>
@@ -518,5 +532,7 @@
 	<script type="text/javascript" src="../../js/layer_popup.js"></script>
 	<script type="text/javascript" src="../../js/common.js?ver=251216"></script>
 	<script type="text/javascript" src="../../js/sub.js"></script>
+	<script>window.SHOP_BASE='../../';</script>
+	<script type="text/javascript" src="../../js/shop.js?ver=260806"></script>
 </body>
 </html>
