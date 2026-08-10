@@ -7,8 +7,10 @@ $(function () {
 	var $grid = $('.pf-grid');
 	if (!$grid.length || !$.fn.magnificPopup) return;
 
+	// 팝업은 썸네일이 아닌 full/ 아래 고화질 원본을 쓴다 (마크업 변경 없이 경로만 변환)
 	var items = $grid.find('.pf-item').map(function () {
-		return { src: $(this).find('.pf-thumb img').attr('src') };
+		var thumb = $(this).find('.pf-thumb img').attr('src');
+		return { src: thumb.replace(/\/([^\/]+)$/, '/full/$1') };
 	}).get();
 
 	if (!items.length) return;

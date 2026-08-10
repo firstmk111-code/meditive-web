@@ -1,5 +1,6 @@
 # 개발용 스크립트 (호스팅 대상 아님)
 _*.ps1
+_pf_*.csv
 _expr*.txt
 _home_full_backup.html
 
@@ -11,6 +12,7 @@ _shots/
 images/**/_backup_*/
 images/portfolio/_dl/
 images/portfolio/_shared/
+images/portfolio/_src/
 
 # 에디터 / OS
 .claude/

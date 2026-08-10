@@ -56,7 +56,7 @@
 }
 .mfp-pf img.mfp-img {
 	padding: 0;
-	/* 원본 작업물 이미지가 370px 폭이라 과도한 확대는 화질이 무너진다. 약 1.8배까지만 확대. */
+	/* 팝업은 images/portfolio/full/ 의 1480px 원본을 쓰므로 컨테이너 폭을 꽉 채워도 화질이 유지된다. */
 	width: 100%;
 	max-width: none;
 	background: #fff;
