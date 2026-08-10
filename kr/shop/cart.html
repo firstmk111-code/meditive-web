@@ -31,7 +31,7 @@
 <link rel="stylesheet" type="text/css" href="../../css/plugin/magnific-popup.css">
 <link rel="stylesheet" type="text/css" href="../../css/plugin/swiper.css" />
 <link rel="stylesheet" type="text/css" href="../../css/plugin/spotlight.css" />
-<link rel="stylesheet" href="../../css/shop.css?ver=260806">
+<link rel="stylesheet" href="../../css/shop.css?ver=260810">
 <script type="text/javascript" src="../../js/vendor/jquery-3.6.0.min.js"></script>
 <script src="../../js/utile.js"></script>
 <style>
@@ -149,15 +149,17 @@
 
 						<div class="cart-wrap" id="cartWrap">
 							<div>
-								<ul class="cart-list" id="cartList"></ul>
+								<div id="cartList"></div>
 							</div>
 							<aside class="cart-aside">
 								<h3>주문 요약</h3>
 								<dl><dt>상품 금액</dt><dd class="font-outfit"><span id="sumGoods">0</span>원</dd></dl>
 								<dl><dt>디자인 · 옵션</dt><dd class="font-outfit"><span id="sumOpt">0</span>원</dd></dl>
-								<dl><dt>배송비</dt><dd class="font-outfit">무료</dd></dl>
+								<dl><dt>배송비</dt><dd class="font-outfit" id="sumShip">무료</dd></dl>
 								<dl class="total"><dt>합계 (VAT 별도)</dt><dd class="font-outfit"><span id="sumTotal">0</span><span class="won">원</span></dd></dl>
-								<button type="button" class="mt-btn mint" id="btnOrder"><i class="xi-check"></i>주문 요청하기</button>
+								<p class="aside-note" id="shipNote"></p>
+								<button type="button" class="mt-btn mint" id="btnOrder"><i class="xi-check"></i>주문하기</button>
+								<a href="../../kr/contact/inquiry.html" class="mt-btn solid" id="btnQuote" style="margin-top:1rem; display:none;"><i class="xi-pen"></i>견적 문의하기</a>
 								<a href="list.html?cat=all" class="mt-btn line" style="margin-top:1rem;">상품 더 둘러보기</a>
 								<p class="note">주문 요청 후 담당 디자이너가 1영업일 이내에 연락드립니다.<br>결제는 시안 확정 후 진행되며, 이 단계에서는 비용이 청구되지 않습니다.</p>
 							</aside>
@@ -248,7 +250,7 @@
 	<script type="text/javascript" src="../../js/common.js?ver=251216"></script>
 	<script type="text/javascript" src="../../js/sub.js"></script>
 	<script>window.SHOP_BASE='../../';</script>
-	<script type="text/javascript" src="../../js/shop.js?ver=260806"></script>
+	<script type="text/javascript" src="../../js/shop.js?ver=260810"></script>
 	<script>
 	(function(){
 		var S = window.MTShop;
@@ -267,33 +269,71 @@
 			wrapEl.style.display = '';
 			emptyEl.style.display = 'none';
 
-			var h = '', goods = 0, opt = 0, n = 0;
-			for (var i = 0; i < cart.length; i++) {
-				var c = cart[i], p = S.byId(c.id);
-				goods += c.unit * c.count;
-				opt   += c.optAdd * c.count;
-				n     += c.count;
-				h += '<li class="cart-row" data-i="' + i + '">' +
+			var goods = 0, opt = 0, ordH = '', qtH = '', ordN = 0, qtN = 0;
+
+			function rowHTML(c, i, quote) {
+				var p = S.byId(c.id);
+				return '<li class="cart-row' + (quote ? ' is-quote' : '') + '" data-i="' + i + '">' +
 					'<div class="cart-thumb"><img src="' + (p ? S.imgPath(p) : '') + '" alt="' + c.name + '"></div>' +
 					'<div class="cart-info">' +
 						'<span class="cat">' + S.catName(c.cat) + '</span>' +
 						'<p class="tit">' + c.name + '</p>' +
 						'<p class="opt">' + c.qtyLabel + (c.optTxt ? ' · ' + c.optTxt : '') + '</p>' +
+						(p ? '<p class="opt">제작 기간 ' + (S.leadTime(p) || '협의') + '</p>' : '') +
 					'</div>' +
 					'<div class="cart-qty"><div class="pd-qty">' +
 						'<button type="button" class="js-minus">−</button>' +
 						'<input type="text" value="' + c.count + '" readonly>' +
 						'<button type="button" class="js-plus">+</button>' +
 					'</div></div>' +
-					'<strong class="cart-sum font-outfit">' + S.won((c.unit + c.optAdd) * c.count) + '<span class="won">원</span></strong>' +
+					'<strong class="cart-sum font-outfit">' +
+						(quote ? '견적 산출' : S.won((c.unit + c.optAdd) * c.count) + '<span class="won">원</span>') +
+					'</strong>' +
 					'<button type="button" class="cart-del js-del" title="삭제"><i class="xi-close-thin"></i></button>' +
 				'</li>';
 			}
+
+			for (var i = 0; i < cart.length; i++) {
+				var c = cart[i], p = S.byId(c.id);
+				var quote = p ? S.isQuote(p) : (c.type === 'quote');
+				if (quote) { qtH += rowHTML(c, i, true); qtN++; }
+				else {
+					goods += c.unit * c.count;
+					opt   += c.optAdd * c.count;
+					ordH  += rowHTML(c, i, false);
+					ordN++;
+				}
+			}
+
+			var h = '';
+			if (ordN) {
+				h += '<div class="cart-group"><div class="cart-group-tit"><h3>바로 주문 상품</h3>' +
+					 '<span>가격이 확정된 상품입니다. 바로 주문하실 수 있습니다.</span></div>' +
+					 '<ul class="cart-list">' + ordH + '</ul></div>';
+			}
+			if (qtN) {
+				h += '<div class="cart-group"><div class="cart-group-tit"><h3>맞춤 제작 상품</h3>' +
+					 '<span>구성에 따라 금액이 달라져 견적 확인 후 진행됩니다.</span></div>' +
+					 '<ul class="cart-list">' + qtH + '</ul></div>';
+			}
 			listEl.innerHTML = h;
+
+			var ship  = ordN ? S.shipFee(goods + opt) : 0;
+			var total = goods + opt + ship;
+
 			document.getElementById('cartCnt').textContent  = cart.length;
 			document.getElementById('sumGoods').textContent = S.won(goods);
 			document.getElementById('sumOpt').textContent   = S.won(opt);
-			document.getElementById('sumTotal').textContent = S.won(goods + opt);
+			document.getElementById('sumShip').textContent  = ordN ? (ship ? S.won(ship) + '원' : '무료') : '-';
+			document.getElementById('sumTotal').textContent = S.won(total);
+
+			document.getElementById('shipNote').innerHTML = ordN
+				? (ship ? S.won(S.SHIP_FREE_OVER - (goods + opt)) + '원만 더 담으시면 배송비가 무료입니다.'
+				        : S.won(S.SHIP_FREE_OVER) + '원 이상 주문으로 배송비가 무료입니다.')
+				: '맞춤 제작 상품만 담겨 있어 견적 확인 후 금액이 확정됩니다.';
+
+			document.getElementById('btnOrder').style.display = ordN ? '' : 'none';
+			document.getElementById('btnQuote').style.display = qtN ? '' : 'none';
 		}
 
 		listEl.addEventListener('click', function (e) {
@@ -309,13 +349,19 @@
 			render();
 		});
 
+		/* 바로 주문 상품만 주문 처리하고, 맞춤 제작 상품은 장바구니에 남긴다 */
 		document.getElementById('btnOrder').addEventListener('click', function () {
-			var cart = S.getCart();
-			if (!cart.length) return;
-			S.addOrder(cart);
-			S.clearCart();
+			var cart = S.getCart(), order = [], rest = [];
+			for (var i = 0; i < cart.length; i++) {
+				var p = S.byId(cart[i].id);
+				var quote = p ? S.isQuote(p) : (cart[i].type === 'quote');
+				if (quote) rest.push(cart[i]); else order.push(cart[i]);
+			}
+			if (!order.length) return;
+			S.addOrder(order);
+			S.setCart(rest);
 			render();
-			S.toast('주문 요청이 접수되었습니다. 담당 디자이너가 확인 후 연락드립니다.', '주문 내역 보기', 'mypage.html');
+			S.toast('주문이 접수되었습니다. 진행 상황은 마이페이지에서 확인하실 수 있습니다.', '주문 내역 보기', 'mypage.html');
 		});
 
 		render();

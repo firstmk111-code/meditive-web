@@ -33,7 +33,7 @@
 <link rel="stylesheet" type="text/css" href="../../css/plugin/magnific-popup.css">
 <link rel="stylesheet" type="text/css" href="../../css/plugin/swiper.css" />
 <link rel="stylesheet" type="text/css" href="../../css/plugin/spotlight.css" />
-<link rel="stylesheet" href="../../css/shop.css?ver=260806">
+<link rel="stylesheet" href="../../css/shop.css?ver=260810">
 <script type="text/javascript" src="../../js/vendor/jquery-3.6.0.min.js"></script>
 <script src="../../js/utile.js"></script>
 <script>dep1=2; dep2=1; dep3="";</script>
@@ -199,7 +199,19 @@
 								<div class="shop-filter-label">진료과<em class="font-outfit">DEPARTMENT</em></div>
 								<div class="shop-chips" id="deptChips"></div>
 							</div>
+							<div class="shop-filter-row">
+								<div class="shop-filter-label">주문 방식<em class="font-outfit">ORDER TYPE</em></div>
+								<div class="shop-chips" id="typeChips"></div>
+								<div class="shop-search">
+									<label for="shopQ" class="blind">상품 검색</label>
+									<input type="text" id="shopQ" placeholder="상품명 · 카테고리 · 진료과 검색" autocomplete="off">
+									<button type="button" id="shopQBtn" title="검색"><i class="xi-search"></i></button>
+								</div>
+							</div>
 						</div>
+
+						<!-- 검색 결과 안내 -->
+						<div class="shop-searched" id="searchedBox" style="display:none;"></div>
 
 						<!-- 재주문 : 최근 주문 내역 -->
 						<div id="reorderBox" style="display:none; margin-bottom:7rem;">
@@ -288,7 +300,7 @@
 	<script type="text/javascript" src="../../js/common.js?ver=251216"></script>
 	<script type="text/javascript" src="../../js/sub.js"></script>
 	<script>window.SHOP_BASE='../../';</script>
-	<script type="text/javascript" src="../../js/shop.js?ver=260806"></script>
+	<script type="text/javascript" src="../../js/shop.js?ver=260810"></script>
 	<script>
 	(function(){
 		var S = window.MTShop;
@@ -302,11 +314,31 @@
 			reorder: { en:'REORDER',         tit:'자주 쓰는 상품은<br>같은 조건으로 다시 주문하세요.',   desc:'이전 주문 조건 그대로 한 번에 담을 수 있습니다.' }
 		};
 
+		var TYPES = [
+			{ id: 'all',   name: '전체' },
+			{ id: 'order', name: '바로 주문' },
+			{ id: 'quote', name: '견적 문의' }
+		];
+
 		var cat  = S.getParam('cat')  || 'all';
 		var dept = S.getParam('dept') || 'all';
+		var type = S.getParam('type') || 'all';
+		var q    = S.getParam('q')    || '';
 		if (!HEAD[cat]) cat = 'all';
 
-		function url(c, dp){ return 'list.html?cat=' + c + (dp && dp !== 'all' ? '&dept=' + dp : ''); }
+		function url(c, dp, tp, kw){
+			if (c  === undefined) c  = cat;
+			if (dp === undefined) dp = dept;
+			if (tp === undefined) tp = type;
+			if (kw === undefined) kw = q;
+			var u = 'list.html?cat=' + c;
+			if (dp && dp !== 'all') u += '&dept=' + dp;
+			if (tp && tp !== 'all') u += '&type=' + tp;
+			if (kw) u += '&q=' + encodeURIComponent(kw);
+			return u;
+		}
+		/* 조건 + 검색어를 함께 적용한 결과 */
+		function result(c, dp, tp){ return S.searchList(q, S.filterList(c, dp, tp)); }
 
 		/* 헤드 카피 */
 		var h = HEAD[cat];
@@ -320,8 +352,8 @@
 		var ch = '';
 		for (var i = 0; i < S.CATS.length; i++) {
 			var c = S.CATS[i];
-			ch += '<a href="' + url(c.id, dept) + '" class="shop-chip' + (c.id === cat ? ' on' : '') + '">' + c.name +
-			      '<span class="num font-outfit">' + S.filterList(c.id, dept).length + '</span></a>';
+			ch += '<a href="' + url(c.id, dept, type) + '" class="shop-chip' + (c.id === cat ? ' on' : '') + '">' + c.name +
+			      '<span class="num font-outfit">' + result(c.id, dept, type).length + '</span></a>';
 		}
 		document.getElementById('catChips').innerHTML = ch;
 
@@ -329,14 +361,37 @@
 		var dh = '';
 		for (var j = 0; j < S.DEPTS.length; j++) {
 			var dp = S.DEPTS[j];
-			dh += '<a href="' + url(cat, dp.id) + '" class="shop-chip' + (dp.id === dept ? ' on' : '') + '">' + dp.name + '</a>';
+			dh += '<a href="' + url(cat, dp.id, type) + '" class="shop-chip' + (dp.id === dept ? ' on' : '') + '">' + dp.name + '</a>';
 		}
 		document.getElementById('deptChips').innerHTML = dh;
 
+		/* 주문 방식 칩 — 바로 주문 / 견적 문의 구분 */
+		var th = '';
+		for (var t = 0; t < TYPES.length; t++) {
+			var tp = TYPES[t];
+			th += '<a href="' + url(cat, dept, tp.id) + '" class="shop-chip' + (tp.id === type ? ' on' : '') + '">' + tp.name +
+			      '<span class="num font-outfit">' + result(cat, dept, tp.id).length + '</span></a>';
+		}
+		document.getElementById('typeChips').innerHTML = th;
+
+		/* 검색 */
+		var qInput = document.getElementById('shopQ');
+		qInput.value = q;
+		function doSearch() { location.href = url(cat, dept, type, qInput.value.trim()); }
+		document.getElementById('shopQBtn').addEventListener('click', doSearch);
+		qInput.addEventListener('keydown', function (e) { if (e.keyCode === 13) doSearch(); });
+
 		/* 목록 */
-		var list = S.filterList(cat, dept);
+		var list = result(cat, dept, type);
 		S.renderGrid(document.getElementById('shopGrid'), list);
 		document.getElementById('cntNum').textContent = list.length;
+
+		if (q) {
+			var box = document.getElementById('searchedBox');
+			box.innerHTML = '<b>‘' + q + '’</b> 검색 결과 ' + list.length + '건' +
+				'<a href="' + url(cat, dept, type, '') + '"><i class="xi-close-circle"></i>검색 초기화</a>';
+			box.style.display = 'flex';
+		}
 
 		/* 재주문 카테고리일 때 최근 주문 노출 */
 		if (cat === 'reorder') {
@@ -351,7 +406,10 @@
 						'<div class="od-thumb"><img src="' + (p ? S.imgPath(p) : '') + '" alt="' + o.name + '"></div>' +
 						'<div class="od-info"><p class="tit">' + o.name + '</p><p class="qty"><b>' + o.qtyLabel + '</b> · ' + o.opt + '</p></div>' +
 						'<strong class="od-price font-outfit">' + S.won(o.price) + '<span class="won">원</span></strong>' +
-						'<button type="button" class="mt-btn mint sm js-reorder" data-i="' + k + '"><i class="xi-refresh"></i>재주문</button>' +
+						'<div class="od-btns">' +
+						'<button type="button" class="mt-btn mint sm js-reorder" data-i="' + k + '"><i class="xi-refresh"></i>동일하게 재주문</button>' +
+						'<a href="' + S.reorderEditUrl(o) + '" class="mt-btn line sm"><i class="xi-pen-o"></i>수정 후 재주문</a>' +
+					'</div>' +
 					'</div></li>';
 			}
 			document.getElementById('reorderList').innerHTML = oh;

@@ -9,6 +9,7 @@
 	var BASE = (typeof w.SHOP_BASE === 'string') ? w.SHOP_BASE : '../../';
 	var CART_KEY = 'meditive_cart_v1';
 	var ORDER_KEY = 'meditive_orders_v1';
+	var QUOTE_KEY = 'meditive_quotes_v1';
 
 	/* ----------------------------------------------------
 	 * 카테고리 / 진료과
@@ -52,13 +53,27 @@
 		{ label: '양면 인쇄 (기본)', add: 0 },
 		{ label: '단면 인쇄', add: -8000 }
 	];
+	/* 디자인 수정 범위 — 기존 디자인 / 텍스트 수정 / 부분 수정 / 신규 디자인 */
 	var OPT_DESIGN = [
-		{ label: '기본 템플릿 (로고·정보 적용)', add: 0 },
-		{ label: '맞춤 디자인 (1회 시안)', add: 90000 },
-		{ label: '맞춤 디자인 (3회 시안 + 컨셉 제안)', add: 180000 }
+		{ label: '기존 디자인 그대로 (기본 템플릿)', add: 0 },
+		{ label: '텍스트만 수정', add: 30000 },
+		{ label: '부분 수정 (레이아웃 조정)', add: 90000 },
+		{ label: '신규 디자인 (시안 3회)', add: 180000 }
 	];
 
 	function qty(list) { return list; }
+
+	/* ----------------------------------------------------
+	 * 배송 / 주문 진행 단계
+	---------------------------------------------------- */
+	var SHIP_FEE = 3500;          /* 기본 배송비 */
+	var SHIP_FREE_OVER = 300000;  /* 이 금액 이상 무료 */
+
+	/* 디자인 프로젝트 진행 흐름 */
+	var FLOW = ['자료 접수', '디자이너 배정', '시안 확인', '수정 반영', '인쇄 진행', '배송 완료'];
+
+	/* 맞춤 제작 — 가격 확정이 어려워 견적 문의로 연결되는 상품 */
+	var QUOTE_IDS = ['pr05', 'pr06', 'pr07', 'pm01', 'pm08', 'pk01', 'pk02', 'pk03', 'pk04'];
 
 	/* ----------------------------------------------------
 	 * 상품 카탈로그
@@ -70,8 +85,8 @@
 			desc: '재방문을 부르는 첫 접점. 병원 로고와 진료시간을 담은 카드.',
 			depts: ALL_DEPT, best: true, reorder: true, badge: 'BEST',
 			qty: qty([{ label: '500매', price: 39000 }, { label: '1,000매', price: 62000 }, { label: '2,000매', price: 104000 }, { label: '5,000매', price: 218000 }]),
-			opts: [{ name: '용지', list: OPT_PAPER }, { name: '후가공', list: OPT_FINISH }, { name: '디자인', list: OPT_DESIGN }],
-			spec: { '규격': '90 × 50 mm', '인쇄': '양면 컬러', '제작기간': '시안 확정 후 3~4일', '최소수량': '500매' }
+			opts: [{ name: '용지', list: OPT_PAPER }, { name: '인쇄', list: OPT_SIDE }, { name: '후가공', list: OPT_FINISH }, { name: '디자인', list: OPT_DESIGN }],
+			spec: { '규격': '90 × 50 mm', '인쇄': '단면 / 양면 선택', '제작기간': '시안 확정 후 3~4일', '최소수량': '500매' }
 		},
 		{
 			id: 'pr02', cat: 'print', name: '예약카드', img: 'p14.jpg',
@@ -250,8 +265,8 @@
 			desc: '시술 직후 환자에게 건네는 홈케어 안내 카드.',
 			depts: ['derma', 'plastic', 'dental'],
 			qty: qty([{ label: '500매', price: 46000 }, { label: '1,000매', price: 72000 }, { label: '3,000매', price: 158000 }]),
-			opts: [{ name: '용지', list: OPT_PAPER }, { name: '후가공', list: OPT_FINISH }, { name: '디자인', list: OPT_DESIGN }],
-			spec: { '규격': '90 × 140 mm', '인쇄': '양면 컬러', '제작기간': '4~6일', '최소수량': '500매' }
+			opts: [{ name: '용지', list: OPT_PAPER }, { name: '인쇄', list: OPT_SIDE }, { name: '후가공', list: OPT_FINISH }, { name: '디자인', list: OPT_DESIGN }],
+			spec: { '규격': '90 × 140 mm', '인쇄': '단면 / 양면 선택', '제작기간': '4~6일', '최소수량': '500매' }
 		},
 
 		/* ===== 명함 / 봉투 ===== */
@@ -260,8 +275,8 @@
 			desc: '병원의 인상을 결정하는 원장 명함. 고급 용지 선택 가능.',
 			depts: ALL_DEPT, best: true, reorder: true, badge: 'BEST',
 			qty: qty([{ label: '200매', price: 42000 }, { label: '500매', price: 68000 }, { label: '1,000매', price: 108000 }]),
-			opts: [{ name: '용지', list: [{ label: '랑데뷰 240g (기본)', add: 0 }, { label: '머쉬멜로우 240g', add: 12000 }, { label: '팬시 크라프트', add: 16000 }, { label: '수입지 (고급)', add: 46000 }] }, { name: '후가공', list: [{ label: '없음 (기본)', add: 0 }, { label: '박 (금·은)', add: 58000 }, { label: '형압', add: 52000 }, { label: '박 + 형압', add: 96000 }] }, { name: '디자인', list: OPT_DESIGN }],
-			spec: { '규격': '90 × 50 mm', '인쇄': '양면 컬러', '제작기간': '4~6일', '최소수량': '200매' }
+			opts: [{ name: '용지', list: [{ label: '랑데뷰 240g (기본)', add: 0 }, { label: '머쉬멜로우 240g', add: 12000 }, { label: '팬시 크라프트', add: 16000 }, { label: '수입지 (고급)', add: 46000 }] }, { name: '인쇄', list: OPT_SIDE }, { name: '후가공', list: [{ label: '없음 (기본)', add: 0 }, { label: '박 (금·은)', add: 58000 }, { label: '형압', add: 52000 }, { label: '박 + 형압', add: 96000 }] }, { name: '디자인', list: OPT_DESIGN }],
+			spec: { '규격': '90 × 50 mm', '인쇄': '단면 / 양면 선택', '제작기간': '4~6일', '최소수량': '200매' }
 		},
 		{
 			id: 'cd02', cat: 'card', name: '직원 명함', img: 'p39.jpg',
@@ -269,7 +284,7 @@
 			depts: ALL_DEPT, reorder: true,
 			qty: qty([{ label: '200매', price: 34000 }, { label: '500매', price: 54000 }, { label: '1,000매', price: 86000 }]),
 			opts: [{ name: '용지', list: [{ label: '랑데뷰 240g (기본)', add: 0 }, { label: '머쉬멜로우 240g', add: 12000 }, { label: '스노우지 250g', add: -6000 }] }, { name: '인쇄', list: OPT_SIDE }, { name: '디자인', list: OPT_DESIGN }],
-			spec: { '규격': '90 × 50 mm', '인쇄': '양면 컬러', '제작기간': '4~6일', '최소수량': '200매' }
+			spec: { '규격': '90 × 50 mm', '인쇄': '단면 / 양면 선택', '제작기간': '4~6일', '최소수량': '200매' }
 		},
 		{
 			id: 'cd03', cat: 'card', name: '소봉투 (서양 봉투)', img: 'p31.jpg',
@@ -343,10 +358,60 @@
 		}
 	];
 
+	/* 주문 유형 부여 : order(바로 주문) / quote(견적 문의) */
+	(function () {
+		for (var i = 0; i < PRODUCTS.length; i++) {
+			PRODUCTS[i].type = (QUOTE_IDS.indexOf(PRODUCTS[i].id) >= 0) ? 'quote' : 'order';
+		}
+	})();
+
 	/* ----------------------------------------------------
 	 * 유틸
 	---------------------------------------------------- */
 	function won(n) { return (n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+	/* 견적 문의형 상품 여부 */
+	function isQuote(p) { return !!p && p.type === 'quote'; }
+	/* 제작 기간 — '4~5일' → '4~5영업일' */
+	function leadTime(p) {
+		var v = (p && p.spec && (p.spec['제작기간'] || p.spec['제작 기간'])) || '';
+		return v.replace(/(\d)일/g, '$1영업일');
+	}
+	/* 인쇄 방식 (소재형 상품은 소재로 대체) */
+	function printWay(p) {
+		if (!p || !p.spec) return '';
+		return p.spec['인쇄'] || p.spec['소재'] || p.spec['형태'] || p.spec['구성'] || '';
+	}
+	/* 제작 기간 중 기간 표기만 추출 — '시안 확인 후 3~4영업일' → '3~4영업일' */
+	function leadShort(p) {
+		var v = leadTime(p);
+		var m = /(\d+(?:\s*~\s*\d+)?)\s*(영업일|주)/.exec(v);
+		return m ? m[1].replace(/\s+/g, '') + m[2] : v;
+	}
+	/* 카드 · 상세 공통 요약 : "500매 기준 · 제작 3~4영업일" */
+	function briefInfo(p) {
+		var l = leadShort(p);
+		return p.qty[0].label + ' 기준' + (l ? ' · 제작 ' + l : '');
+	}
+	/* 배송비 */
+	function shipFee(total) { return (total >= SHIP_FREE_OVER || total <= 0) ? 0 : SHIP_FEE; }
+	/* 상품명 · 카테고리 · 진료과 검색 */
+	function deptNames(p) {
+		var out = [];
+		for (var i = 0; i < DEPTS.length; i++) if (p.depts.indexOf(DEPTS[i].id) >= 0) out.push(DEPTS[i].name);
+		return out;
+	}
+	function searchList(q, list) {
+		list = list || PRODUCTS;
+		q = (q || '').trim().toLowerCase();
+		if (!q) return list.slice(0);
+		var out = [];
+		for (var i = 0; i < list.length; i++) {
+			var p = list[i];
+			var hay = (p.name + ' ' + p.desc + ' ' + catName(p.cat) + ' ' + deptNames(p).join(' ')).toLowerCase();
+			if (hay.indexOf(q) >= 0) out.push(p);
+		}
+		return out;
+	}
 	function catName(id) { for (var i = 0; i < CATS.length; i++) if (CATS[i].id === id) return CATS[i].name; return ''; }
 	function getParam(k) {
 		var m = new RegExp('[?&]' + k + '=([^&#]*)').exec(w.location.search);
@@ -419,19 +484,21 @@
 
 	/* 기본 옵션(첫 항목)으로 바로 담기 */
 	function quickAdd(p) {
-		var optTxt = [], optKey = [], add = 0;
+		var optTxt = [], optKey = [], optIdx = [], add = 0;
 		if (p.opts) {
 			for (var i = 0; i < p.opts.length; i++) {
 				var o = p.opts[i].list[0];
 				optTxt.push(p.opts[i].name + ' : ' + o.label);
 				optKey.push(o.label);
+				optIdx.push(0);
 				add += o.add;
 			}
 		}
 		addCart({
-			id: p.id, name: p.name, cat: p.cat, img: p.img,
+			id: p.id, name: p.name, cat: p.cat, img: p.img, type: p.type,
 			qtyLabel: p.qty[0].label, unit: p.qty[0].price,
 			optTxt: optTxt.join(' / '), optKey: optKey.join('|'), optAdd: add,
+			qtyIdx: 0, optIdx: optIdx,
 			count: 1
 		});
 		toast('<b>' + p.name + '</b> 을(를) 장바구니에 담았습니다.', '장바구니 보기', BASE + 'kr/shop/cart.html');
@@ -442,11 +509,13 @@
 	---------------------------------------------------- */
 	function seedOrders() {
 		return [
-			{ no: 'MD-260731-0142', date: '2026.07.31', id: 'pr01', name: '진료카드', qtyLabel: '500매', opt: '스노우지 200g / 무광 코팅', count: 1, price: 39000, state: '제작완료' },
-			{ no: 'MD-260714-0098', date: '2026.07.14', id: 'cd01', name: '원장 명함', qtyLabel: '1,000매', opt: '랑데뷰 240g / 박 (금·은)', count: 1, price: 166000, state: '제작완료' },
-			{ no: 'MD-260620-0071', date: '2026.06.20', id: 'fm01', name: '초진 문진표', qtyLabel: '3,000매', opt: '모조지 80g / 1도', count: 1, price: 148000, state: '제작완료' },
-			{ no: 'MD-260602-0033', date: '2026.06.02', id: 'cd03', name: '소봉투 (서양 봉투)', qtyLabel: '3,000매', opt: '모조지 100g / 1도', count: 1, price: 208000, state: '제작완료' },
-			{ no: 'MD-260518-0016', date: '2026.05.18', id: 'cd05', name: '약봉투', qtyLabel: '5,000매', opt: '모조지 80g / 1도', count: 1, price: 198000, state: '제작완료' }
+			{ no: 'MD-260805-0187', date: '2026.08.05', id: 'pm02', name: '3단 리플렛', qtyLabel: '1,000부', opt: '스노우지 200g / 무광 코팅 / 부분 수정', count: 1, price: 198000, state: '시안 확인', step: 2, qtyIdx: 1, optIdx: [0, 0, 0] },
+			{ no: 'MD-260728-0161', date: '2026.07.28', id: 'fm03', name: '진료기록지', qtyLabel: '3,000매', opt: '모조지 80g / 양면 인쇄 / 텍스트만 수정', count: 1, price: 142000, state: '인쇄 진행', step: 4, qtyIdx: 1, optIdx: [0, 0, 0] },
+			{ no: 'MD-260731-0142', date: '2026.07.31', id: 'pr01', name: '진료카드', qtyLabel: '500매', opt: '스노우지 200g / 양면 인쇄 / 무광 코팅', count: 1, price: 39000, state: '제작완료', step: 5, qtyIdx: 0, optIdx: [0, 0, 0, 0] },
+			{ no: 'MD-260714-0098', date: '2026.07.14', id: 'cd01', name: '원장 명함', qtyLabel: '1,000매', opt: '랑데뷰 240g / 양면 인쇄 / 박 (금·은)', count: 1, price: 166000, state: '제작완료', step: 5, qtyIdx: 2, optIdx: [0, 0, 1, 0] },
+			{ no: 'MD-260620-0071', date: '2026.06.20', id: 'fm01', name: '초진 문진표', qtyLabel: '3,000매', opt: '모조지 80g / 1도 (흑백)', count: 1, price: 148000, state: '제작완료', step: 5, qtyIdx: 1, optIdx: [0, 0, 0] },
+			{ no: 'MD-260602-0033', date: '2026.06.02', id: 'cd03', name: '소봉투 (서양 봉투)', qtyLabel: '3,000매', opt: '모조지 100g / 1도', count: 1, price: 208000, state: '제작완료', step: 5, qtyIdx: 1, optIdx: [0, 0] },
+			{ no: 'MD-260518-0016', date: '2026.05.18', id: 'cd05', name: '약봉투', qtyLabel: '5,000매', opt: '모조지 80g / 1도', count: 1, price: 198000, state: '제작완료', step: 5, qtyIdx: 1, optIdx: [0, 0] }
 		];
 	}
 	function getOrders() {
@@ -462,20 +531,45 @@
 			o.unshift({
 				no: no, date: ds, id: list[i].id, name: list[i].name, qtyLabel: list[i].qtyLabel,
 				opt: list[i].optTxt, count: list[i].count, price: (list[i].unit + list[i].optAdd) * list[i].count,
-				state: '주문요청'
+				state: FLOW[0], step: 0,
+				qtyIdx: (typeof list[i].qtyIdx === 'number') ? list[i].qtyIdx : 0,
+				optIdx: list[i].optIdx || []
 			});
 		}
 		writeJSON(ORDER_KEY, o);
 	}
-	/* 재주문 : 동일 조건으로 장바구니에 담기 */
+
+	/* 견적 문의 내역 (맞춤 제작) */
+	function seedQuotes() {
+		return [
+			{ no: 'MQ-260722-0044', date: '2026.07.22', id: 'pm01', name: '병원 소개 브로슈어', memo: '12p / 500부 / 브랜드 컨셉 제안 포함', state: '견적 검토 중' },
+			{ no: 'MQ-260610-0021', date: '2026.06.10', id: 'pk02', name: '개원 프리미엄 패키지', memo: '사인물 확장 구성 / 4~6주 일정', state: '견적 발송 완료' }
+		];
+	}
+	function getQuotes() {
+		var q = readJSON(QUOTE_KEY);
+		if (!q || !q.length) { q = seedQuotes(); writeJSON(QUOTE_KEY, q); }
+		return q;
+	}
+
+	/* 재주문 ① 동일하게 재주문 : 이전 조건 그대로 장바구니에 담기 */
 	function reorder(order) {
 		var p = byId(order.id);
 		addCart({
 			id: order.id, name: order.name, cat: p ? p.cat : 'print', img: p ? p.img : 'p05.jpg',
 			qtyLabel: order.qtyLabel, unit: Math.round(order.price / (order.count || 1)),
-			optTxt: order.opt, optKey: order.opt, optAdd: 0, count: order.count || 1
+			optTxt: order.opt, optKey: order.opt, optAdd: 0, count: order.count || 1,
+			qtyIdx: order.qtyIdx, optIdx: order.optIdx
 		});
-		toast('<b>' + order.name + ' ' + order.qtyLabel + '</b> 을(를) 동일 조건으로 담았습니다.', '장바구니 보기', BASE + 'kr/shop/cart.html');
+		toast('<b>' + order.name + ' ' + order.qtyLabel + '</b> 을(를) 이전 주문과 동일한 조건으로 담았습니다.', '장바구니 보기', BASE + 'kr/shop/cart.html');
+	}
+	/* 재주문 ② 내용 수정 후 재주문 : 이전 조건을 그대로 불러온 상세 페이지로 이동 */
+	function reorderEditUrl(order) {
+		var q = 'id=' + order.id + '&re=1';
+		if (typeof order.qtyIdx === 'number') q += '&qi=' + order.qtyIdx;
+		if (order.optIdx && order.optIdx.length) q += '&oi=' + order.optIdx.join('-');
+		if (order.count) q += '&cn=' + order.count;
+		return BASE + 'kr/shop/detail.html?' + q;
 	}
 
 	/* ----------------------------------------------------
@@ -483,19 +577,25 @@
 	---------------------------------------------------- */
 	function cardHTML(p) {
 		var badge = p.badge ? '<span class="shop-badge' + (p.badge === 'BEST' ? ' mint' : '') + ' font-outfit">' + p.badge + '</span>' : '';
+		var quote = isQuote(p);
+		/* 견적 상품은 담기 아이콘 대신 상세로 유도한다 */
+		var icon = quote ? '' :
+			'<button type="button" class="shop-cart-icon js-quick-add" title="장바구니에 담기"><i class="xi-cart-o"></i></button>';
+		var price = quote
+			? '<strong class="shop-price is-quote"><span class="from">맞춤 제작</span>견적 문의</strong>'
+			: '<strong class="shop-price font-outfit"><span class="from">' + p.qty[0].label + ' 기준</span>' + won(minPrice(p)) + '<span class="won">원~</span></strong>';
 		return '' +
-			'<li class="shop-item" data-scroll="fade-up" data-id="' + p.id + '" data-cat="' + p.cat + '" data-depts="' + p.depts.join(' ') + '">' +
+			'<li class="shop-item" data-scroll="fade-up" data-id="' + p.id + '" data-cat="' + p.cat + '" data-type="' + p.type + '" data-depts="' + p.depts.join(' ') + '">' +
 				'<div class="shop-thumb">' + badge +
-					'<a href="' + detailUrl(p) + '"><img src="' + imgPath(p) + '" alt="' + p.name + '" loading="lazy"></a>' +
-					'<button type="button" class="shop-cart-icon js-quick-add" title="장바구니에 담기"><i class="xi-cart-o"></i></button>' +
+					'<a href="' + detailUrl(p) + '"><img src="' + imgPath(p) + '" alt="' + p.name + '" loading="lazy"></a>' + icon +
 				'</div>' +
 				'<div class="shop-meta">' +
 					'<span class="shop-cat">' + catName(p.cat) + '</span>' +
 					'<h3 class="shop-tit"><a href="' + detailUrl(p) + '">' + p.name + '</a></h3>' +
 					'<p class="shop-txt">' + p.desc + '</p>' +
-					'<div class="shop-price-row">' +
-						'<strong class="shop-price font-outfit"><span class="from">' + p.qty[0].label + ' 기준</span>' + won(minPrice(p)) + '<span class="won">원~</span></strong>' +
-						'<a href="' + detailUrl(p) + '" class="shop-detail-btn">상세보기 <i class="xi-angle-right-min"></i></a>' +
+					'<p class="shop-note">' + briefInfo(p) + '</p>' +
+					'<div class="shop-price-row">' + price +
+						'<a href="' + detailUrl(p) + '" class="shop-detail-btn">' + (quote ? '견적 문의' : '상세보기') + ' <i class="xi-angle-right-min"></i></a>' +
 					'</div>' +
 				'</div>' +
 			'</li>';
@@ -538,14 +638,23 @@
 		initReveal(el);
 	}
 
-	function filterList(cat, dept) {
+	function filterList(cat, dept, type) {
 		var out = [];
 		for (var i = 0; i < PRODUCTS.length; i++) {
 			var p = PRODUCTS[i];
 			if (cat === 'reorder') { if (!p.reorder) continue; }
 			else if (cat && cat !== 'all' && p.cat !== cat) continue;
 			if (dept && dept !== 'all' && p.depts.indexOf(dept) < 0) continue;
+			if (type && type !== 'all' && p.type !== type) continue;
 			out.push(p);
+		}
+		/* 진료과를 고르면 해당 진료과 전용 상품을 앞으로 (공통 상품은 뒤로) */
+		if (dept && dept !== 'all') {
+			var focus = [], common = [];
+			for (var k = 0; k < out.length; k++) {
+				(out[k].depts.length < ALL_DEPT.length ? focus : common).push(out[k]);
+			}
+			out = focus.concat(common);
 		}
 		return out;
 	}
@@ -567,13 +676,17 @@
 	 * 공개 API
 	---------------------------------------------------- */
 	w.MTShop = {
-		BASE: BASE, CATS: CATS, DEPTS: DEPTS, PRODUCTS: PRODUCTS,
+		BASE: BASE, CATS: CATS, DEPTS: DEPTS, PRODUCTS: PRODUCTS, FLOW: FLOW,
+		SHIP_FEE: SHIP_FEE, SHIP_FREE_OVER: SHIP_FREE_OVER,
 		won: won, catName: catName, getParam: getParam, byId: byId,
 		imgPath: imgPath, detailUrl: detailUrl, minPrice: minPrice,
+		isQuote: isQuote, leadTime: leadTime, printWay: printWay, briefInfo: briefInfo,
+		shipFee: shipFee, deptNames: deptNames, searchList: searchList,
 		cardHTML: cardHTML, renderGrid: renderGrid, filterList: filterList,
 		getCart: getCart, setCart: setCart, addCart: addCart, cartCount: cartCount,
 		paintCount: paintCount, toast: toast, quickAdd: quickAdd,
-		getOrders: getOrders, addOrder: addOrder, reorder: reorder,
+		getOrders: getOrders, addOrder: addOrder, getQuotes: getQuotes,
+		reorder: reorder, reorderEditUrl: reorderEditUrl,
 		clearCart: function () { setCart([]); }
 	};
 
