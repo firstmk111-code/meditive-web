@@ -490,3 +490,90 @@
 	.od-body .od-btns.mt-btn{margin-left:0;}
 	.shop-note{font-size:1.2rem;}
 }
+
+/* ==========================================================================
+ * 11. 상품몰 CATEGORY : 원형(오빗) 배치
+ * 데스크탑은 원 위에 6개 노드를 두고 중앙에 활성 카테고리를 띄운다.
+ * 900px 이하는 기존 .main-cat-grid 카드를 그대로 쓴다.
+ * 노드 내용은 JS 가 .main-cat-grid 원본에서 읽어 구성한다 (콘텐츠 단일 출처)
+ * ========================================================================== */
+.cat-orbit{display:none;}
+
+@media all and (min-width:901px){
+	.main-shop-cat .main-cat-grid{display:none;}
+
+	.cat-orbit{display:block; position:relative; width:100%; max-width:68rem; margin:0 auto;}
+	/* 아래쪽 호를 잘라 아치 형태로 보여준다 */
+	.cat-orbit-stage{position:relative; width:100%; aspect-ratio:100/86; overflow:hidden;}
+	/* 원의 좌표계 : 정사각형이라 자식의 % 값이 지름 기준으로 계산된다 */
+	.cat-orbit-plane{position:absolute; left:0; top:0; width:100%; aspect-ratio:1;}
+
+	/* 원형 트랙 + 중앙 광원 */
+	.cat-orbit-ring{position:absolute; inset:0; border-radius:50%; border:1px solid #DCE6E8;}
+	.cat-orbit-ring:after{content:''; position:absolute; left:50%; top:50%; width:78%; height:78%; transform:translate(-50%,-50%);
+		border-radius:50%; background:radial-gradient(circle, rgba(100,211,206,.12) 0%, rgba(100,211,206,0) 68%);}
+
+	/* 활성 노드 쪽으로 도는 빛 */
+	.cat-orbit-spin{position:absolute; inset:0; transition:transform .9s cubic-bezier(.65,.02,.3,1);}
+	.cat-orbit-spin .dot{position:absolute; left:50%; top:0; width:1.4rem; height:1.4rem; margin:-.7rem 0 0 -.7rem; border-radius:50%;
+		background:var(--main-color); box-shadow:0 0 0 .6rem rgba(100,211,206,.16), 0 0 2.2rem .2rem rgba(100,211,206,.6);}
+
+	/* 중앙 : 활성 카테고리 상세 */
+	.cat-orbit-core{position:absolute; left:50%; top:50%; width:40rem; transform:translate(-50%,-50%); text-align:center;}
+	.cat-orbit-core .core-label{display:block; font-family:var(--font-family2); font-size:1.3rem; font-weight:700; letter-spacing:.18em; color:var(--main-color);}
+	.cat-orbit-core .core-slot{position:relative; margin-top:1.4rem;}
+	.cat-orbit-core .core-item{position:absolute; left:0; top:0; width:100%; opacity:0; transform:translateY(1.2rem); pointer-events:none;
+		transition:opacity .5s ease, transform .5s cubic-bezier(.22,.61,.36,1);}
+	.cat-orbit-core .core-item.on{position:relative; opacity:1; transform:none; pointer-events:auto;}
+	.cat-orbit-core .core-num{display:block; font-family:var(--font-family2); font-size:6.4rem; font-weight:700; line-height:1; color:var(--ink-color); opacity:.13;}
+	.cat-orbit-core .core-tit{display:block; margin-top:-1rem; font-size:3rem; font-weight:700; letter-spacing:-.04em; color:var(--ink-color);}
+	.cat-orbit-core .core-txt{display:block; margin-top:1.1rem; font-size:1.5rem; line-height:1.7; letter-spacing:-.02em; color:#8A959A;}
+	.cat-orbit-core .core-go{display:inline-flex; align-items:center; gap:.7rem; margin-top:2rem; height:4.6rem; padding:0 2.4rem; border-radius:2.3rem;
+		background:var(--ink-color); color:#fff; font-size:1.5rem; font-weight:600; letter-spacing:-.02em; transition:var(--transition-custom);}
+	.cat-orbit-core .core-go:hover{background:var(--main-color);}
+	.cat-orbit-core .core-go i{transition:var(--transition-custom);}
+	.cat-orbit-core .core-go:hover i{transform:translateX(.3rem);}
+
+	/* 원 위의 6개 노드 (반지름 42% 지점 = 트랙 살짝 안쪽) */
+	.cat-orbit-nodes{list-style:none; margin:0; padding:0;}
+	.cat-node{position:absolute; transform:translate(-50%,-50%);}
+	.cat-node .node-btn{display:flex; flex-direction:column; align-items:center; gap:.9rem; padding:0; border:0; background:none; cursor:pointer;}
+	.cat-node .node-mark{display:flex; align-items:center; justify-content:center; width:5.6rem; height:5.6rem; border-radius:50%; background:#fff;
+		border:1px solid #DCE6E8; font-family:var(--font-family2); font-size:1.5rem; font-weight:700; color:#B4C0C4; transition:var(--transition-custom);}
+	.cat-node .node-tit{font-size:1.6rem; font-weight:600; letter-spacing:-.03em; color:#9AA7AC; white-space:nowrap; transition:var(--transition-custom);}
+	.cat-node .node-btn:hover .node-mark,
+	.cat-node .node-btn:focus-visible .node-mark,
+	.cat-node.on .node-mark{background:var(--main-color); border-color:var(--main-color); color:#fff; box-shadow:0 .8rem 2rem rgba(100,211,206,.34);}
+	.cat-node .node-btn:hover .node-tit,
+	.cat-node .node-btn:focus-visible .node-tit,
+	.cat-node.on .node-tit{color:var(--ink-color);}
+
+	/* 12시 기준 -115 / -75 / -35 / 35 / 75 / 115도 */
+	.cat-node.n1{left:11.9%; top:67.7%;}
+	.cat-node.n2{left:9.4%;  top:39.1%;}
+	.cat-node.n3{left:25.9%; top:15.6%;}
+	.cat-node.n4{left:74.1%; top:15.6%;}
+	.cat-node.n5{left:90.6%; top:39.1%;}
+	.cat-node.n6{left:88.1%; top:67.7%;}
+
+	.cat-orbit.on1 .cat-orbit-spin{transform:rotate(-115deg);}
+	.cat-orbit.on2 .cat-orbit-spin{transform:rotate(-75deg);}
+	.cat-orbit.on3 .cat-orbit-spin{transform:rotate(-35deg);}
+	.cat-orbit.on4 .cat-orbit-spin{transform:rotate(35deg);}
+	.cat-orbit.on5 .cat-orbit-spin{transform:rotate(75deg);}
+	.cat-orbit.on6 .cat-orbit-spin{transform:rotate(115deg);}
+}
+
+@media all and (min-width:901px) and (max-width:1200px){
+	.cat-orbit{max-width:60rem;}
+	.cat-orbit-core{width:34rem;}
+	.cat-orbit-core .core-num{font-size:5.4rem;}
+	.cat-orbit-core .core-tit{font-size:2.6rem;}
+	.cat-node .node-mark{width:5rem; height:5rem; font-size:1.4rem;}
+	.cat-node .node-tit{font-size:1.5rem;}
+}
+
+@media (prefers-reduced-motion: reduce){
+	.cat-orbit-spin,
+	.cat-orbit-core .core-item{transition:none !important;}
+}
