@@ -14,6 +14,12 @@
 .shop-section{padding:11rem 0 16rem; background:#fff;}
 .shop-section + .shop-section{padding-top:0;}
 
+/* 0-1. 서브 첫 섹션 상단 여백 공통값
+ *      서비스(.pf-section) / 상품몰(.shop-section) / 문의(.iq-section)는 11rem 을 쓰는데
+ *      인쇄가이드·병원마케팅의 .rnd-page 만 0 이라 제목이 메인 배너에 붙어 보였다.
+ *      첫 섹션에만 동일한 상단 여백을 준다. */
+#content.wide > .rnd-page:first-child{padding-top:11rem;}
+
 .shop-head{display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:5rem; gap:2rem; flex-wrap:wrap;}
 .shop-head .shop-sub{position:relative; display:inline-block; font-size:2.4rem; font-weight:600; letter-spacing:-0.02em; color:var(--main-color); line-height:1.3; margin-bottom:1.4rem;}
 .shop-head .shop-sub:before{position:absolute; content:''; width:0.6rem; height:0.6rem; border-radius:0.6rem; background-color:var(--main-color); right:-1.2rem; top:0.3rem;}
@@ -175,17 +181,17 @@
 /* --------------------------------------------------
  * 4. 장바구니
 -------------------------------------------------- */
-.cart-wrap{display:grid; grid-template-columns:1fr 40rem; gap:4rem; align-items:start;}
+.cart-wrap{display:grid; grid-template-columns:1fr 44rem; gap:4rem; align-items:start;}
 .cart-list{list-style:none; margin:0; padding:0;}
-.cart-row{display:flex; align-items:center; gap:2.6rem; padding:2.8rem; border-radius:1.6rem; border:1px solid #E4EAEC; background:#fff; transition:var(--transition-custom);}
+.cart-row{display:flex; align-items:center; gap:2.6rem; padding:3.2rem 3rem; border-radius:1.6rem; border:1px solid #E4EAEC; background:#fff; transition:var(--transition-custom);}
 .cart-row + .cart-row{margin-top:1.4rem;}
 .cart-row:hover{border-color:#CFDBDE; box-shadow:0 1.2rem 3.2rem rgba(62,77,84,.06);}
 .cart-thumb{flex:0 0 14rem; width:14rem; aspect-ratio:4/3; border-radius:1.2rem; overflow:hidden; background:var(--mist-color);}
 .cart-thumb img{width:100%; height:100%; object-fit:cover; display:block;}
 .cart-info{flex:1; min-width:0;}
-.cart-info .cat{font-size:1.3rem; font-weight:600; color:var(--main-color); display:block; margin-bottom:.6rem;}
-.cart-info .tit{font-size:1.9rem; font-weight:600; color:var(--ink-color); letter-spacing:-0.02em;}
-.cart-info .opt{font-size:1.4rem; color:#8A959A; margin-top:.8rem; letter-spacing:-0.02em;}
+.cart-info .cat{display:none;}
+.cart-info .tit{font-size:2.1rem; font-weight:600; color:var(--ink-color); letter-spacing:-0.015em; line-height:1.45;}
+.cart-info .opt{font-size:1.65rem; color:#8A959A; margin-top:1rem; letter-spacing:-0.01em; line-height:1.6;}
 .cart-qty{flex:0 0 auto;}
 .cart-sum{flex:0 0 14rem; text-align:right; font-family:var(--font-family2); font-size:2.1rem; font-weight:700; color:var(--ink-color);}
 .cart-sum .won{font-family:var(--font-family1); font-size:1.5rem; font-weight:600;}
@@ -193,16 +199,18 @@
 .cart-del:hover{border-color:#E8A2A2; color:#D97A7A;}
 
 /* 요약 패널 */
-.cart-aside{position:sticky; top:12rem; padding:3.4rem; border-radius:2rem; background:var(--mist-color);}
-.cart-aside h3{font-size:2.2rem; font-weight:800; color:var(--ink-color); letter-spacing:-0.03em; margin-bottom:2.4rem;}
-.cart-aside dl{display:flex; justify-content:space-between; padding:1.3rem 0; font-size:1.6rem; color:#6B777D; letter-spacing:-0.02em;}
+.cart-aside{position:sticky; top:12rem; padding:4rem 3.8rem; border-radius:2rem; background:var(--mist-color);}
+.cart-aside h3{font-size:2.5rem; font-weight:800; color:var(--ink-color); letter-spacing:-0.025em; margin-bottom:2.9rem;}
+.cart-aside dl{display:flex; justify-content:space-between; align-items:baseline; gap:1.6rem; padding:1.75rem 0; font-size:1.85rem; line-height:1.55; color:#6B777D; letter-spacing:-0.01em;}
+.cart-aside dl dt{font-weight:500;}
 .cart-aside dl dd{font-family:var(--font-family2); font-weight:600; color:var(--ink-color);}
-.cart-aside .total{margin-top:1.4rem; padding-top:2.2rem; border-top:1px solid #D9E2E4;}
-.cart-aside .total dt{font-size:1.8rem; font-weight:700; color:var(--ink-color);}
-.cart-aside .total dd{font-family:var(--font-family2); font-size:2.8rem; font-weight:700; color:var(--main-color);}
-.cart-aside .total dd .won{font-family:var(--font-family1); font-size:1.8rem; color:var(--ink-color);}
-.cart-aside .mt-btn{width:100%; margin-top:2.4rem;}
-.cart-aside .note{font-size:1.3rem; color:#8A959A; line-height:1.7; letter-spacing:-0.02em; margin-top:1.8rem;}
+.cart-aside .total{margin-top:1.8rem; padding-top:2.6rem; border-top:1px solid #D9E2E4;}
+.cart-aside .total dt{font-size:2.05rem; font-weight:700; color:var(--ink-color);}
+.cart-aside .total dd{font-family:var(--font-family2); font-size:3.1rem; font-weight:700; color:var(--main-color);}
+.cart-aside .total dd .won{font-family:var(--font-family1); font-size:2.05rem; color:var(--ink-color);}
+/* a / button 이 섞여 있어 box-sizing 이 달라지면 폭이 어긋난다 → 요약 패널 버튼은 전부 border-box 100% */
+.cart-aside .mt-btn{width:100%; box-sizing:border-box; margin-top:2.8rem;}
+.cart-aside .note{font-size:1.55rem; color:#8A959A; line-height:1.85; letter-spacing:-0.01em; margin-top:2.1rem;}
 
 /* --------------------------------------------------
  * 5. 마이페이지 / 재주문
@@ -311,7 +319,7 @@
  * 9. 반응형
 -------------------------------------------------- */
 @media all and (max-width:1600px){
-	.cart-wrap{grid-template-columns:1fr 34rem;}
+	.cart-wrap{grid-template-columns:1fr 38rem;}
 }
 @media all and (max-width:1280px){
 	.shop-head .shop-h2{font-size:5.5rem;}
@@ -332,6 +340,9 @@
 @media all and (max-width:900px){
 	.main-pkg-grid{grid-template-columns:1fr;}
 	.pd-spec{grid-template-columns:1fr;}
+}
+@media all and (max-width:800px){
+	#content.wide > .rnd-page:first-child{padding-top:7rem;}
 }
 @media all and (max-width:767px){
 	.shop-section{padding:7rem 0 10rem;}
@@ -409,6 +420,12 @@
 /* 10-1. 상품 카드 : 견적 상품 표기 */
 .shop-price.is-quote{font-family:var(--font-family1); font-size:1.9rem; font-weight:700; color:var(--main-color);}
 
+/* 10-1-1. 메인 Best Product : 수량 기준 문구는 노출하지 않는다 (상품몰 카드에서는 그대로 유지) */
+.main-shop-best .shop-price .from{display:none;}
+
+/* 10-1-2. 상품 상세 : 제목 위 민트 카테고리 소제목 미노출 */
+.pd-cat{display:none;}
+
 /* 10-2. 상품 검색 (리스트 상단) */
 .shop-search{position:relative; max-width:44rem; margin-left:auto;}
 .shop-search input{width:100%; height:5.2rem; padding:0 5.4rem 0 2.2rem; border-radius:2.6rem; border:1px solid #DDE5E7; background:#fff;
@@ -451,7 +468,7 @@
 .cart-group-tit h3{font-size:1.9rem; font-weight:700; color:var(--ink-color); letter-spacing:-0.03em;}
 .cart-group-tit span{font-size:1.4rem; color:var(--sub-color); letter-spacing:-0.02em;}
 .cart-row.is-quote .cart-sum{font-family:var(--font-family1); font-size:1.7rem; color:var(--main-color);}
-.cart-aside .aside-note{padding:1.4rem 1.8rem; border-radius:1rem; background:#fff; font-size:1.4rem; color:#6B777D; letter-spacing:-0.02em; line-height:1.6; margin-top:1.6rem;}
+.cart-aside .aside-note{padding:1.7rem 2rem; border-radius:1rem; background:#fff; font-size:1.6rem; color:#6B777D; letter-spacing:-0.01em; line-height:1.75; margin-top:1.9rem;}
 
 /* 10-7. 마이페이지 : 디자인 진행 트래커 */
 .od-flow{list-style:none; margin:2.2rem 0 0; padding:2.2rem 0 0; border-top:1px solid #EDF1F2; display:flex; gap:.6rem;}
@@ -490,7 +507,8 @@
 
 /* ==========================================================================
  * 11. 상품몰 CATEGORY : 원형(오빗) 배치
- * 데스크탑은 원 위에 6개 노드를 두고 중앙에 활성 카테고리를 띄운다.
+ * 굵은 그레이 원형 트랙 위에 6개 노드를 놓고, 활성 노드 쪽으로 민트 호(arc)가
+ * 회전하며 중앙 카드가 교체된다. 3초 자동 순환 / hover 시 정지 + 해당 항목 활성.
  * 900px 이하는 기존 .main-cat-grid 카드를 그대로 쓴다.
  * 노드 내용은 JS 가 .main-cat-grid 원본에서 읽어 구성한다 (콘텐츠 단일 출처)
  * ========================================================================== */
@@ -499,28 +517,31 @@
 @media all and (min-width:901px){
 	.main-shop-cat .main-cat-grid{display:none;}
 
-	.cat-orbit{display:block; position:relative; width:100%; max-width:68rem; margin:0 auto;}
+	/* 바깥 상자는 자르지 않는다 : 좌우 노드 라벨이 원 밖으로 나가야 하기 때문 */
+	.cat-orbit{display:block; position:relative; width:100%; height:58rem; margin:1rem auto 0;}
 	/* 아래쪽 호를 잘라 아치 형태로 보여준다 */
-	.cat-orbit-stage{position:relative; width:100%; aspect-ratio:100/86; overflow:hidden;}
+	.cat-orbit-stage{position:absolute; left:50%; top:0; width:66rem; height:58rem; margin-left:-33rem; overflow:hidden;}
 	/* 원의 좌표계 : 정사각형이라 자식의 % 값이 지름 기준으로 계산된다 */
-	.cat-orbit-plane{position:absolute; left:0; top:0; width:100%; aspect-ratio:1;}
+	.cat-orbit-plane{position:absolute; left:0; top:0; width:66rem; height:66rem;}
 
-	/* 원형 트랙 + 중앙 광원 */
-	.cat-orbit-ring{position:absolute; inset:0; border-radius:50%; border:1px solid #DCE6E8;}
+	/* 굵은 그레이 원형 트랙 (SVG stroke) + 중앙 광원 */
+	.cat-orbit-ring{position:absolute; left:0; top:0; width:100%; height:100%;}
+	.cat-orbit-ring svg,
+	.cat-orbit-spin svg{display:block; width:100%; height:100%; overflow:visible;}
 	.cat-orbit-ring:after{content:''; position:absolute; left:50%; top:50%; width:78%; height:78%; transform:translate(-50%,-50%);
-		border-radius:50%; background:radial-gradient(circle, rgba(100,211,206,.12) 0%, rgba(100,211,206,0) 68%);}
+		border-radius:50%; background:radial-gradient(circle, rgba(100,211,206,.13) 0%, rgba(100,211,206,0) 70%);}
 
-	/* 활성 노드 쪽으로 도는 빛 */
-	.cat-orbit-spin{position:absolute; inset:0; transition:transform .9s cubic-bezier(.65,.02,.3,1);}
-	.cat-orbit-spin .dot{position:absolute; left:50%; top:0; width:1.4rem; height:1.4rem; margin:-.7rem 0 0 -.7rem; border-radius:50%;
-		background:var(--main-color); box-shadow:0 0 0 .6rem rgba(100,211,206,.16), 0 0 2.2rem .2rem rgba(100,211,206,.6);}
+	/* 활성 노드 쪽으로 도는 민트 호 + 선단 광점 */
+	.cat-orbit-spin{position:absolute; left:0; top:0; width:100%; height:100%;
+		transition:transform .9s cubic-bezier(.65,.02,.3,1); will-change:transform;}
+	.cat-orbit-spin .dot{position:absolute; left:50%; top:2.25%; width:1.5rem; height:1.5rem; margin:-.75rem 0 0 -.75rem; border-radius:50%;
+		background:var(--main-color); box-shadow:0 0 0 .7rem rgba(100,211,206,.16), 0 0 2.4rem .2rem rgba(100,211,206,.62);}
 
 	/* 중앙 : 활성 카테고리 상세 */
 	.cat-orbit-core{position:absolute; left:50%; top:50%; width:40rem; transform:translate(-50%,-50%); text-align:center;}
-	.cat-orbit-core .core-label{display:block; font-family:var(--font-family2); font-size:1.3rem; font-weight:700; letter-spacing:.18em; color:var(--main-color);}
-	.cat-orbit-core .core-slot{position:relative; margin-top:1.4rem;}
+	.cat-orbit-core .core-slot{position:relative;}
 	.cat-orbit-core .core-item{position:absolute; left:0; top:0; width:100%; opacity:0; transform:translateY(1.2rem); pointer-events:none;
-		transition:opacity .5s ease, transform .5s cubic-bezier(.22,.61,.36,1);}
+		transition:opacity .45s ease-in-out, transform .45s cubic-bezier(.22,.61,.36,1);}
 	.cat-orbit-core .core-item.on{position:relative; opacity:1; transform:none; pointer-events:auto;}
 	.cat-orbit-core .core-num{display:block; font-family:var(--font-family2); font-size:6.4rem; font-weight:700; line-height:1; color:var(--ink-color); opacity:.13;}
 	.cat-orbit-core .core-tit{display:block; margin-top:-1rem; font-size:3rem; font-weight:700; letter-spacing:-.04em; color:var(--ink-color);}
@@ -531,13 +552,21 @@
 	.cat-orbit-core .core-go i{transition:var(--transition-custom);}
 	.cat-orbit-core .core-go:hover i{transform:translateX(.3rem);}
 
-	/* 원 위의 6개 노드 (반지름 42% 지점 = 트랙 살짝 안쪽) */
-	.cat-orbit-nodes{list-style:none; margin:0; padding:0;}
+	/* 원 위의 6개 노드 : 트랙 중심선(반지름 47.75%) 위에 정확히 올린다 */
+	.cat-orbit-nodes{position:absolute; left:50%; top:0; width:66rem; height:66rem; margin-left:-33rem; list-style:none; padding:0; z-index:2;}
 	.cat-node{position:absolute; transform:translate(-50%,-50%);}
-	.cat-node .node-btn{display:flex; flex-direction:column; align-items:center; gap:.9rem; padding:0; border:0; background:none; cursor:pointer;}
-	.cat-node .node-mark{display:flex; align-items:center; justify-content:center; width:5.6rem; height:5.6rem; border-radius:50%; background:#fff;
-		border:1px solid #DCE6E8; font-family:var(--font-family2); font-size:1.5rem; font-weight:700; color:#B4C0C4; transition:var(--transition-custom);}
-	.cat-node .node-tit{font-size:1.6rem; font-weight:600; letter-spacing:-.03em; color:#9AA7AC; white-space:nowrap; transition:var(--transition-custom);}
+	.cat-node .node-btn{position:relative; display:block; padding:0; border:0; background:none; cursor:pointer;}
+	.cat-node .node-mark{display:flex; align-items:center; justify-content:center; width:6rem; height:6rem; border-radius:50%; background:#fff;
+		border:1px solid #DCE6E8; font-family:var(--font-family2); font-size:1.5rem; font-weight:700; color:#B4C0C4;
+		transition:background .3s ease-in-out, border-color .3s ease-in-out, color .3s ease-in-out, box-shadow .3s ease-in-out;}
+	.cat-node .node-tit{position:absolute; top:50%; transform:translateY(-50%); font-size:1.6rem; font-weight:600; letter-spacing:-.03em;
+		color:#9AA7AC; white-space:nowrap; transition:color .3s ease-in-out;}
+	.cat-node.n1 .node-tit,
+	.cat-node.n2 .node-tit{right:calc(100% + 1.4rem);}
+	.cat-node.n5 .node-tit,
+	.cat-node.n6 .node-tit{left:calc(100% + 1.4rem);}
+	.cat-node.n3 .node-tit,
+	.cat-node.n4 .node-tit{top:calc(100% + 1.1rem); left:50%; transform:translateX(-50%);}
 	.cat-node .node-btn:hover .node-mark,
 	.cat-node .node-btn:focus-visible .node-mark,
 	.cat-node.on .node-mark{background:var(--main-color); border-color:var(--main-color); color:#fff; box-shadow:0 .8rem 2rem rgba(100,211,206,.34);}
@@ -545,13 +574,13 @@
 	.cat-node .node-btn:focus-visible .node-tit,
 	.cat-node.on .node-tit{color:var(--ink-color);}
 
-	/* 12시 기준 -115 / -75 / -35 / 35 / 75 / 115도 */
-	.cat-node.n1{left:11.9%; top:67.7%;}
-	.cat-node.n2{left:9.4%;  top:39.1%;}
-	.cat-node.n3{left:25.9%; top:15.6%;}
-	.cat-node.n4{left:74.1%; top:15.6%;}
-	.cat-node.n5{left:90.6%; top:39.1%;}
-	.cat-node.n6{left:88.1%; top:67.7%;}
+	/* 12시 기준 -115 / -75 / -35 / 35 / 75 / 115도 지점 */
+	.cat-node.n1{left:6.7%;  top:70.2%;}
+	.cat-node.n2{left:3.9%;  top:37.6%;}
+	.cat-node.n3{left:22.6%; top:10.9%;}
+	.cat-node.n4{left:77.4%; top:10.9%;}
+	.cat-node.n5{left:96.1%; top:37.6%;}
+	.cat-node.n6{left:93.3%; top:70.2%;}
 
 	.cat-orbit.on1 .cat-orbit-spin{transform:rotate(-115deg);}
 	.cat-orbit.on2 .cat-orbit-spin{transform:rotate(-75deg);}
@@ -562,11 +591,14 @@
 }
 
 @media all and (min-width:901px) and (max-width:1200px){
-	.cat-orbit{max-width:60rem;}
-	.cat-orbit-core{width:34rem;}
+	.cat-orbit{height:50rem;}
+	.cat-orbit-stage{width:57rem; height:50rem; margin-left:-28.5rem;}
+	.cat-orbit-plane{width:57rem; height:57rem;}
+	.cat-orbit-nodes{width:57rem; height:57rem; margin-left:-28.5rem;}
+	.cat-orbit-core{width:32rem;}
 	.cat-orbit-core .core-num{font-size:5.4rem;}
 	.cat-orbit-core .core-tit{font-size:2.6rem;}
-	.cat-node .node-mark{width:5rem; height:5rem; font-size:1.4rem;}
+	.cat-node .node-mark{width:5.2rem; height:5.2rem; font-size:1.4rem;}
 	.cat-node .node-tit{font-size:1.5rem;}
 }
 

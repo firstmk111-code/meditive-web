@@ -175,7 +175,7 @@
 }
 
 /* -------- 硫붿씤 而⑦뀗痢?:: 而⑦뀗痢?(About Us) -------- */
-#mainAbout {position: relative; background: linear-gradient(rgba(255,255,255,0.35), rgba(255,255,255,0.35)) no-repeat center/cover, url(../images/main/main_about_bg.jpg?ver=260812)no-repeat center/cover;}
+#mainAbout {position: relative; background: url(../images/main/main_about_bg.jpg?ver=260812b)no-repeat center/cover;}
 .main-about-wrap {position: relative; padding:15rem 0 18rem;}
 .main-about-wrap .main-tit-box .main-tit {font-size: 6.3rem;} 
 .main-about-wrap .main-tit-box .main-sub-tit {font-size: 2.4rem;}

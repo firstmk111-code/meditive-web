@@ -21,8 +21,8 @@
 <link rel="stylesheet" href="../../css/default.css">
 <link rel="stylesheet" href="../../css/layout.css">
 <link rel="stylesheet" href="../../css/content.css?ver=260805">
-<link rel="stylesheet" href="../../css/content_yt.css?ver=260805">
-<link rel="stylesheet" href="../../css/main.css?ver=260805" />
+<link rel="stylesheet" href="../../css/content_yt.css?ver=260812b">
+<link rel="stylesheet" href="../../css/main.css?ver=260812b" />
 <link rel="stylesheet" href="../../css/layout_responsive.css">
 <link rel="stylesheet" href="../../css/content_responsive.css">
 <link rel="stylesheet" href="../../css/main_responsive.css?ver=260805" />
@@ -34,7 +34,7 @@
 <link rel="stylesheet" type="text/css" href="../../css/plugin/swiper.css" />
 <link rel="stylesheet" type="text/css" href="../../css/plugin/spotlight.css" />
 <link rel="stylesheet" type="text/css" href="../../css/pf_popup.css">
-<link rel="stylesheet" href="../../css/shop.css?ver=260812">
+<link rel="stylesheet" href="../../css/shop.css?ver=260812b">
 <script type="text/javascript" src="../../js/vendor/jquery-3.6.0.min.js"></script>
 <script src="../../js/utile.js"></script>
 <style>
@@ -70,6 +70,10 @@
 	/* 같은 행 안에서 왼쪽 → 오른쪽 순서로 안착 */
 	html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(3n+2){transition-delay:.1s;}
 	html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(3n+3){transition-delay:.2s;}
+	/* 첫 화면 카드는 스크롤에 물려 움직이므로(GSAP 이 inline 로 제어) CSS transition 을 비운다.
+	   .pf-intro 는 데스크톱(901px~)에서만 JS 가 붙인다 → 태블릿 / 모바일 반응형은 위 규칙 그대로 유지 */
+	html:not(.no-js) .pf-grid .pf-item.pf-intro[data-scroll]{opacity:1; transform:none; transition:none; transition-delay:0s; will-change:transform, opacity;}
+	html:not(.no-js) .pf-grid .pf-item.pf-intro.is-settled{will-change:auto;}
 	/* 터치 기기 : hover 가 없으므로 정보를 항상 노출 */
 	@media (hover:none){
 		.pf-item:before{opacity:1;}
@@ -658,6 +662,79 @@
 	<script type="text/javascript" src="../../js/sub.js"></script>
 	<script type="text/javascript" src="../../js/pf_popup.js"></script>
 	<script>window.SHOP_BASE='../../';</script>
-	<script type="text/javascript" src="../../js/shop.js?ver=260812"></script>
+	<script type="text/javascript" src="../../js/shop.js?ver=260812b"></script>
+	<script>
+	/* ************************
+	* Func : 포트폴리오 진입 모션
+	*        첫 화면 카드 6장이 화면 주변(좌 · 우 · 아래)에서 시작해
+	*        스크롤에 물려 이동 + Scale + Opacity + Stagger 로 3열 Grid 자리에 안착한다.
+	*        안착 이후 나머지 카드는 기존 [data-scroll] 등장 모션 그대로 → 일반 Grid 처럼 스크롤.
+	*        901px 미만 / 모션 최소화 설정에서는 아무 것도 하지 않는다.
+	************************ */
+	(function () {
+		var grid = document.querySelector('.pf-grid');
+		if ( !grid || !window.gsap || !window.ScrollTrigger ) return;
+		if ( window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ) return;
+
+		/* 3열 기준 두 줄 = 6장을 진입 카드로 쓴다 */
+		var items = [].slice.call(grid.children, 0, 6);
+		if ( items.length < 3 ) return;
+
+		/* 열별 출발 지점 : 1열은 화면 왼쪽 밖, 3열은 오른쪽 밖, 2열은 아래쪽에서 올라온다 */
+		var FROM = [
+			{ x: -88, y: 22, s: 0.60 },
+			{ x:   0, y: 52, s: 0.50 },
+			{ x:  88, y: 22, s: 0.60 }
+		];
+		var mq = window.matchMedia('(min-width: 901px)');
+		var tl = null;
+
+		function build () {
+			if ( tl ) return;
+			tl = gsap.timeline({
+				scrollTrigger: {
+					trigger: grid,
+					start: 'top 90%',
+					end: 'top 12%',
+					scrub: 0.6,
+					invalidateOnRefresh: true,
+					/* 정렬이 끝나면 will-change 를 내려 이후 스크롤은 일반 Grid 와 동일하게 가볍게 */
+					onLeave: function () { items.forEach(function (el) { el.classList.add('is-settled'); }); },
+					onEnterBack: function () { items.forEach(function (el) { el.classList.remove('is-settled'); }); }
+				}
+			});
+
+			items.forEach(function (el, i) {
+				var f = FROM[i % 3];
+				/* 뒷줄은 출발 지점을 완만하게 → 두 줄이 서로 겹쳐 보이지 않게 */
+				var k = i < 3 ? 1 : 0.55;
+				el.classList.add('pf-intro');
+				gsap.set(el, {
+					xPercent: f.x * k, yPercent: f.y * k,
+					scale: f.s + (1 - f.s) * (1 - k),
+					opacity: 0, transformOrigin: '50% 50%'
+				});
+				tl.to(el, { xPercent: 0, yPercent: 0, scale: 1, opacity: 1, duration: 1, ease: 'power1.out' }, i * 0.08);
+			});
+		}
+
+		function destroy () {
+			if ( !tl ) return;
+			if ( tl.scrollTrigger ) tl.scrollTrigger.kill();
+			tl.kill();
+			tl = null;
+			items.forEach(function (el) {
+				gsap.set(el, { clearProps: 'all' });
+				el.classList.remove('pf-intro', 'is-settled');
+			});
+		}
+
+		function sync () { mq.matches ? build() : destroy(); }
+
+		sync();
+		if ( mq.addEventListener ) mq.addEventListener('change', sync);
+		else if ( mq.addListener ) mq.addListener(sync);
+	})();
+	</script>
 </body>
 </html>

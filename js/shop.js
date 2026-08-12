@@ -698,7 +698,9 @@
  * 기존 .main-cat-grid 를 콘텐츠 원본으로 삼아 데스크탑 전용 원형 UI 를 만든다.
  * - HTML 은 건드리지 않는다 (마크업 단일 출처 유지)
  * - 900px 이하는 CSS 가 원형 UI 를 감추고 기존 카드 그리드를 그대로 보여준다
- * - 스크롤 진행도에 따라 활성 카테고리가 01 -> 06 으로 넘어가고, 노드 클릭으로도 전환된다
+ * - 화면에 들어오면 3초 간격으로 01 -> 06 자동 순환, 마지막 다음은 다시 01
+ * - 노드에 hover/focus 하면 순환을 멈추고 그 항목을 활성화, 벗어나면 다시 순환
+ * - 스크롤 핸들러를 쓰지 않아 스크롤 성능에 영향이 없다
  * ========================================================================== */
 (function (w, d) {
 	'use strict';
@@ -717,17 +719,64 @@
 		function pick(el, sel) { var t = el.querySelector(sel); return t ? t.textContent.replace(/\s+/g, ' ').trim() : ''; }
 		function make(tag, cls) { var e = d.createElement(tag); if (cls) e.className = cls; return e; }
 
+		/* 트랙과 호를 같은 좌표계(viewBox 200)로 그려 두 선이 정확히 겹치게 한다.
+		 * r 95.5 / stroke 5  ->  지름 대비 2.5% 두께의 굵은 원형 */
+		var NS = 'http://www.w3.org/2000/svg';
+		var R = 95.5, SW = 5;
+		function svgRoot() {
+			var s = d.createElementNS(NS, 'svg');
+			s.setAttribute('viewBox', '0 0 200 200');
+			s.setAttribute('aria-hidden', 'true');
+			s.setAttribute('focusable', 'false');
+			return s;
+		}
+		function ringCircle(stroke, dash, rotate) {
+			var c = d.createElementNS(NS, 'circle');
+			c.setAttribute('cx', '100'); c.setAttribute('cy', '100'); c.setAttribute('r', String(R));
+			c.setAttribute('fill', 'none');
+			c.setAttribute('stroke', stroke);
+			c.setAttribute('stroke-width', String(SW));
+			if (dash) { c.setAttribute('stroke-dasharray', dash); c.setAttribute('stroke-linecap', 'round'); }
+			if (rotate) c.setAttribute('transform', 'rotate(' + rotate + ' 100 100)');
+			return c;
+		}
+
 		/* ---------- 조립 ---------- */
 		var orbit = make('div', 'cat-orbit');
 		var stage = make('div', 'cat-orbit-stage');
 		var plane = make('div', 'cat-orbit-plane');
+		var ring  = make('div', 'cat-orbit-ring');
 		var spin  = make('div', 'cat-orbit-spin');
 		var nodes = make('ul', 'cat-orbit-nodes');
 		var core  = make('div', 'cat-orbit-core');
 		var slot  = make('div', 'core-slot');
 		var nodeEls = [], btnEls = [], panelEls = [], i;
 
+		/* 굵은 그레이 트랙 */
+		var ringSvg = svgRoot();
+		ringSvg.appendChild(ringCircle('#D3DCDF', '', ''));
+		ring.appendChild(ringSvg);
+
+		/* 활성 노드를 가리키는 민트 호 : 12시에서 끝나도록 -138도 회전 (48도 길이) */
+		var CIRC = 2 * Math.PI * R;                    /* 600.0 */
+		var ARC  = CIRC * 48 / 360;                    /* 80.0  */
+		var arcSvg = svgRoot();
+		var grad = d.createElementNS(NS, 'linearGradient');
+		grad.setAttribute('id', 'catOrbitArc');
+		grad.setAttribute('x1', '0'); grad.setAttribute('y1', '1');
+		grad.setAttribute('x2', '1'); grad.setAttribute('y2', '0');
+		var st1 = d.createElementNS(NS, 'stop');
+		st1.setAttribute('offset', '0%'); st1.setAttribute('stop-color', '#64D3CE'); st1.setAttribute('stop-opacity', '.15');
+		var st2 = d.createElementNS(NS, 'stop');
+		st2.setAttribute('offset', '100%'); st2.setAttribute('stop-color', '#64D3CE'); st2.setAttribute('stop-opacity', '1');
+		grad.appendChild(st1); grad.appendChild(st2);
+		var defs = d.createElementNS(NS, 'defs');
+		defs.appendChild(grad);
+		arcSvg.appendChild(defs);
+		arcSvg.appendChild(ringCircle('url(#catOrbitArc)', ARC.toFixed(1) + ' ' + (CIRC - ARC).toFixed(1), '-138'));
+		spin.appendChild(arcSvg);
 		spin.appendChild(make('span', 'dot'));
+
 		nodes.setAttribute('role', 'tablist');
 		nodes.setAttribute('aria-label', '상품 카테고리');
 
@@ -767,12 +816,13 @@
 		}
 
 		core.appendChild(slot);
-		plane.appendChild(make('div', 'cat-orbit-ring'));
+		plane.appendChild(ring);
 		plane.appendChild(spin);
-		plane.appendChild(nodes);
 		plane.appendChild(core);
 		stage.appendChild(plane);
 		orbit.appendChild(stage);
+		/* 노드는 stage(원 아래를 잘라내는 상자) 밖에 둬야 좌우 라벨이 잘리지 않는다 */
+		orbit.appendChild(nodes);
 		grid.parentNode.insertBefore(orbit, grid);
 
 		/* ---------- 전환 ---------- */
@@ -795,17 +845,54 @@
 		}
 		go(0);
 
-		/* 직접 고른 직후에는 스크롤이 선택을 덮어쓰지 않도록 잠깐 잠근다 */
-		var manualUntil = 0;
-		nodes.addEventListener('click', function (e) {
-			var t = e.target, li = null;
+		/* ---------- 3초 자동 순환 ---------- */
+		var TICK = 3000;
+		var timer = null, inView = false, held = false;
+
+		function next() { go((cur + 1) % total); }
+		function start() {
+			if (timer || !inView || held || w.innerWidth < 901) return;
+			timer = w.setInterval(next, TICK);
+		}
+		function stop() {
+			if (!timer) return;
+			w.clearInterval(timer);
+			timer = null;
+		}
+		function restart() { stop(); start(); }
+
+		/* 노드에 마우스를 올리면 순환을 멈추고 그 항목을 활성화한다 */
+		function idxOf(el) {
+			var t = el;
 			while (t && t !== nodes) {
-				if (t.nodeType === 1 && (' ' + t.className + ' ').indexOf(' cat-node ') > -1) { li = t; break; }
+				if (t.nodeType === 1 && (' ' + t.className + ' ').indexOf(' cat-node ') > -1) {
+					for (var k = 0; k < total; k++) if (nodeEls[k] === t) return k;
+					return -1;
+				}
 				t = t.parentNode;
 			}
-			if (!li) return;
-			manualUntil = (new Date()).getTime() + 5000;
-			for (var k = 0; k < total; k++) if (nodeEls[k] === li) { go(k); break; }
+			return -1;
+		}
+		function hold(e) {
+			var k = idxOf(e.target);
+			if (k < 0) return;
+			held = true; stop(); go(k);
+		}
+		function release() { held = false; start(); }
+
+		nodes.addEventListener('mouseover', hold);
+		nodes.addEventListener('mouseout', function (e) {
+			if (e.relatedTarget && nodes.contains(e.relatedTarget)) return;
+			release();
+		});
+		nodes.addEventListener('focusin', hold);
+		nodes.addEventListener('focusout', function (e) {
+			if (e.relatedTarget && nodes.contains(e.relatedTarget)) return;
+			release();
+		});
+		nodes.addEventListener('click', function (e) {
+			var k = idxOf(e.target);
+			if (k > -1) { go(k); restart(); }
 		});
 
 		/* 좌우 방향키로도 이동 (tablist 기본 동작) */
@@ -813,38 +900,23 @@
 			var step = (e.keyCode === 39) ? 1 : (e.keyCode === 37 ? -1 : 0);
 			if (!step) return;
 			e.preventDefault();
-			manualUntil = (new Date()).getTime() + 5000;
-			var next = (cur + step + total) % total;
-			go(next);
-			btnEls[next].focus();
+			var n = (cur + step + total) % total;
+			go(n);
+			btnEls[n].focus();
 		});
 
-		/* ---------- 스크롤 진행도 -> 활성 인덱스 ---------- */
-		var ticking = false;
-		function update() {
-			ticking = false;
-			if (w.innerWidth < 901) return;                       /* 모바일은 기존 카드 UI */
-			if ((new Date()).getTime() < manualUntil) return;
-			var r = orbit.getBoundingClientRect();
-			if (!r.height) return;
-			var mid  = r.top + r.height / 2;
-			var from = w.innerHeight * 0.95;                      /* 원이 아래에서 올라오기 시작 */
-			var to   = w.innerHeight * 0.15;                      /* 원이 위로 빠져나가는 시점 */
-			var p    = (from - mid) / (from - to);
-			if (p < 0) p = 0;
-			if (p > 0.9999) p = 0.9999;
-			go(Math.floor(p * total));
+		/* 화면에 들어와 있을 때만 돈다 */
+		if (w.IntersectionObserver) {
+			new w.IntersectionObserver(function (entries) {
+				inView = entries[0].isIntersecting;
+				if (inView) start(); else stop();
+			}, { threshold: 0.4 }).observe(orbit);
+		} else {
+			inView = true; start();
 		}
-		function onScroll() {
-			if (ticking) return;
-			ticking = true;
-			if (w.requestAnimationFrame) w.requestAnimationFrame(update);
-			else setTimeout(update, 16);
-		}
-		try { w.addEventListener('scroll', onScroll, { passive: true }); }
-		catch (err) { w.addEventListener('scroll', onScroll); }
-		w.addEventListener('resize', onScroll);
-		update();
+		w.addEventListener('resize', function () {
+			if (w.innerWidth < 901) stop(); else start();
+		});
 	}
 
 	if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', init);
