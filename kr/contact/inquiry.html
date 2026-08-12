@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>문의 - 견적 문의 양식 | MEDITIVE 병원 전문 디자인 스튜디오</title>
+<title>문의 - 견적 문의 | MEDITIVE 병원 전문 디자인 스튜디오</title>
 <meta name="Title" content="견적 문의 - MEDITIVE 병원 전문 디자인 스튜디오">
 <meta name="Keywords" content="병원 디자인 견적, 병원 브로슈어 제작 문의, 병원 홈페이지 제작, 올인원 마케팅, MEDITIVE 문의">
 <meta name="Description" content="병원 브로슈어·리플렛·홈페이지·개원 패키지 제작을 위한 MEDITIVE 견적 문의 양식입니다.">
@@ -36,37 +36,74 @@
 <style>
 	#content.wide{padding:0;}
 	.iq-section{padding:11rem 0 16rem; background:#fff;}
-	.iq-wrap{max-width:96rem; margin:0 auto;}
-	.iq-lead{text-align:center; margin-bottom:6rem;}
-	.iq-lead .iq-sub{font-size:1.6rem; letter-spacing:.14em; color:#64D3CE; font-weight:600; display:block; margin-bottom:1.6rem;}
-	.iq-lead h2{font-size:3.4rem; font-weight:700; color:#3E4D54; letter-spacing:-0.01em; line-height:1.35;}
-	.iq-lead p{margin-top:2rem; font-size:1.7rem; color:#7C888D; line-height:1.7;}
-	.iq-form{margin-top:1rem;}
-	.iq-row{border-top:1px solid #E3E9EA; padding:3rem 0; display:flex; gap:3rem;}
-	.iq-row:first-child{border-top:2px solid #3E4D54;}
-	.iq-row .iq-label{flex:0 0 20rem; font-size:1.7rem; font-weight:600; color:#3E4D54; padding-top:1rem;}
+	/* 폼 폭은 본문 기준폭(1400px)을 그대로 사용 */
+	.iq-wrap{max-width:none; margin:0 auto;}
+	/* 제목 · 설명 : 폼 위 중앙 정렬 */
+	.iq-lead{text-align:center; margin-bottom:5rem;}
+	.iq-lead .iq-sub{position:relative; display:inline-block; font-size:2.4rem; font-weight:600; letter-spacing:-0.02em; color:#64D3CE; line-height:1.3; margin-bottom:1.5rem;}
+	.iq-lead .iq-sub:before{position:absolute; content:''; width:.6rem; height:.6rem; border-radius:.6rem; background:#64D3CE; right:-1.2rem; top:.3rem;}
+	.iq-lead h2{font-size:4.6rem; font-weight:800; color:#3E4D54; letter-spacing:-0.025em; line-height:1.3;}
+	.iq-lead p{margin-top:2.5rem; font-size:1.9rem; font-weight:500; color:#7C888D; line-height:1.7; letter-spacing:-0.03em;}
+	/* 필수 항목 안내줄이 표의 상단 굵은 선 역할 */
+	.iq-essential{text-align:right; color:#64D3CE; font-weight:500; font-size:1.6rem; letter-spacing:-0.05em; padding-bottom:1.5rem; border-bottom:2px solid #3E4D54; margin-bottom:3rem;}
+	.iq-form{margin-top:0;}
+	/* 라벨 열 + 입력 열 2단 : 행 구분선 없이 여백으로만 리듬 */
+	.iq-row{display:flex; align-items:flex-start; border:0;}
+	.iq-row .iq-label{flex:0 0 18rem; font-size:2rem; font-weight:700; color:#3E4D54; letter-spacing:-0.05em; padding:3rem 2rem 1rem 0;}
 	.iq-row .iq-label .req{color:#64D3CE; margin-left:.4rem;}
-	.iq-row .iq-field{flex:1 1 auto;}
+	.iq-row .iq-field{flex:1 1 auto; min-width:0; padding:1rem 0;}
+	/* select 의 기본 화살표(default.css 의 background-image)를 지우지 않도록 background-color 만 지정 */
 	.iq-field input[type=text], .iq-field input[type=email], .iq-field textarea, .iq-field select{
-		width:100%; border:1px solid #D6DEE0; border-radius:1rem; padding:1.5rem 1.8rem; font-size:1.6rem; color:#3E4D54; background:#fff; transition:border-color .3s, box-shadow .3s; font-family:inherit;}
-	.iq-field textarea{min-height:16rem; resize:vertical; line-height:1.6;}
-	.iq-field input:focus, .iq-field textarea:focus, .iq-field select:focus{outline:none; border-color:#64D3CE; box-shadow:0 0 0 .3rem rgba(100,211,206,.18);}
-	.iq-chips{display:flex; flex-wrap:wrap; gap:1.2rem;}
+		width:100%; height:6.5rem; background-color:#F2F6F7; border:none; border-radius:.5rem; outline:none;
+		font-size:1.8rem; font-weight:500; color:#3E4D54; letter-spacing:-0.03em; text-indent:3rem;
+		vertical-align:middle; box-sizing:border-box; font-family:inherit; transition:background .3s, box-shadow .3s;}
+	.iq-field ::placeholder{color:#AAB4B8; font-weight:500;}
+	.iq-field textarea{height:38rem; resize:none; text-indent:0; padding:2rem 3rem; line-height:1.6;}
+	.iq-field select{padding-right:4rem; background-position:calc(100% - 2rem) 50%;}
+	.iq-field input:focus, .iq-field textarea:focus, .iq-field select:focus{background-color:#fff; box-shadow:inset 0 0 0 .1rem #64D3CE;}
+	/* 선택 항목도 입력창과 같은 높이 · 같은 바탕의 한 줄로 */
+	.iq-chips{display:flex; align-items:center; flex-wrap:wrap; min-height:6.5rem; background:#F2F6F7; border-radius:.5rem; padding:1.2rem 3rem; gap:1rem 2.8rem; box-sizing:border-box;}
 	.iq-chips label{position:relative; cursor:pointer;}
-	.iq-chips input{position:absolute; opacity:0; pointer-events:none;}
-	.iq-chips span{display:inline-block; padding:1.1rem 1.9rem; border:1px solid #D6DEE0; border-radius:5rem; font-size:1.5rem; color:#7C888D; transition:all .25s;}
-	.iq-chips input:checked + span{background:#64D3CE; border-color:#64D3CE; color:#fff; font-weight:600;}
-	.iq-agree{display:flex; align-items:center; gap:1rem; font-size:1.5rem; color:#7C888D;}
-	.iq-agree input{width:2rem; height:2rem; accent-color:#64D3CE;}
-	.iq-agree a{color:#3E4D54; text-decoration:underline;}
-	.iq-submit{text-align:center; margin-top:5rem;}
-	.iq-submit button{display:inline-flex; align-items:center; gap:1rem; background:#3E4D54; color:#fff; border:none; border-radius:5rem; padding:2rem 5.5rem; font-size:1.8rem; font-weight:600; letter-spacing:.02em; cursor:pointer; transition:background .3s, transform .3s;}
-	.iq-submit button:hover{background:#64D3CE; transform:translateY(-.3rem);}
+	.iq-chips input{display:none;}
+	.iq-chips span{display:inline-block; position:relative; padding-left:3.2rem; font-size:1.8rem; font-weight:500; color:#3E4D54; letter-spacing:-0.05em; line-height:1.3;}
+	.iq-chips span:before{position:absolute; content:'\e92c'; font-family:xeicon; top:-.4rem; left:0; font-size:2.4rem; color:#C6D2D6;}
+	.iq-chips input:checked + span{font-weight:700;}
+	.iq-chips input:checked + span:before{content:'\e92b'; color:#64D3CE;}
+	/* 개인정보 동의 : 표 밖의 독립 바 */
+	.iq-agree-con{display:flex; align-items:center; justify-content:space-between; gap:2rem; padding:2rem 0; margin-top:3rem; border-top:1px solid #E3E9EA; border-bottom:1px solid #E3E9EA;}
+	.iq-agree{position:relative; cursor:pointer;}
+	/* required 검사가 동작해야 하므로 display:none 대신 투명 처리 */
+	.iq-agree input{position:absolute; left:0; top:.2rem; width:2.2rem; height:2.2rem; opacity:0; margin:0; cursor:pointer;}
+	.iq-agree > span{position:relative; display:inline-block; padding-left:3.5rem; font-size:1.8rem; font-weight:500; color:#3E4D54; letter-spacing:-0.05em; line-height:1.3;}
+	.iq-agree > span:before{position:absolute; content:'\e92c'; font-family:xeicon; top:-.4rem; left:0; font-size:2.5rem; color:#C6D2D6;}
+	.iq-agree input:checked + span:before{content:'\e92b'; color:#64D3CE;}
+	.iq-agree > span .req{color:#64D3CE; font-style:normal; margin-left:.4rem;}
+	.iq-agree-con .iq-agree-view{display:flex; align-items:center; flex:none; height:4.5rem; border:2px solid #3E4D54; padding:0 3.5rem; border-radius:2.25rem; font-size:1.7rem; font-weight:700; letter-spacing:-0.05em; color:#3E4D54; box-sizing:border-box; transition:background .3s, color .3s, border-color .3s;}
+	.iq-agree-con .iq-agree-view:hover{background:#3E4D54; color:#fff;}
+	/* 버튼 : 중앙 정렬 · 미라셀 기준 사이즈(21.5rem x 6rem) */
+	.iq-submit{display:flex; align-items:center; justify-content:center; flex-wrap:wrap; margin-top:5rem;}
+	.iq-submit button{display:inline-flex; align-items:center; justify-content:center; gap:1rem; min-width:21.5rem; height:6rem; padding:0 4rem; background:#3E4D54; color:#fff; border:0; border-radius:.5rem; font-size:1.8rem; font-weight:700; letter-spacing:-0.02em; cursor:pointer; box-sizing:border-box; transition:background .3s;}
+	.iq-submit button:hover{background:#64D3CE;}
 	.iq-submit button i{font-size:1.6rem;}
-	.iq-note{text-align:center; margin-top:2.4rem; font-size:1.4rem; color:#AAB4B8;}
-	@media all and (max-width:767px){
-		.iq-section{padding:7rem 0 10rem;} .iq-lead h2{font-size:2.4rem;}
-		.iq-row{flex-direction:column; gap:1.4rem; padding:2.4rem 0;} .iq-row .iq-label{flex:none; padding-top:0;}
+	.iq-note{width:100%; text-align:center; margin-top:2.4rem; font-size:1.4rem; color:#AAB4B8;}
+	@media all and (max-width:1024px){
+		.iq-lead h2{font-size:3.6rem;}
+		.iq-row .iq-label{flex:0 0 15rem; font-size:1.8rem;}
+	}
+	@media all and (max-width:800px){
+		.iq-section{padding:7rem 0 10rem;}
+		.iq-lead{margin-bottom:3.5rem;} .iq-lead .iq-sub{font-size:2rem;} .iq-lead h2{font-size:2.8rem;} .iq-lead p{font-size:1.6rem; margin-top:1.8rem;}
+		.iq-essential{margin-bottom:1rem;}
+		.iq-row{display:block; padding:2rem 0; border-bottom:1px solid #E3E9EA;}
+		.iq-row .iq-label{font-size:1.8rem; padding:0;}
+		.iq-row .iq-field{padding:1rem 0 0;}
+		.iq-field input[type=text], .iq-field input[type=email], .iq-field select{height:5rem; text-indent:1.5rem; font-size:1.6rem;}
+		.iq-field textarea{height:20rem; padding:1.5rem; font-size:1.6rem;}
+		.iq-chips{padding:1.2rem 1.5rem; gap:1rem 2rem;} .iq-chips span{font-size:1.6rem; padding-left:2.8rem;} .iq-chips span:before{font-size:2rem; top:-.2rem;}
+		.iq-agree-con{flex-direction:column; align-items:flex-start; gap:1.4rem;}
+		.iq-agree > span{font-size:1.6rem;}
+		.iq-agree-con .iq-agree-view{height:4rem; padding:0 2.4rem; font-size:1.5rem;}
+		.iq-submit{margin-top:3rem;} .iq-submit button{min-width:15rem; height:5rem; font-size:1.6rem;}
 	}
 </style>
 <script>dep1=6; dep2=1; dep3="";</script>
@@ -101,7 +138,7 @@
 				<h2 class="blind">Menu</h2>
 				<ul class="clearfix area font-outfit">
 					<li class="gnb1">
-						<a href="../../kr/service/logo.html">디자인 서비스</a>
+						<a href="../../kr/service/logo.html">서비스</a>
 						<div class="gnb-2dep"><ul>
 							<li><a href="../../kr/service/logo.html"><span>로고</span></a></li>
 							<li><a href="../../kr/service/catalog.html"><span>카탈로그</span></a></li>
@@ -145,7 +182,7 @@
 					<li class="gnb6">
 						<a href="../../kr/contact/inquiry.html">문의</a>
 						<div class="gnb-2dep"><ul>
-							<li><a href="../../kr/contact/inquiry.html"><span>견적 문의 양식</span></a></li>
+							<li><a href="../../kr/contact/inquiry.html"><span>견적 문의</span></a></li>
 						</ul></div>
 					</li>
 				</ul>
@@ -177,7 +214,7 @@
 										<div class="menu-location location1 cm-drop-menu-box-JS" data-drop-event="click">
 											<button class="cur-location cm-drop-open-btn-JS"><span>문의</span></button>
 											<ul class="location-menu-con cm-drop-list-JS">
-												<li><a href="../../kr/service/logo.html">디자인 서비스</a></li>
+												<li><a href="../../kr/service/logo.html">서비스</a></li>
 												<li><a href="../../kr/shop/list.html?cat=all">상품몰</a></li>
 												<li><a href="../../kr/portfolio/all.html">포트폴리오</a></li>
 												<li><a href="../../kr/guide/binding.html">인쇄 가이드</a></li>
@@ -186,9 +223,9 @@
 											</ul>
 										</div>
 										<div class="menu-location location2 cm-drop-menu-box-JS" data-drop-event="click">
-											<button class="cur-location cm-drop-open-btn-JS"><span>견적 문의 양식</span></button>
+											<button class="cur-location cm-drop-open-btn-JS"><span>견적 문의</span></button>
 											<ul class="location-menu-con cm-drop-list-JS">
-												<li><a href="../../kr/contact/inquiry.html"><span>견적 문의 양식</span></a></li>
+												<li><a href="../../kr/contact/inquiry.html"><span>견적 문의</span></a></li>
 											</ul>
 										</div>
 									</div>
@@ -209,28 +246,29 @@
 					<div class="area">
 						<div class="iq-wrap">
 							<div class="iq-lead" data-scroll="fade-up">
-								<span class="iq-sub font-outfit">GET A QUOTE</span>
+								<span class="iq-sub font-outfit">Inquiry</span>
 								<h2>병원을, 메디티브하게.<br>편하게 문의해 주세요.</h2>
 								<p>브로슈어 · 리플렛 · 명함 · 디지털 콘텐츠 · 홈페이지 · 개원 패키지까지<br>병원에 필요한 모든 디자인을 함께 설계합니다.</p>
 							</div>
-							<form class="iq-form" action="#" method="post" onsubmit="alert('문의가 접수되었습니다. 빠르게 연락드리겠습니다.'); return false;">
-								<div class="iq-row" data-scroll="fade-up">
+							<form class="iq-form" action="#" method="post" data-scroll="fade-up" onsubmit="alert('문의가 접수되었습니다. 빠르게 연락드리겠습니다.'); return false;">
+								<p class="iq-essential"><span class="req">*</span> 표시는 필수 입력 항목입니다.</p>
+								<div class="iq-row">
 									<div class="iq-label">담당자명<span class="req">*</span></div>
 									<div class="iq-field"><input type="text" name="name" placeholder="성함을 입력해 주세요" required></div>
 								</div>
-								<div class="iq-row" data-scroll="fade-up">
+								<div class="iq-row">
 									<div class="iq-label">병원 · 기관명</div>
 									<div class="iq-field"><input type="text" name="hospital" placeholder="병원 또는 기관명을 입력해 주세요"></div>
 								</div>
-								<div class="iq-row" data-scroll="fade-up">
+								<div class="iq-row">
 									<div class="iq-label">연락처<span class="req">*</span></div>
 									<div class="iq-field"><input type="text" name="phone" placeholder="- 없이 숫자만 입력" required></div>
 								</div>
-								<div class="iq-row" data-scroll="fade-up">
+								<div class="iq-row">
 									<div class="iq-label">이메일<span class="req">*</span></div>
 									<div class="iq-field"><input type="email" name="email" placeholder="example@hospital.com" required></div>
 								</div>
-								<div class="iq-row" data-scroll="fade-up">
+								<div class="iq-row">
 									<div class="iq-label">문의 유형</div>
 									<div class="iq-field">
 										<div class="iq-chips">
@@ -244,7 +282,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="iq-row" data-scroll="fade-up">
+								<div class="iq-row">
 									<div class="iq-label">예상 일정</div>
 									<div class="iq-field">
 										<select name="schedule">
@@ -256,17 +294,15 @@
 										</select>
 									</div>
 								</div>
-								<div class="iq-row" data-scroll="fade-up">
+								<div class="iq-row">
 									<div class="iq-label">문의 내용<span class="req">*</span></div>
 									<div class="iq-field"><textarea name="message" placeholder="병원 소개, 진료 특성, 필요한 작업물, 참고 자료 등을 자유롭게 남겨 주세요." required></textarea></div>
 								</div>
-								<div class="iq-row" data-scroll="fade-up">
-									<div class="iq-label">개인정보 동의<span class="req">*</span></div>
-									<div class="iq-field">
-										<label class="iq-agree"><input type="checkbox" name="agree" required> <span><a href="../../kr/etc/privacy.html" target="_blank">개인정보 수집 및 이용</a>에 동의합니다.</span></label>
-									</div>
+								<div class="iq-agree-con">
+									<label class="iq-agree"><input type="checkbox" name="agree" required><span>개인정보 수집 및 이용에 동의합니다.<em class="req">*</em></span></label>
+									<a href="../../kr/etc/privacy.html" target="_blank" class="iq-agree-view">내용 보기</a>
 								</div>
-								<div class="iq-submit" data-scroll="fade-up">
+								<div class="iq-submit">
 									<button type="submit">견적 문의 보내기 <i class="xi-arrow-right"></i></button>
 									<p class="iq-note">접수 후 영업일 기준 1~2일 이내에 담당자가 연락드립니다. · hello@meditive.co.kr</p>
 								</div>

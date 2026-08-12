@@ -40,23 +40,34 @@
 <style>
 	#content.wide{padding:0;}
 	/* ===== portfolio grid ===== */
-	.pf-section{padding:11rem 0 16rem; background:#fff;}
+	.pf-section{padding:11rem 0 16rem; background:#fff; overflow-x:hidden;}
 	.pf-head{display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:5rem; gap:2rem; flex-wrap:wrap;}
 	.pf-head .pf-sub{font-size:2rem; letter-spacing:.14em; color:#64D3CE; font-weight:600; margin-bottom:1.4rem; display:block;}
 	.pf-head .pf-h2{font-size:6.3rem; font-weight:800; color:#3E4D54; letter-spacing:-0.05em; line-height:1.34;}
 	.pf-head .pf-desc{font-size:1.7rem; color:#7C8A90; line-height:1.7; letter-spacing:-0.02em; margin-top:1.8rem; max-width:62rem;}
 	.pf-head .pf-count{font-size:1.6rem; color:#AAB4B8;}
 	.pf-head .pf-count b{color:#64D3CE;}
-	.pf-grid{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(3,1fr); gap:4.5rem 3.2rem;}
-	.pf-item{position:relative;}
-	.pf-thumb{position:relative; width:100%; aspect-ratio:370/240; border-radius:1.6rem; overflow:hidden; background:#EEF2F3; box-shadow:0 1.2rem 3.2rem rgba(62,77,84,.08);}
-	.pf-thumb img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .7s cubic-bezier(.16,.84,.44,1);}
-	.pf-thumb:after{content:""; position:absolute; inset:0; background:linear-gradient(160deg,rgba(100,211,206,0) 40%,rgba(62,77,84,.18)); opacity:0; transition:opacity .5s;}
-	.pf-item:hover .pf-thumb img{transform:scale(1.06);}
-	.pf-item:hover .pf-thumb:after{opacity:1;}
-	.pf-meta{padding:2rem .4rem 0;}
-	.pf-cat{display:inline-block; font-family:var(--font-family1); font-size:1.4rem; letter-spacing:0; color:#64D3CE; font-weight:600; margin-bottom:.9rem;}
-	.pf-tit{font-size:1.9rem; font-weight:600; color:#3E4D54; letter-spacing:-0.02em; line-height:1.4;}
+	/* 카드 박스 대신 이미지가 영역을 꽉 채우는 갤러리형 : 라운딩 · 그림자 · 카드배경 없음 */
+	.pf-grid{list-style:none; margin:0 calc(50% - 50vw); padding:0; display:grid; grid-template-columns:repeat(4,1fr); gap:0;}
+	.pf-item{position:relative; aspect-ratio:370/240; overflow:hidden; background:#EEF2F3; cursor:pointer;}
+	.pf-thumb{position:absolute; inset:0; width:100%; height:100%; border-radius:0; overflow:hidden; background:none; box-shadow:none;}
+	.pf-thumb img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .8s cubic-bezier(.16,.84,.44,1);}
+	.pf-item:hover .pf-thumb img{transform:scale(1.05);}
+	/* hover 시에만 작업물 정보를 얹어 이미지 자체가 중심이 되도록 */
+	.pf-item:before{content:""; position:absolute; inset:0; z-index:1; background:linear-gradient(180deg,rgba(30,44,49,0) 42%,rgba(30,44,49,.82) 100%); opacity:0; transition:opacity .45s; pointer-events:none;}
+	.pf-item:hover:before{opacity:1;}
+	.pf-item:after{content:"\2197"; position:absolute; top:1.6rem; right:1.6rem; z-index:2; width:4.2rem; height:4.2rem; border-radius:50%; background:#fff; color:#3E4D54; display:grid; place-items:center; font-size:1.7rem; font-weight:700; opacity:0; transform:translateY(.8rem) scale(.85); transition:opacity .35s, transform .35s; pointer-events:none;}
+	.pf-item:hover:after{opacity:1; transform:none;}
+	.pf-meta{position:absolute; left:0; right:0; bottom:0; z-index:2; padding:2.6rem 2.4rem; opacity:0; transform:translateY(1.2rem); transition:opacity .45s, transform .45s; pointer-events:none;}
+	.pf-item:hover .pf-meta{opacity:1; transform:none;}
+	.pf-cat{display:block; font-family:var(--font-family1); font-size:1.4rem; letter-spacing:0; color:#64D3CE; font-weight:600; margin-bottom:.7rem;}
+	.pf-tit{font-size:2rem; font-weight:700; color:#fff; letter-spacing:-0.02em; line-height:1.4;}
+	/* 터치 기기 : hover 가 없으므로 정보를 항상 노출 */
+	@media (hover:none){
+		.pf-item:before{opacity:1;}
+		.pf-meta{opacity:1; transform:none;}
+		.pf-item:after{display:none;}
+	}
 	/* ===== empty state ===== */
 	.pf-empty{text-align:center; padding:9rem 2rem; border:1px solid #E6ECEE; border-radius:1.6rem; background:#F7FAFA;}
 	.pf-empty-tit{font-size:2.2rem; font-weight:600; color:#3E4D54; letter-spacing:-0.02em; margin-bottom:1.6rem;}
@@ -64,13 +75,14 @@
 	.pf-empty-btn{display:inline-flex; align-items:center; gap:.8rem; margin-top:3.2rem; padding:1.5rem 3rem; border-radius:999px; background:#64D3CE; color:#fff; font-size:1.5rem; font-weight:600; transition:background .3s;}
 	.pf-empty-btn:hover{background:#3E4D54;}
 	@media all and (max-width:1280px){ .pf-head .pf-h2{font-size:5.5rem;} }
-	@media all and (max-width:1200px){ .pf-grid{grid-template-columns:repeat(2,1fr); gap:4rem 2.6rem;} }
+	@media all and (max-width:1400px){ .pf-grid{grid-template-columns:repeat(3,1fr);} }
+	@media all and (max-width:900px){ .pf-grid{grid-template-columns:repeat(2,1fr);} }
 	@media all and (max-width:767px){
 		.pf-section{padding:7rem 0 10rem;} .pf-head .pf-h2{font-size:3.8rem;} .pf-head .pf-desc{font-size:1.5rem;}
-		.pf-grid{grid-template-columns:repeat(2,1fr); gap:3rem 1.6rem;} .pf-tit{font-size:1.6rem;} .pf-cat{font-size:1.2rem;}
+		.pf-meta{padding:1.8rem 1.6rem;} .pf-tit{font-size:1.6rem;} .pf-cat{font-size:1.2rem;}
 		.pf-empty{padding:6rem 1.6rem;} .pf-empty-tit{font-size:1.8rem;} .pf-empty-txt{font-size:1.4rem;}
 	}
-	@media all and (max-width:479px){ .pf-grid{grid-template-columns:1fr;} }
+	@media all and (max-width:560px){ .pf-grid{grid-template-columns:1fr;} }
 </style>
 <script>dep1=1; dep2=3; dep3="";</script>
 </head>
@@ -104,7 +116,7 @@
 				<h2 class="blind">Menu</h2>
 				<ul class="clearfix area font-outfit">
 					<li class="gnb1">
-						<a href="../../kr/service/logo.html">디자인 서비스</a>
+						<a href="../../kr/service/logo.html">서비스</a>
 						<div class="gnb-2dep"><ul>
 							<li><a href="../../kr/service/logo.html"><span>로고</span></a></li>
 							<li><a href="../../kr/service/catalog.html"><span>카탈로그</span></a></li>
@@ -148,7 +160,7 @@
 					<li class="gnb6">
 						<a href="../../kr/contact/inquiry.html">문의</a>
 						<div class="gnb-2dep"><ul>
-							<li><a href="../../kr/contact/inquiry.html"><span>견적 문의 양식</span></a></li>
+							<li><a href="../../kr/contact/inquiry.html"><span>견적 문의</span></a></li>
 						</ul></div>
 					</li>
 				</ul>
@@ -180,7 +192,7 @@
 										<div class="menu-location location1 cm-drop-menu-box-JS" data-drop-event="click">
 											<button class="cur-location cm-drop-open-btn-JS"><span>서비스</span></button>
 											<ul class="location-menu-con cm-drop-list-JS">
-												<li><a href="../../kr/service/logo.html">디자인 서비스</a></li>
+												<li><a href="../../kr/service/logo.html">서비스</a></li>
 												<li><a href="../../kr/shop/list.html?cat=all">상품몰</a></li>
 												<li><a href="../../kr/portfolio/all.html">포트폴리오</a></li>
 												<li><a href="../../kr/guide/binding.html">인쇄 가이드</a></li>
@@ -221,7 +233,7 @@
 								<h2 class="pf-h2">한 장으로 전하는<br>팜플렛 · 리플렛 작업물</h2>
 								<p class="pf-desc">접지 구조에 맞춰 정보의 우선순위를 정리해, 짧은 순간에도 핵심이 전달되도록 디자인합니다.</p>
 							</div>
-							<p class="pf-count font-outfit">Total <b>15</b> works</p>
+							<p class="pf-count font-outfit">Total <b>14</b> works</p>
 						</div>
 						<ul class="pf-grid">
 							<li class="pf-item" data-scroll="fade-up">
@@ -250,13 +262,6 @@
 								<div class="pf-meta">
 									<span class="pf-cat">리플렛</span>
 									<h3 class="pf-tit">워터트리네즈 리플렛</h3>
-								</div>
-							</li>
-							<li class="pf-item" data-scroll="fade-up">
-								<div class="pf-thumb"><img src="../../images/portfolio/p14.jpg" alt="FNT 오토피더 리플렛" loading="lazy"></div>
-								<div class="pf-meta">
-									<span class="pf-cat">리플렛</span>
-									<h3 class="pf-tit">FNT 오토피더 리플렛</h3>
 								</div>
 							</li>
 							<li class="pf-item" data-scroll="fade-up">

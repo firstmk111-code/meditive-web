@@ -72,7 +72,7 @@
 				<h2 class="blind">Menu</h2>
 				<ul class="clearfix area font-outfit">
 					<li class="gnb1">
-						<a href="../../kr/service/logo.html">디자인 서비스</a>
+						<a href="../../kr/service/logo.html">서비스</a>
 						<div class="gnb-2dep"><ul>
 							<li><a href="../../kr/service/logo.html"><span>로고</span></a></li>
 							<li><a href="../../kr/service/catalog.html"><span>카탈로그</span></a></li>
@@ -116,7 +116,7 @@
 					<li class="gnb6">
 						<a href="../../kr/contact/inquiry.html">문의</a>
 						<div class="gnb-2dep"><ul>
-							<li><a href="../../kr/contact/inquiry.html"><span>견적 문의 양식</span></a></li>
+							<li><a href="../../kr/contact/inquiry.html"><span>견적 문의</span></a></li>
 						</ul></div>
 					</li>
 				</ul>
@@ -151,18 +151,40 @@
 								<!-- 제작 정보 요약 : 제작 기간 / 인쇄 방식 / 최소 수량 / 배송 -->
 								<ul class="pd-quick" id="pdQuick"></ul>
 
-								<div class="pd-opt" id="pdOpt"></div>
+								<!-- 옵션 선택 ~ 결제까지를 하나의 구매 패널로 묶는다 -->
+								<div class="pd-buy">
+									<h3 class="pd-buy-tit"><em class="font-outfit">STEP</em>옵션을 선택해 주세요</h3>
 
-								<!-- 예상 금액 상세 -->
-								<div class="pd-sumlist" id="pdSumList"></div>
+									<div class="pd-opt" id="pdOpt"></div>
 
-								<div class="pd-total">
-									<span class="label">예상 금액</span>
-									<strong class="sum font-outfit"><span class="sum-cap">VAT 별도</span><span id="pdSum">0</span><span class="won">원</span></strong>
+									<!-- 선택한 옵션 요약 : 수량 · 금액 조절 -->
+									<div class="pd-sel">
+										<span class="pd-sel-tag font-outfit">SELECTED</span>
+										<strong class="pd-sel-name" id="selName"></strong>
+										<span class="pd-sel-opt" id="selOpt"></span>
+										<div class="pd-sel-ctrl">
+											<div class="pd-qty"><button type="button" id="qMinus">−</button><input type="text" id="qNum" value="1" readonly><button type="button" id="qPlus">+</button></div>
+											<strong class="pd-sel-price font-outfit"><span id="selPrice">0</span><span class="won">원</span></strong>
+										</div>
+									</div>
+
+									<!-- 예상 금액 상세 -->
+									<div class="pd-sumlist" id="pdSumList"></div>
+
+									<div class="pd-total">
+										<span class="label">예상 금액</span>
+										<strong class="sum font-outfit"><span class="sum-cap">VAT 별도</span><span id="pdSum">0</span><span class="won">원</span></strong>
+									</div>
+
+									<div class="pd-btns" id="pdBtns"></div>
 								</div>
-
-								<div class="pd-btns" id="pdBtns"></div>
 							</div>
+						</div>
+
+						<!-- 추천 상품 : 구매 영역 바로 아래 -->
+						<div class="pd-block pd-recommend">
+							<h3 class="pd-block-tit"><em class="font-outfit">RECOMMEND</em>함께 준비하면 좋은 상품</h3>
+							<ul class="shop-grid" id="pdRelated"></ul>
 						</div>
 
 						<!-- 상품 설명 -->
@@ -181,12 +203,6 @@
 								<li><span class="step font-outfit">STEP 03</span><p class="tit">수정 · 확정</p><p class="txt">문구와 구성을 함께 다듬어 최종 시안을 확정합니다.</p></li>
 								<li><span class="step font-outfit">STEP 04</span><p class="tit">인쇄 · 배송</p><p class="txt">인쇄 감리 후 병원으로 안전하게 배송해 드립니다.</p></li>
 							</ul>
-						</div>
-
-						<!-- 관련 상품 -->
-						<div class="pd-block">
-							<h3 class="pd-block-tit"><em class="font-outfit">RELATED</em>함께 준비하면 좋은 상품</h3>
-							<ul class="shop-grid" id="pdRelated"></ul>
 						</div>
 					</div>
 				</section>
@@ -332,10 +348,7 @@
 				oh += '</select></div></div>';
 			}
 		}
-		/* 주문 수량 */
-		oh += '<div class="pd-opt-row"><div class="pd-opt-label">주문 세트</div><div class="pd-opt-body">' +
-		      '<div class="pd-qty"><button type="button" id="qMinus">−</button><input type="text" id="qNum" value="1" readonly><button type="button" id="qPlus">+</button></div>' +
-		      '<span class="pd-qty-unit">세트</span></div></div>';
+		/* 주문 수량 스테퍼는 아래 '선택한 옵션' 카드에 고정으로 두어 옵션 선택과 분리한다 */
 		document.getElementById('pdOpt').innerHTML = oh;
 
 		/* ---- 이전 주문 조건 적용 ---- */
@@ -371,6 +384,10 @@
 			var goods = s.unit * s.count;
 			var opt   = s.optAdd * s.count;
 			var ship  = isQuote ? 0 : S.shipFee(goods + opt);
+			/* 선택한 옵션 카드 : 무엇을 · 몇 세트 · 얼마에 담는지 한눈에 */
+			document.getElementById('selName').textContent = p.name + ' — ' + s.qtyLabel;
+			document.getElementById('selOpt').textContent = s.optTxt;
+			document.getElementById('selPrice').textContent = S.won(goods + opt);
 			document.getElementById('pdSumList').innerHTML =
 				'<dl><dt>상품 금액 (' + s.qtyLabel + ' × ' + s.count + ')</dt><dd>' + S.won(goods) + '원</dd></dl>' +
 				'<dl><dt>디자인 · 제작 옵션</dt><dd>' + (opt >= 0 ? '' : '-') + S.won(Math.abs(opt)) + '원</dd></dl>' +
@@ -441,10 +458,10 @@
 
 		/* ---- 관련 상품 ---- */
 		var pool = S.filterList(p.cat, 'all'), rel = [];
-		for (var r = 0; r < pool.length && rel.length < 3; r++) if (pool[r].id !== p.id) rel.push(pool[r]);
-		if (rel.length < 3) {
+		for (var r = 0; r < pool.length && rel.length < 4; r++) if (pool[r].id !== p.id) rel.push(pool[r]);
+		if (rel.length < 4) {
 			var all = S.PRODUCTS;
-			for (var a = 0; a < all.length && rel.length < 3; a++) {
+			for (var a = 0; a < all.length && rel.length < 4; a++) {
 				if (all[a].id === p.id) continue;
 				if (rel.indexOf(all[a]) < 0) rel.push(all[a]);
 			}

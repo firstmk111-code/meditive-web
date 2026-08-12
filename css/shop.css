@@ -577,3 +577,82 @@
 	.cat-orbit-spin,
 	.cat-orbit-core .core-item{transition:none !important;}
 }
+
+/* --------------------------------------------------
+ * 11. 상품 상세 : 구매 UX 보완
+ *     상품 정보 -> 옵션 선택 · 구매 -> 추천 상품 흐름
+ *     (기존 토큰 · 기존 클래스를 그대로 확장한다)
+-------------------------------------------------- */
+
+/* 11-1. 상단 : 이미지는 고정하고 오른쪽 정보 · 옵션만 스크롤
+   (열 수 · gap 은 위쪽 반응형 규칙을 덮지 않도록 건드리지 않는다) */
+.pd-top{padding-bottom:8rem;}
+.pd-visual{position:sticky; top:12rem;}
+.pd-info{padding-top:0;}
+
+/* 11-2. 정보 위계 : 상품명보다 가격 · 총액이 눈에 먼저 들어오도록 */
+.pd-tit{font-size:3.4rem; letter-spacing:-0.04em;}
+.pd-txt{font-size:1.6rem; margin-top:1.4rem;}
+.pd-price-box,
+.pd-quote-box{margin-top:2.4rem;}
+
+/* 11-3. 구매 패널 : 옵션 선택 ~ 결제 버튼을 하나의 덩어리로 */
+.pd-buy{margin-top:3rem; padding:3rem 3.2rem 3.2rem; border:1px solid #E4EAEC; border-radius:1.6rem; background:#fff;}
+.pd-buy-tit{display:flex; align-items:center; gap:1rem; font-size:1.8rem; font-weight:700; color:var(--ink-color); letter-spacing:-0.03em; padding-bottom:1.8rem; border-bottom:1px solid #EDF1F2;}
+.pd-buy-tit em{display:inline-flex; align-items:center; height:2.4rem; padding:0 .9rem; border-radius:1.2rem; background:var(--main-color); color:#fff; font-size:1.2rem; font-weight:700; letter-spacing:.06em;}
+
+/* 11-4. 옵션 : 라벨 위 · 선택창 아래로 쌓아 선택 흐름을 한 줄기로 */
+.pd-buy .pd-opt{margin-top:.4rem;}
+.pd-buy .pd-opt-row{display:block; padding:1.8rem 0 0; border:0;}
+.pd-buy .pd-opt-row:first-child{border-top:0;}
+.pd-buy .pd-opt-label{flex:none; display:block; font-size:1.4rem; color:#7C888E; font-weight:500; margin-bottom:.8rem;}
+.pd-buy .pd-opt-body{display:block;}
+.pd-buy .pd-select{width:100%; min-width:0; height:5.6rem; border-radius:.8rem; font-size:1.6rem;}
+
+/* 11-5. 선택한 옵션 요약 카드 : 수량 · 금액을 여기서 한 번에 */
+.pd-sel{margin-top:2.4rem; padding:2rem 2.2rem; border-radius:1.2rem; background:var(--mist-color);}
+.pd-sel-tag{display:inline-block; font-size:1.2rem; font-weight:700; letter-spacing:.06em; color:var(--main-color); margin-bottom:1.2rem;}
+.pd-sel-name{display:block; font-size:1.6rem; font-weight:700; color:var(--ink-color); letter-spacing:-0.03em; line-height:1.45;}
+.pd-sel-opt{display:block; font-size:1.4rem; color:#7C888E; letter-spacing:-0.02em; line-height:1.5; margin-top:.5rem;}
+.pd-sel-opt:empty{display:none;}
+.pd-sel-ctrl{display:flex; align-items:center; justify-content:space-between; gap:1.6rem; margin-top:1.6rem;}
+.pd-sel-ctrl .pd-qty{height:4.4rem; border-radius:2.2rem; background:#fff;}
+.pd-sel-ctrl .pd-qty button{width:4rem; font-size:1.6rem;}
+.pd-sel-ctrl .pd-qty input{width:4.6rem; font-size:1.6rem;}
+.pd-sel-price{font-family:var(--font-family2); font-size:2.2rem; font-weight:700; color:var(--ink-color);}
+.pd-sel-price .won{font-family:var(--font-family1); font-size:1.5rem; font-weight:600; margin-left:.2rem;}
+
+/* 11-6. 금액 · CTA */
+.pd-buy .pd-sumlist{margin-top:2.2rem; padding-top:2rem;}
+.pd-buy .pd-total{margin-top:.6rem; padding:2rem 0 2.4rem; border-top:1px solid #EDF1F2;}
+.pd-buy .pd-total .sum{font-size:3.2rem;}
+.pd-buy .pd-btns{margin-top:0; gap:1rem;}
+.pd-buy .pd-btns .mt-btn{height:6.2rem; border-radius:.8rem; font-size:1.7rem; font-weight:700;}
+
+/* 11-7. 추천 상품 : 구매 영역 바로 아래 */
+.pd-block.pd-recommend{padding-top:7rem;}
+.pd-recommend .shop-grid{grid-template-columns:repeat(4,1fr); gap:3.4rem 2.4rem;}
+
+@media all and (max-width:1400px){
+	.pd-recommend .shop-grid{grid-template-columns:repeat(3,1fr);}
+}
+@media all and (max-width:1200px){
+	.pd-visual{position:static; top:auto;}
+}
+@media all and (max-width:900px){
+	.pd-recommend .shop-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media all and (max-width:767px){
+	.pd-top{padding-bottom:5rem;}
+	.pd-tit{font-size:2.6rem;}
+	.pd-buy{margin-top:2.4rem; padding:2.2rem 2rem 2.4rem; border-radius:1.2rem;}
+	.pd-buy-tit{font-size:1.6rem; padding-bottom:1.4rem;}
+	.pd-buy .pd-opt-row{padding-top:1.4rem;}
+	.pd-buy .pd-select{height:5rem; font-size:1.5rem;}
+	.pd-sel{padding:1.8rem;}
+	.pd-sel-ctrl{flex-wrap:wrap;}
+	.pd-sel-price{font-size:2rem;}
+	.pd-buy .pd-total .sum{font-size:2.6rem;}
+	.pd-buy .pd-btns .mt-btn{height:5.6rem; font-size:1.6rem;}
+	.pd-block.pd-recommend{padding-top:5rem;}
+}
