@@ -34,7 +34,7 @@
 <link rel="stylesheet" type="text/css" href="../../css/plugin/swiper.css" />
 <link rel="stylesheet" type="text/css" href="../../css/plugin/spotlight.css" />
 <link rel="stylesheet" type="text/css" href="../../css/pf_popup.css">
-<link rel="stylesheet" href="../../css/shop.css?ver=260810">
+<link rel="stylesheet" href="../../css/shop.css?ver=260812">
 <script type="text/javascript" src="../../js/vendor/jquery-3.6.0.min.js"></script>
 <script src="../../js/utile.js"></script>
 <style>
@@ -42,12 +42,13 @@
 	/* ===== portfolio grid ===== */
 	.pf-section{padding:11rem 0 16rem; background:#fff; overflow-x:hidden;}
 	.pf-head{display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:5rem; gap:2rem; flex-wrap:wrap;}
-	.pf-head .pf-sub{font-size:2rem; letter-spacing:.14em; color:#64D3CE; font-weight:600; margin-bottom:1.4rem; display:block;}
+	.pf-head .pf-sub{position:relative; display:inline-block; font-size:2.4rem; font-weight:600; letter-spacing:-0.02em; color:#64D3CE; line-height:1.3; margin-bottom:1.4rem;}
+	.pf-head .pf-sub:before{position:absolute; content:''; width:0.6rem; height:0.6rem; border-radius:0.6rem; background-color:#64D3CE; right:-1.2rem; top:0.3rem;}
 	.pf-head .pf-h2{font-size:6.3rem; font-weight:800; color:#3E4D54; letter-spacing:-0.05em; line-height:1.34;}
 	.pf-head .pf-count{font-size:1.6rem; color:#AAB4B8;}
 	.pf-head .pf-count b{color:#64D3CE;}
 	/* 카드 박스 대신 이미지가 영역을 꽉 채우는 갤러리형 : 라운딩 · 그림자 · 카드배경 없음 */
-	.pf-grid{list-style:none; margin:0 calc(50% - 50vw); padding:0; display:grid; grid-template-columns:repeat(4,1fr); gap:0;}
+	.pf-grid{list-style:none; margin:0 calc(50% - 50vw); padding:0; display:grid; grid-template-columns:repeat(3,1fr); gap:0;}
 	.pf-item{position:relative; aspect-ratio:370/240; overflow:hidden; background:#EEF2F3; cursor:pointer;}
 	.pf-thumb{position:absolute; inset:0; width:100%; height:100%; border-radius:0; overflow:hidden; background:none; box-shadow:none;}
 	.pf-thumb img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .8s cubic-bezier(.16,.84,.44,1);}
@@ -61,6 +62,14 @@
 	.pf-item:hover .pf-meta{opacity:1; transform:none;}
 	.pf-cat{display:block; font-family:var(--font-family1); font-size:1.4rem; letter-spacing:0; color:#64D3CE; font-weight:600; margin-bottom:.7rem;}
 	.pf-tit{font-size:2rem; font-weight:700; color:#fff; letter-spacing:-0.02em; line-height:1.4;}
+	/* 진입 모션 : 카드가 화면 주변에서 등장 → 축 이동 + Scale 변화 → 순차적으로 자기 Grid 자리에 안착 */
+	html:not(.no-js) .pf-grid .pf-item[data-scroll]{opacity:0; transform:translate3d(0,7rem,0) scale(.88); transition:opacity .9s cubic-bezier(.16,.84,.44,1), transform .9s cubic-bezier(.16,.84,.44,1);}
+	html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(3n+1){transform:translate3d(-9rem,4rem,0) scale(.88);}
+	html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(3n+3){transform:translate3d(9rem,4rem,0) scale(.88);}
+	html:not(.no-js) .pf-grid .pf-item[data-scroll].animated{opacity:1; transform:none;}
+	/* 같은 행 안에서 왼쪽 → 오른쪽 순서로 안착 */
+	html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(3n+2){transition-delay:.1s;}
+	html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(3n+3){transition-delay:.2s;}
 	/* 터치 기기 : hover 가 없으므로 정보를 항상 노출 */
 	@media (hover:none){
 		.pf-item:before{opacity:1;}
@@ -68,13 +77,44 @@
 		.pf-item:after{display:none;}
 	}
 	@media all and (max-width:1280px){ .pf-head .pf-h2{font-size:5.5rem;} }
-	@media all and (max-width:1400px){ .pf-grid{grid-template-columns:repeat(3,1fr);} }
-	@media all and (max-width:900px){ .pf-grid{grid-template-columns:repeat(2,1fr);} }
+	@media all and (max-width:900px){
+		.pf-grid{grid-template-columns:repeat(2,1fr);}
+		/* 2열 : 좌우에서 들어오는 축을 2열 기준으로 다시 잡는다 */
+		html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(3n+1),
+		html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(3n+3){transform:translate3d(0,6rem,0) scale(.9);}
+		html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(2n+1){transform:translate3d(-6rem,4rem,0) scale(.9);}
+		html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(2n){transform:translate3d(6rem,4rem,0) scale(.9);}
+		html:not(.no-js) .pf-grid .pf-item[data-scroll].animated{transform:none;}
+		html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(3n+2),
+		html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(3n+3){transition-delay:0s;}
+		html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(2n){transition-delay:.1s;}
+	}
 	@media all and (max-width:767px){
 		.pf-section{padding:7rem 0 10rem;} .pf-head .pf-h2{font-size:3.8rem;}
 		.pf-meta{padding:1.8rem 1.6rem;} .pf-tit{font-size:1.6rem;} .pf-cat{font-size:1.2rem;}
 	}
-	@media all and (max-width:560px){ .pf-grid{grid-template-columns:1fr;} }
+	@media all and (max-width:560px){
+		.pf-grid{grid-template-columns:1fr;}
+		/* 1열 : 모바일에서는 좌우 이동을 빼고 가벼운 fade-up 으로 단순화 */
+		html:not(.no-js) .pf-grid .pf-item[data-scroll],
+		html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(3n+1),
+		html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(3n+3),
+		html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(2n+1),
+		html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(2n){transform:translate3d(0,4rem,0) scale(.96); transition-duration:.6s;}
+		html:not(.no-js) .pf-grid .pf-item[data-scroll].animated{transform:none;}
+		html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(2n),
+		html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(3n+2),
+		html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(3n+3){transition-delay:0s;}
+	}
+	/* 모션 최소화 설정이면 : 진입 모션 없이 곧바로 최종 Grid 상태로 노출 */
+	@media (prefers-reduced-motion: reduce){
+		html:not(.no-js) .pf-grid .pf-item[data-scroll][data-scroll],
+		html:not(.no-js) .pf-grid .pf-item[data-scroll][data-scroll]:nth-child(2n),
+		html:not(.no-js) .pf-grid .pf-item[data-scroll][data-scroll]:nth-child(2n+1),
+		html:not(.no-js) .pf-grid .pf-item[data-scroll][data-scroll]:nth-child(3n+1),
+		html:not(.no-js) .pf-grid .pf-item[data-scroll][data-scroll]:nth-child(3n+2),
+		html:not(.no-js) .pf-grid .pf-item[data-scroll][data-scroll]:nth-child(3n+3){opacity:1; transform:none; transition:none; transition-delay:0s; pointer-events:auto;}
+	}
 </style>
 <script>dep1=3; dep2=1; dep3="";</script>
 </head>
@@ -216,7 +256,7 @@
 					<div class="area">
 						<div class="pf-head">
 							<div>
-								<span class="pf-sub font-outfit">ALL WORKS</span>
+								<span class="pf-sub font-outfit">All Works</span>
 								<h2 class="pf-h2">병원의 이야기를 하나의 감각으로<br>완성한 전체 작업물</h2>
 							</div>
 							<p class="pf-count font-outfit">Total <b>45</b> works</p>
@@ -618,6 +658,6 @@
 	<script type="text/javascript" src="../../js/sub.js"></script>
 	<script type="text/javascript" src="../../js/pf_popup.js"></script>
 	<script>window.SHOP_BASE='../../';</script>
-	<script type="text/javascript" src="../../js/shop.js?ver=260810"></script>
+	<script type="text/javascript" src="../../js/shop.js?ver=260812"></script>
 </body>
 </html>

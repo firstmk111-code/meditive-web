@@ -33,7 +33,7 @@
 <link rel="stylesheet" type="text/css" href="../../css/plugin/magnific-popup.css">
 <link rel="stylesheet" type="text/css" href="../../css/plugin/swiper.css" />
 <link rel="stylesheet" type="text/css" href="../../css/plugin/spotlight.css" />
-<link rel="stylesheet" href="../../css/shop.css?ver=260810">
+<link rel="stylesheet" href="../../css/shop.css?ver=260812">
 <script type="text/javascript" src="../../js/vendor/jquery-3.6.0.min.js"></script>
 <script src="../../js/utile.js"></script>
 <script>dep1=2; dep2=1; dep3="";</script>
@@ -182,7 +182,7 @@
 					<div class="area">
 						<div class="shop-head">
 							<div>
-								<span class="shop-sub font-outfit" id="headEn">ALL PRODUCTS</span>
+								<span class="shop-sub font-outfit" id="headEn">All Products</span>
 								<h2 class="shop-h2" id="headTit">병원에 필요한 디자인을<br>상품으로 바로 만나보세요.</h2>
 								<p class="shop-desc" id="headDesc">진료과에 맞는 인쇄물과 홍보물을 선택하고, 제작 옵션까지 한 번에 정리해 드립니다.</p>
 							</div>
@@ -200,8 +200,7 @@
 								<div class="shop-chips" id="deptChips"></div>
 							</div>
 							<div class="shop-filter-row">
-								<div class="shop-filter-label">주문 방식<em class="font-outfit">ORDER TYPE</em></div>
-								<div class="shop-chips" id="typeChips"></div>
+								<div class="shop-filter-label">검색<em class="font-outfit">SEARCH</em></div>
 								<div class="shop-search">
 									<label for="shopQ" class="blind">상품 검색</label>
 									<input type="text" id="shopQ" placeholder="상품명 · 카테고리 · 진료과 검색" autocomplete="off">
@@ -215,7 +214,7 @@
 
 						<!-- 재주문 : 최근 주문 내역 -->
 						<div id="reorderBox" style="display:none; margin-bottom:7rem;">
-							<h3 class="pd-block-tit"><em class="font-outfit">RECENT ORDER</em>최근 주문하신 상품</h3>
+							<h3 class="pd-block-tit"><em class="font-outfit">Recent Order</em>최근 주문하신 상품</h3>
 							<ul class="od-list" id="reorderList"></ul>
 						</div>
 
@@ -300,45 +299,36 @@
 	<script type="text/javascript" src="../../js/common.js?ver=251216"></script>
 	<script type="text/javascript" src="../../js/sub.js"></script>
 	<script>window.SHOP_BASE='../../';</script>
-	<script type="text/javascript" src="../../js/shop.js?ver=260810"></script>
+	<script type="text/javascript" src="../../js/shop.js?ver=260812"></script>
 	<script>
 	(function(){
 		var S = window.MTShop;
 		var HEAD = {
-			all:     { en:'ALL PRODUCTS',    tit:'병원에 필요한 디자인을<br>상품으로 바로 만나보세요.', desc:'진료과에 맞는 인쇄물과 홍보물을 선택하고, 제작 옵션까지 한 번에 정리해 드립니다.' },
-			print:   { en:'HOSPITAL PRINT',  tit:'진료 공간에서 매일 쓰이는<br>병원 인쇄물입니다.',       desc:'진료카드부터 사인물까지, 환자와 만나는 접점을 하나의 톤으로 정리합니다.' },
-			promo:   { en:'PROMOTION',       tit:'병원을 처음 알리는<br>홍보물을 준비합니다.',           desc:'브로슈어 · 리플렛 · 포스터 · 배너까지 병원의 인상을 만드는 홍보 인쇄물입니다.' },
-			form:    { en:'MEDICAL FORMS',   tit:'진료 흐름을 정돈하는<br>병원 서식류입니다.',           desc:'문진표 · 동의서 · 기록지까지, 읽기 쉬운 구조로 다시 설계했습니다.' },
-			card:    { en:'CARD &amp; ENVELOPE', tit:'병원의 첫인상을 만드는<br>명함과 봉투입니다.',      desc:'원장 명함부터 약봉투까지 브랜드 톤을 그대로 이어갑니다.' },
-			package: { en:'OPENING PACKAGE', tit:'개원에 필요한 모든 것을<br>한 번에 준비합니다.',       desc:'낱개로 주문할 필요 없이, 개원 · 리뉴얼에 필요한 구성을 묶어 제안합니다.' },
-			reorder: { en:'REORDER',         tit:'자주 쓰는 상품은<br>같은 조건으로 다시 주문하세요.',   desc:'이전 주문 조건 그대로 한 번에 담을 수 있습니다.' }
+			all:     { en:'All Products',    tit:'병원에 필요한 디자인을<br>상품으로 바로 만나보세요.', desc:'진료과에 맞는 인쇄물과 홍보물을 선택하고, 제작 옵션까지 한 번에 정리해 드립니다.' },
+			print:   { en:'Hospital Print',  tit:'진료 공간에서 매일 쓰이는<br>병원 인쇄물입니다.',       desc:'진료카드부터 사인물까지, 환자와 만나는 접점을 하나의 톤으로 정리합니다.' },
+			promo:   { en:'Promotion',       tit:'병원을 처음 알리는<br>홍보물을 준비합니다.',           desc:'브로슈어 · 리플렛 · 포스터 · 배너까지 병원의 인상을 만드는 홍보 인쇄물입니다.' },
+			form:    { en:'Medical Forms',   tit:'진료 흐름을 정돈하는<br>병원 서식류입니다.',           desc:'문진표 · 동의서 · 기록지까지, 읽기 쉬운 구조로 다시 설계했습니다.' },
+			card:    { en:'Card &amp; Envelope', tit:'병원의 첫인상을 만드는<br>명함과 봉투입니다.',      desc:'원장 명함부터 약봉투까지 브랜드 톤을 그대로 이어갑니다.' },
+			package: { en:'Opening Package', tit:'개원에 필요한 모든 것을<br>한 번에 준비합니다.',       desc:'낱개로 주문할 필요 없이, 개원 · 리뉴얼에 필요한 구성을 묶어 제안합니다.' },
+			reorder: { en:'Reorder',         tit:'자주 쓰는 상품은<br>같은 조건으로 다시 주문하세요.',   desc:'이전 주문 조건 그대로 한 번에 담을 수 있습니다.' }
 		};
-
-		var TYPES = [
-			{ id: 'all',   name: '전체' },
-			{ id: 'order', name: '바로 주문' },
-			{ id: 'quote', name: '견적 문의' }
-		];
 
 		var cat  = S.getParam('cat')  || 'all';
 		var dept = S.getParam('dept') || 'all';
-		var type = S.getParam('type') || 'all';
 		var q    = S.getParam('q')    || '';
 		if (!HEAD[cat]) cat = 'all';
 
-		function url(c, dp, tp, kw){
+		function url(c, dp, kw){
 			if (c  === undefined) c  = cat;
 			if (dp === undefined) dp = dept;
-			if (tp === undefined) tp = type;
 			if (kw === undefined) kw = q;
 			var u = 'list.html?cat=' + c;
 			if (dp && dp !== 'all') u += '&dept=' + dp;
-			if (tp && tp !== 'all') u += '&type=' + tp;
 			if (kw) u += '&q=' + encodeURIComponent(kw);
 			return u;
 		}
 		/* 조건 + 검색어를 함께 적용한 결과 */
-		function result(c, dp, tp){ return S.searchList(q, S.filterList(c, dp, tp)); }
+		function result(c, dp){ return S.searchList(q, S.filterList(c, dp)); }
 
 		/* 헤드 카피 */
 		var h = HEAD[cat];
@@ -352,8 +342,8 @@
 		var ch = '';
 		for (var i = 0; i < S.CATS.length; i++) {
 			var c = S.CATS[i];
-			ch += '<a href="' + url(c.id, dept, type) + '" class="shop-chip' + (c.id === cat ? ' on' : '') + '">' + c.name +
-			      '<span class="num font-outfit">' + result(c.id, dept, type).length + '</span></a>';
+			ch += '<a href="' + url(c.id, dept) + '" class="shop-chip' + (c.id === cat ? ' on' : '') + '">' + c.name +
+			      '<span class="num font-outfit">' + result(c.id, dept).length + '</span></a>';
 		}
 		document.getElementById('catChips').innerHTML = ch;
 
@@ -361,35 +351,26 @@
 		var dh = '';
 		for (var j = 0; j < S.DEPTS.length; j++) {
 			var dp = S.DEPTS[j];
-			dh += '<a href="' + url(cat, dp.id, type) + '" class="shop-chip' + (dp.id === dept ? ' on' : '') + '">' + dp.name + '</a>';
+			dh += '<a href="' + url(cat, dp.id) + '" class="shop-chip' + (dp.id === dept ? ' on' : '') + '">' + dp.name + '</a>';
 		}
 		document.getElementById('deptChips').innerHTML = dh;
-
-		/* 주문 방식 칩 — 바로 주문 / 견적 문의 구분 */
-		var th = '';
-		for (var t = 0; t < TYPES.length; t++) {
-			var tp = TYPES[t];
-			th += '<a href="' + url(cat, dept, tp.id) + '" class="shop-chip' + (tp.id === type ? ' on' : '') + '">' + tp.name +
-			      '<span class="num font-outfit">' + result(cat, dept, tp.id).length + '</span></a>';
-		}
-		document.getElementById('typeChips').innerHTML = th;
 
 		/* 검색 */
 		var qInput = document.getElementById('shopQ');
 		qInput.value = q;
-		function doSearch() { location.href = url(cat, dept, type, qInput.value.trim()); }
+		function doSearch() { location.href = url(cat, dept, qInput.value.trim()); }
 		document.getElementById('shopQBtn').addEventListener('click', doSearch);
 		qInput.addEventListener('keydown', function (e) { if (e.keyCode === 13) doSearch(); });
 
 		/* 목록 */
-		var list = result(cat, dept, type);
+		var list = result(cat, dept);
 		S.renderGrid(document.getElementById('shopGrid'), list);
 		document.getElementById('cntNum').textContent = list.length;
 
 		if (q) {
 			var box = document.getElementById('searchedBox');
 			box.innerHTML = '<b>‘' + q + '’</b> 검색 결과 ' + list.length + '건' +
-				'<a href="' + url(cat, dept, type, '') + '"><i class="xi-close-circle"></i>검색 초기화</a>';
+				'<a href="' + url(cat, dept, '') + '"><i class="xi-close-circle"></i>검색 초기화</a>';
 			box.style.display = 'flex';
 		}
 

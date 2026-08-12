@@ -89,7 +89,7 @@
 			spec: { '규격': '90 × 50 mm', '인쇄': '단면 / 양면 선택', '제작기간': '시안 확정 후 3~4일', '최소수량': '500매' }
 		},
 		{
-			id: 'pr02', cat: 'print', name: '예약카드', img: 'p14.jpg',
+			id: 'pr02', cat: 'print', name: '예약카드', img: 'p44.jpg',
 			desc: '다음 내원일을 손글씨로 적어 전달하는 재방문 유도 카드.',
 			depts: ALL_DEPT, reorder: true,
 			qty: qty([{ label: '500매', price: 34000 }, { label: '1,000매', price: 54000 }, { label: '2,000매', price: 92000 }]),
@@ -590,10 +590,8 @@
 					'<a href="' + detailUrl(p) + '"><img src="' + imgPath(p) + '" alt="' + p.name + '" loading="lazy"></a>' + icon +
 				'</div>' +
 				'<div class="shop-meta">' +
-					'<span class="shop-cat">' + catName(p.cat) + '</span>' +
 					'<h3 class="shop-tit"><a href="' + detailUrl(p) + '">' + p.name + '</a></h3>' +
 					'<p class="shop-txt">' + p.desc + '</p>' +
-					'<p class="shop-note">' + briefInfo(p) + '</p>' +
 					'<div class="shop-price-row">' + price +
 						'<a href="' + detailUrl(p) + '" class="shop-detail-btn">' + (quote ? '견적 문의' : '상세보기') + ' <i class="xi-angle-right-min"></i></a>' +
 					'</div>' +
@@ -638,14 +636,13 @@
 		initReveal(el);
 	}
 
-	function filterList(cat, dept, type) {
+	function filterList(cat, dept) {
 		var out = [];
 		for (var i = 0; i < PRODUCTS.length; i++) {
 			var p = PRODUCTS[i];
 			if (cat === 'reorder') { if (!p.reorder) continue; }
 			else if (cat && cat !== 'all' && p.cat !== cat) continue;
 			if (dept && dept !== 'all' && p.depts.indexOf(dept) < 0) continue;
-			if (type && type !== 'all' && p.type !== type) continue;
 			out.push(p);
 		}
 		/* 진료과를 고르면 해당 진료과 전용 상품을 앞으로 (공통 상품은 뒤로) */
@@ -692,5 +689,165 @@
 
 	if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', paintCount);
 	else paintCount();
+
+})(window, document);
+
+
+/* ==========================================================================
+ * 메인 CATEGORY : 원형(오빗) 인터랙션
+ * 기존 .main-cat-grid 를 콘텐츠 원본으로 삼아 데스크탑 전용 원형 UI 를 만든다.
+ * - HTML 은 건드리지 않는다 (마크업 단일 출처 유지)
+ * - 900px 이하는 CSS 가 원형 UI 를 감추고 기존 카드 그리드를 그대로 보여준다
+ * - 스크롤 진행도에 따라 활성 카테고리가 01 -> 06 으로 넘어가고, 노드 클릭으로도 전환된다
+ * ========================================================================== */
+(function (w, d) {
+	'use strict';
+
+	function init() {
+		var root = d.querySelector('.main-shop-cat');
+		if (!root) return;
+		var grid = root.querySelector('.main-cat-grid');
+		if (!grid) return;
+
+		var src = grid.querySelectorAll('li > a');
+		var MAX = 6;                                  /* 원 위에 배치해 둔 노드 좌표 수 */
+		var total = Math.min(src.length, MAX);
+		if (total < 2) return;
+
+		function pick(el, sel) { var t = el.querySelector(sel); return t ? t.textContent.replace(/\s+/g, ' ').trim() : ''; }
+		function make(tag, cls) { var e = d.createElement(tag); if (cls) e.className = cls; return e; }
+
+		/* ---------- 조립 ---------- */
+		var orbit = make('div', 'cat-orbit');
+		var stage = make('div', 'cat-orbit-stage');
+		var plane = make('div', 'cat-orbit-plane');
+		var spin  = make('div', 'cat-orbit-spin');
+		var nodes = make('ul', 'cat-orbit-nodes');
+		var core  = make('div', 'cat-orbit-core');
+		var slot  = make('div', 'core-slot');
+		var nodeEls = [], btnEls = [], panelEls = [], i;
+
+		spin.appendChild(make('span', 'dot'));
+		nodes.setAttribute('role', 'tablist');
+		nodes.setAttribute('aria-label', '상품 카테고리');
+
+		for (i = 0; i < total; i++) {
+			var a   = src[i];
+			var num = pick(a, '.num') || (i < 9 ? '0' + (i + 1) : String(i + 1));
+			var tit = pick(a, '.tit');
+			var des = pick(a, '.txt');
+			var uid = 'catOrbitPanel' + (i + 1);
+
+			/* 원 위의 노드 */
+			var li  = make('li', 'cat-node n' + (i + 1));
+			var btn = make('button', 'node-btn');
+			btn.type = 'button';
+			btn.setAttribute('role', 'tab');
+			btn.setAttribute('aria-controls', uid);
+			var mark = make('span', 'node-mark'); mark.textContent = num;
+			var ntit = make('span', 'node-tit');  ntit.textContent = tit;
+			btn.appendChild(mark); btn.appendChild(ntit);
+			li.appendChild(btn); nodes.appendChild(li);
+			nodeEls.push(li); btnEls.push(btn);
+
+			/* 중앙 : 활성 카테고리 상세 */
+			var panel = make('div', 'core-item');
+			panel.id = uid;
+			panel.setAttribute('role', 'tabpanel');
+			var pn = make('span', 'core-num'); pn.textContent = num;
+			var pt = make('strong', 'core-tit'); pt.textContent = tit;
+			panel.appendChild(pn); panel.appendChild(pt);
+			if (des) { var px = make('span', 'core-txt'); px.textContent = des; panel.appendChild(px); }
+			var goBtn = make('a', 'core-go');
+			goBtn.href = a.getAttribute('href') || '#';
+			goBtn.appendChild(d.createTextNode('상품 보기 '));
+			goBtn.appendChild(make('i', 'xi-angle-right-min'));
+			panel.appendChild(goBtn);
+			slot.appendChild(panel); panelEls.push(panel);
+		}
+
+		core.appendChild(slot);
+		plane.appendChild(make('div', 'cat-orbit-ring'));
+		plane.appendChild(spin);
+		plane.appendChild(nodes);
+		plane.appendChild(core);
+		stage.appendChild(plane);
+		orbit.appendChild(stage);
+		grid.parentNode.insertBefore(orbit, grid);
+
+		/* ---------- 전환 ---------- */
+		var cur = -1;
+		function go(idx) {
+			if (idx < 0) idx = 0;
+			if (idx > total - 1) idx = total - 1;
+			if (idx === cur) return;
+			cur = idx;
+			for (var k = 0; k < total; k++) {
+				var on = (k === idx);
+				nodeEls[k].className = 'cat-node n' + (k + 1) + (on ? ' on' : '');
+				btnEls[k].setAttribute('aria-selected', on ? 'true' : 'false');
+				btnEls[k].tabIndex = on ? 0 : -1;
+				panelEls[k].className = 'core-item' + (on ? ' on' : '');
+				if (on) panelEls[k].removeAttribute('aria-hidden');
+				else panelEls[k].setAttribute('aria-hidden', 'true');
+			}
+			orbit.className = 'cat-orbit on' + (idx + 1);
+		}
+		go(0);
+
+		/* 직접 고른 직후에는 스크롤이 선택을 덮어쓰지 않도록 잠깐 잠근다 */
+		var manualUntil = 0;
+		nodes.addEventListener('click', function (e) {
+			var t = e.target, li = null;
+			while (t && t !== nodes) {
+				if (t.nodeType === 1 && (' ' + t.className + ' ').indexOf(' cat-node ') > -1) { li = t; break; }
+				t = t.parentNode;
+			}
+			if (!li) return;
+			manualUntil = (new Date()).getTime() + 5000;
+			for (var k = 0; k < total; k++) if (nodeEls[k] === li) { go(k); break; }
+		});
+
+		/* 좌우 방향키로도 이동 (tablist 기본 동작) */
+		nodes.addEventListener('keydown', function (e) {
+			var step = (e.keyCode === 39) ? 1 : (e.keyCode === 37 ? -1 : 0);
+			if (!step) return;
+			e.preventDefault();
+			manualUntil = (new Date()).getTime() + 5000;
+			var next = (cur + step + total) % total;
+			go(next);
+			btnEls[next].focus();
+		});
+
+		/* ---------- 스크롤 진행도 -> 활성 인덱스 ---------- */
+		var ticking = false;
+		function update() {
+			ticking = false;
+			if (w.innerWidth < 901) return;                       /* 모바일은 기존 카드 UI */
+			if ((new Date()).getTime() < manualUntil) return;
+			var r = orbit.getBoundingClientRect();
+			if (!r.height) return;
+			var mid  = r.top + r.height / 2;
+			var from = w.innerHeight * 0.95;                      /* 원이 아래에서 올라오기 시작 */
+			var to   = w.innerHeight * 0.15;                      /* 원이 위로 빠져나가는 시점 */
+			var p    = (from - mid) / (from - to);
+			if (p < 0) p = 0;
+			if (p > 0.9999) p = 0.9999;
+			go(Math.floor(p * total));
+		}
+		function onScroll() {
+			if (ticking) return;
+			ticking = true;
+			if (w.requestAnimationFrame) w.requestAnimationFrame(update);
+			else setTimeout(update, 16);
+		}
+		try { w.addEventListener('scroll', onScroll, { passive: true }); }
+		catch (err) { w.addEventListener('scroll', onScroll); }
+		w.addEventListener('resize', onScroll);
+		update();
+	}
+
+	if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', init);
+	else init();
 
 })(window, document);
