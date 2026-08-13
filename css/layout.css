@@ -224,8 +224,8 @@ table, th, td{word-break:break-word;}
 	opacity:0;filter:Alpha(opacity=0);
 	transition:all 0.2s cubic-bezier(0.4, 0, 1, 1);
 }
-#gnb.each-menu > ul > li.gnb5 .gnb-2dep,
-#gnb.each-menu > ul > li.gnb6 .gnb-2dep {left:0; width:100%; }
+#gnb.each-menu > ul > li.gnb6 .gnb-2dep,
+#gnb.each-menu > ul > li.gnb7 .gnb-2dep {left:0; width:100%; }
 
 #gnb.each-menu > ul > li .gnb-2dep:before{
 	content:""; 

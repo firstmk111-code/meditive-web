@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>서비스 - 포스터 | MEDITIVE 병원 전문 디자인 스튜디오</title>
-<meta name="Title" content="서비스 - 포스터 | MEDITIVE 병원 전문 디자인 스튜디오">
-<meta name="Keywords" content="병원 포스터 디자인, 의료 포스터, 캠페인 포스터, 행사 포스터, MEDITIVE">
-<meta name="Description" content="대기 공간과 행사장에서 멀리서도 읽히도록, 메시지를 하나의 이미지로 압축합니다.">
+<title>칼럼 | MEDITIVE 병원 전문 디자인 스튜디오</title>
+<meta name="Title" content="칼럼 | MEDITIVE 병원 전문 디자인 스튜디오">
+<meta name="Keywords" content="병원 전문 디자인, 병원 브로슈어, 병원 리플렛, 병원 홈페이지, 병원 명함, 병원 포스터, 편집디자인, MEDITIVE">
+<meta name="Description" content="병원 브랜딩·인쇄물·홈페이지 작업 현장에서 정리한 기준을 칼럼으로 기록합니다.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="서비스 - 포스터 | MEDITIVE 병원 전문 디자인 스튜디오">
-<meta property="og:description" content="대기 공간과 행사장에서 멀리서도 읽히도록, 메시지를 하나의 이미지로 압축합니다.">
+<meta property="og:title" content="칼럼 | MEDITIVE 병원 전문 디자인 스튜디오">
+<meta property="og:description" content="병원 디자인 현장에서 정리한 이야기">
 <meta property="og:image" content="../../images/common/logo.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="format-detection" content="telephone=no">
@@ -39,53 +39,9 @@
 <script src="../../js/utile.js"></script>
 <style>
 	#content.wide{padding:0;}
-	/* ===== portfolio grid ===== */
-	.pf-section{padding:11rem 0 16rem; background:#fff; overflow-x:hidden;}
-	.pf-head{display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:5rem; gap:2rem; flex-wrap:wrap;}
-	.pf-head .pf-sub{position:relative; display:inline-block; font-size:2.4rem; font-weight:600; letter-spacing:-0.02em; color:#64D3CE; line-height:1.3; margin-bottom:1.4rem;}
-	.pf-head .pf-sub:before{position:absolute; content:''; width:0.6rem; height:0.6rem; border-radius:0.6rem; background-color:#64D3CE; right:-1.2rem; top:0.3rem;}
-	.pf-head .pf-h2{font-size:6.3rem; font-weight:800; color:#3E4D54; letter-spacing:-0.05em; line-height:1.34;}
-	.pf-head .pf-desc{font-size:1.7rem; color:#7C8A90; line-height:1.7; letter-spacing:-0.02em; margin-top:1.8rem; max-width:62rem;}
-	.pf-head .pf-count{font-size:1.6rem; color:#AAB4B8;}
-	.pf-head .pf-count b{color:#64D3CE;}
-	/* 카드 박스 대신 이미지가 영역을 꽉 채우는 갤러리형 : 라운딩 · 그림자 · 카드배경 없음 */
-	.pf-grid{list-style:none; margin:0 calc(50% - 50vw); padding:0; display:grid; grid-template-columns:repeat(4,1fr); gap:0;}
-	.pf-item{position:relative; aspect-ratio:370/240; overflow:hidden; background:#EEF2F3; cursor:pointer;}
-	.pf-thumb{position:absolute; inset:0; width:100%; height:100%; border-radius:0; overflow:hidden; background:none; box-shadow:none;}
-	.pf-thumb img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .8s cubic-bezier(.16,.84,.44,1);}
-	.pf-item:hover .pf-thumb img{transform:scale(1.05);}
-	/* hover 시에만 작업물 정보를 얹어 이미지 자체가 중심이 되도록 */
-	.pf-item:before{content:""; position:absolute; inset:0; z-index:1; background:linear-gradient(180deg,rgba(30,44,49,0) 42%,rgba(30,44,49,.82) 100%); opacity:0; transition:opacity .45s; pointer-events:none;}
-	.pf-item:hover:before{opacity:1;}
-	.pf-item:after{content:"\2197"; position:absolute; top:1.6rem; right:1.6rem; z-index:2; width:4.2rem; height:4.2rem; border-radius:50%; background:#fff; color:#3E4D54; display:grid; place-items:center; font-size:1.7rem; font-weight:700; opacity:0; transform:translateY(.8rem) scale(.85); transition:opacity .35s, transform .35s; pointer-events:none;}
-	.pf-item:hover:after{opacity:1; transform:none;}
-	.pf-meta{position:absolute; left:0; right:0; bottom:0; z-index:2; padding:2.6rem 2.4rem; opacity:0; transform:translateY(1.2rem); transition:opacity .45s, transform .45s; pointer-events:none;}
-	.pf-item:hover .pf-meta{opacity:1; transform:none;}
-	.pf-cat{display:block; font-family:var(--font-family1); font-size:1.4rem; letter-spacing:0; color:#64D3CE; font-weight:600; margin-bottom:.7rem;}
-	.pf-tit{font-size:2rem; font-weight:700; color:#fff; letter-spacing:-0.02em; line-height:1.4;}
-	/* 터치 기기 : hover 가 없으므로 정보를 항상 노출 */
-	@media (hover:none){
-		.pf-item:before{opacity:1;}
-		.pf-meta{opacity:1; transform:none;}
-		.pf-item:after{display:none;}
-	}
-	/* ===== empty state ===== */
-	.pf-empty{text-align:center; padding:9rem 2rem; border:1px solid #E6ECEE; border-radius:1.6rem; background:#F7FAFA;}
-	.pf-empty-tit{font-size:2.2rem; font-weight:600; color:#3E4D54; letter-spacing:-0.02em; margin-bottom:1.6rem;}
-	.pf-empty-txt{font-size:1.6rem; color:#7C8A90; line-height:1.8; letter-spacing:-0.02em;}
-	.pf-empty-btn{display:inline-flex; align-items:center; gap:.8rem; margin-top:3.2rem; padding:1.5rem 3rem; border-radius:999px; background:#64D3CE; color:#fff; font-size:1.5rem; font-weight:600; transition:background .3s;}
-	.pf-empty-btn:hover{background:#3E4D54;}
-	@media all and (max-width:1280px){ .pf-head .pf-h2{font-size:5.5rem;} }
-	@media all and (max-width:1400px){ .pf-grid{grid-template-columns:repeat(3,1fr);} }
-	@media all and (max-width:900px){ .pf-grid{grid-template-columns:repeat(2,1fr);} }
-	@media all and (max-width:767px){
-		.pf-section{padding:7rem 0 10rem;} .pf-head .pf-h2{font-size:3.8rem;} .pf-head .pf-desc{font-size:1.5rem;}
-		.pf-meta{padding:1.8rem 1.6rem;} .pf-tit{font-size:1.6rem;} .pf-cat{font-size:1.2rem;}
-		.pf-empty{padding:6rem 1.6rem;} .pf-empty-tit{font-size:1.8rem;} .pf-empty-txt{font-size:1.4rem;}
-	}
-	@media all and (max-width:560px){ .pf-grid{grid-template-columns:1fr;} }
+	/* 칼럼 게시판 스타일은 공통 CSS(css/shop.css) 에 정리되어 있습니다. */
 </style>
-<script>dep1=1; dep2=5; dep3="";</script>
+<script>dep1=6; dep2=1; dep3="";</script>
 </head>
 <body>
 <div class="cm-accessibility"><a href="#container">본문바로가기</a></div>
@@ -100,7 +56,7 @@
 					</a>
 				</h1>
 				<div class="header-util-box">
-					<a href="../../kr/shop/cart.html" class="header-cart-btn" title="장바구니"><i class="xi-cart-o"></i><em class="cart-count">0</em></a><a href="../../kr/shop/mypage.html" class="header-member-btn" title="마이페이지"><i class="xi-profile-o"></i></a>
+						<a href="../../kr/shop/cart.html" class="header-cart-btn" title="장바구니"><i class="xi-cart-o"></i><em class="cart-count">0</em></a><a href="../../kr/shop/mypage.html" class="header-member-btn" title="마이페이지"><i class="xi-profile-o"></i></a>
 					<button class="sitemap-line-btn cm-sitemap-open-btn" title="Open the sitemap">
 						<span class="line line1"></span><span class="line line2">
 					</button>
@@ -170,21 +126,21 @@
 		</nav>
 	</header>
 	<div id="container">
-			<!-- visual -->
-			<section id="visual" class="sub-visual-product">
+					<!-- visual -->
+			<section id="visual" class="sub-visual-column">
 				<div class="visual-img-con">
-					<div class="visual-img-inner" style="background:#3E4D54 url(../../images/layout/sub_visual_service_main.jpg) no-repeat 50% 50%"></div>
+					<div class="visual-img-inner" style="background:#3E4D54 url(../../images/layout/sub_visual_newsroom.jpg?ver=260813) no-repeat 50% 50%"></div>
 				</div>
 				<div class="area visual-txt-con">
 					<div class="table-cell-layout">
 						<div class="visual-txt-container">
-							<h2 class="visual-tit font-outfit trans400">Service</h2>
+							<h2 class="visual-tit font-outfit trans400">Column</h2>
 							<aside id="topMenu04" class="">
 								<div class="side-menu-inner">
 									<div class="cm-top-menu area clearfix">
 										<a href="../../home.html" class="location-to-home-btn" title="메인으로">Home</a>
 										<div class="menu-location location1 cm-drop-menu-box-JS" data-drop-event="click">
-											<button class="cur-location cm-drop-open-btn-JS"><span>서비스</span></button>
+											<button class="cur-location cm-drop-open-btn-JS"><span>칼럼</span></button>
 											<ul class="location-menu-con cm-drop-list-JS">
 												<li><a href="../../kr/service/logo.html">서비스</a></li>
 												<li><a href="../../kr/shop/list.html?cat=all">상품몰</a></li>
@@ -196,14 +152,9 @@
 											</ul>
 										</div>
 										<div class="menu-location location2 cm-drop-menu-box-JS" data-drop-event="click">
-											<button class="cur-location cm-drop-open-btn-JS"><span>포스터</span></button>
+											<button class="cur-location cm-drop-open-btn-JS"><span>칼럼 전체</span></button>
 											<ul class="location-menu-con cm-drop-list-JS">
-											<li><a href="../../kr/service/logo.html"><span>로고</span></a></li>
-											<li><a href="../../kr/service/catalog.html"><span>카탈로그</span></a></li>
-											<li><a href="../../kr/service/leaflet.html"><span>팜플렛 · 리플렛</span></a></li>
-											<li><a href="../../kr/service/digital.html"><span>디지털 콘텐츠</span></a></li>
-											<li><a href="../../kr/service/poster.html"><span>포스터</span></a></li>
-											<li><a href="../../kr/service/homepage.html"><span>홈페이지</span></a></li>
+												<li><a href="../../kr/column/list.html"><span>칼럼 전체</span></a></li>
 											</ul>
 										</div>
 									</div>
@@ -220,46 +171,143 @@
 			<!-- //visual -->
 		<div id="middleArea">
 			<section id="content" class="wide">
-				<section class="pf-section">
+				<section class="col-section">
 					<div class="area">
-						<div class="pf-head">
-							<div>
-								<span class="pf-sub font-outfit">Poster</span>
-								<h2 class="pf-h2">공간에서 시선을 모으는<br>포스터 작업물</h2>
-								<p class="pf-desc">대기 공간과 행사장에서 멀리서도 읽히도록, 메시지를 하나의 이미지로 압축합니다.</p>
+						<div class="col-head">
+							<div class="col-head-txt">
+								<span class="col-sub font-outfit">Column</span>
+								<h2 class="col-h2">병원 디자인 현장에서<br>정리한 이야기</h2>
 							</div>
-							<p class="pf-count font-outfit">Total <b>4</b> works</p>
+							<p class="col-head-desc">시안을 만들고 인쇄를 넘기며 실제로 부딪힌 기준과 판단을 기록합니다.</p>
 						</div>
-						<ul class="pf-grid pf-grid-card">
-							<li class="pf-item" data-scroll="fade-up">
-								<div class="pf-thumb"><img src="../../images/portfolio/p09.jpg" alt="전북음악아카데미 포스터" loading="lazy"></div>
-								<div class="pf-meta">
-									<span class="pf-cat">포스터</span>
-									<h3 class="pf-tit">전북음악아카데미 포스터</h3>
-								</div>
-							</li>
-							<li class="pf-item" data-scroll="fade-up">
-								<div class="pf-thumb"><img src="../../images/portfolio/p26.jpg" alt="한국지식재산보호원 포스터" loading="lazy"></div>
-								<div class="pf-meta">
-									<span class="pf-cat">포스터</span>
-									<h3 class="pf-tit">한국지식재산보호원 포스터</h3>
-								</div>
-							</li>
-							<li class="pf-item" data-scroll="fade-up">
-								<div class="pf-thumb"><img src="../../images/portfolio/p28.jpg" alt="제스트업 포스터" loading="lazy"></div>
-								<div class="pf-meta">
-									<span class="pf-cat">포스터</span>
-									<h3 class="pf-tit">제스트업 포스터</h3>
-								</div>
-							</li>
-							<li class="pf-item" data-scroll="fade-up">
-								<div class="pf-thumb"><img src="../../images/portfolio/p41.jpg" alt="연세대 포스터" loading="lazy"></div>
-								<div class="pf-meta">
-									<span class="pf-cat">포스터</span>
-									<h3 class="pf-tit">연세대 포스터</h3>
-								</div>
-							</li>
-						</ul>
+						<div class="col-body">
+							<aside class="col-side">
+								<nav class="col-cate">
+									<button type="button" class="col-cate-btn on" data-cat="all"><span>전체</span><em>9</em></button>
+									<button type="button" class="col-cate-btn" data-cat="brand"><span>브랜딩</span><em>3</em></button>
+									<button type="button" class="col-cate-btn" data-cat="print"><span>인쇄물</span><em>3</em></button>
+									<button type="button" class="col-cate-btn" data-cat="web"><span>홈페이지</span><em>2</em></button>
+									<button type="button" class="col-cate-btn" data-cat="mkt"><span>병원 마케팅</span><em>1</em></button>
+								</nav>
+								<a href="../contact/inquiry.html" class="col-side-cta">
+									<strong>준비 중인 디자인이 있으신가요?</strong>
+									<span class="font-outfit">Contact us <i class="xi-arrow-right"></i></span>
+								</a>
+							</aside>
+							<div class="col-main">
+								<ul class="col-grid" data-scroll="fade-up">
+									<li class="col-card" data-cat="brand">
+										<a href="view.html?no=1">
+											<div class="col-thumb">
+												<img src="../../images/portfolio/p03.jpg" alt="">
+												<span class="col-badge">브랜딩</span>
+											</div>
+											<div class="col-info">
+												<h3 class="col-tit">병원 브로슈어, 신뢰를 하나의 감각으로 디자인하다</h3>
+												<div class="col-meta"><span>2026.07.28</span><i></i><span>6분 읽기</span></div>
+											</div>
+										</a>
+									</li>
+									<li class="col-card" data-cat="brand">
+										<a href="view.html?no=2">
+											<div class="col-thumb">
+												<img src="../../images/portfolio/p07.jpg" alt="">
+												<span class="col-badge">브랜딩</span>
+											</div>
+											<div class="col-info">
+												<h3 class="col-tit">개원 병원을 위한 브랜드 패키지 가이드</h3>
+												<div class="col-meta"><span>2026.06.19</span><i></i><span>8분 읽기</span></div>
+											</div>
+										</a>
+									</li>
+									<li class="col-card" data-cat="print">
+										<a href="view.html?no=3">
+											<div class="col-thumb">
+												<img src="../../images/portfolio/p12.jpg" alt="">
+												<span class="col-badge">인쇄물</span>
+											</div>
+											<div class="col-info">
+												<h3 class="col-tit">리플렛 한 장으로 전하는 진료 정보의 정리법</h3>
+												<div class="col-meta"><span>2026.05.30</span><i></i><span>5분 읽기</span></div>
+											</div>
+										</a>
+									</li>
+									<li class="col-card" data-cat="web">
+										<a href="view.html?no=4">
+											<div class="col-thumb">
+												<img src="../../images/portfolio/p18.jpg" alt="">
+												<span class="col-badge">홈페이지</span>
+											</div>
+											<div class="col-info">
+												<h3 class="col-tit">병원 홈페이지, 정보 구조부터 다시 설계하기</h3>
+												<div class="col-meta"><span>2026.05.02</span><i></i><span>7분 읽기</span></div>
+											</div>
+										</a>
+									</li>
+									<li class="col-card" data-cat="brand">
+										<a href="view.html?no=5">
+											<div class="col-thumb">
+												<img src="../../images/portfolio/p22.jpg" alt="">
+												<span class="col-badge">브랜딩</span>
+											</div>
+											<div class="col-info">
+												<h3 class="col-tit">명함부터 사인물까지, 하나의 브랜드 언어로</h3>
+												<div class="col-meta"><span>2026.04.11</span><i></i><span>4분 읽기</span></div>
+											</div>
+										</a>
+									</li>
+									<li class="col-card" data-cat="print">
+										<a href="view.html?no=6">
+											<div class="col-thumb">
+												<img src="../../images/portfolio/p26.jpg" alt="">
+												<span class="col-badge">인쇄물</span>
+											</div>
+											<div class="col-info">
+												<h3 class="col-tit">카탈로그 판형과 제본, 무엇을 기준으로 고를까</h3>
+												<div class="col-meta"><span>2026.03.22</span><i></i><span>6분 읽기</span></div>
+											</div>
+										</a>
+									</li>
+									<li class="col-card" data-cat="mkt">
+										<a href="view.html?no=7">
+											<div class="col-thumb">
+												<img src="../../images/portfolio/p31.jpg" alt="">
+												<span class="col-badge">병원 마케팅</span>
+											</div>
+											<div class="col-info">
+												<h3 class="col-tit">개원 3개월, 마케팅 우선순위 정하기</h3>
+												<div class="col-meta"><span>2026.03.05</span><i></i><span>7분 읽기</span></div>
+											</div>
+										</a>
+									</li>
+									<li class="col-card" data-cat="print">
+										<a href="view.html?no=8">
+											<div class="col-thumb">
+												<img src="../../images/portfolio/p35.jpg" alt="">
+												<span class="col-badge">인쇄물</span>
+											</div>
+											<div class="col-info">
+												<h3 class="col-tit">진료 안내 포스터, 읽히는 정보 위계 만들기</h3>
+												<div class="col-meta"><span>2026.02.14</span><i></i><span>5분 읽기</span></div>
+											</div>
+										</a>
+									</li>
+									<li class="col-card" data-cat="web">
+										<a href="view.html?no=9">
+											<div class="col-thumb">
+												<img src="../../images/portfolio/p41.jpg" alt="">
+												<span class="col-badge">홈페이지</span>
+											</div>
+											<div class="col-info">
+												<h3 class="col-tit">모바일에서 먼저 보이는 병원 홈페이지</h3>
+												<div class="col-meta"><span>2026.01.28</span><i></i><span>6분 읽기</span></div>
+											</div>
+										</a>
+									</li>
+								</ul>
+								<p class="col-empty">해당 카테고리의 칼럼을 준비하고 있습니다.</p>
+							</div>
+						</div>
 					</div>
 				</section>
 				<!-- ****************** FAQ ********************** -->
@@ -267,24 +315,24 @@
 					<div class="area">
 						<div class="faq-head">
 							<span class="faq-sub font-outfit">FAQ</span>
-							<h2 class="faq-h2">포스터 · 사인물 제작에 대해<br>자주 주시는 질문입니다.</h2>
+							<h2 class="faq-h2">칼럼에 대해<br>자주 주시는 질문입니다.</h2>
 						</div>
 						<ul class="faq-list">
 							<li class="faq-item">
-								<button type="button" class="faq-q"><em class="font-outfit">Q.</em><span>원내 게시용 포스터도 제작하나요?</span><i class="xi-angle-down-min"></i></button>
-								<div class="faq-a"><div class="faq-a-inner"><em class="font-outfit">A.</em><p>네. 대기실 안내, 진료 시간, 시즌 캠페인 등 원내에서 쓰이는 게시물 전반을 제작합니다.</p></div></div>
+								<button type="button" class="faq-q"><em class="font-outfit">Q.</em><span>칼럼은 얼마나 자주 올라오나요?</span><i class="xi-angle-down-min"></i></button>
+								<div class="faq-a"><div class="faq-a-inner"><em class="font-outfit">A.</em><p>월 1~2회 기준으로 실제 진행한 작업에서 정리된 기준만 골라 올립니다. 분량을 채우기 위한 글은 올리지 않습니다.</p></div></div>
 							</li>
 							<li class="faq-item">
-								<button type="button" class="faq-q"><em class="font-outfit">Q.</em><span>사이즈는 어떻게 정하나요?</span><i class="xi-angle-down-min"></i></button>
-								<div class="faq-a"><div class="faq-a-inner"><em class="font-outfit">A.</em><p>게시할 위치와 보는 거리를 기준으로 A2 · A1 · B2 중에서 제안해 드립니다. 현장 사진을 주시면 더 정확합니다.</p></div></div>
+								<button type="button" class="faq-q"><em class="font-outfit">Q.</em><span>칼럼에 나온 방식으로 상담받을 수 있나요?</span><i class="xi-angle-down-min"></i></button>
+								<div class="faq-a"><div class="faq-a-inner"><em class="font-outfit">A.</em><p>네. 문의 시 어떤 칼럼을 보셨는지 알려 주시면 해당 기준을 병원 상황에 맞게 다시 정리해 제안드립니다.</p></div></div>
 							</li>
 							<li class="faq-item">
-								<button type="button" class="faq-q"><em class="font-outfit">Q.</em><span>시즌별 배너 · 엑스배너도 함께 되나요?</span><i class="xi-angle-down-min"></i></button>
-								<div class="faq-a"><div class="faq-a-inner"><em class="font-outfit">A.</em><p>포스터와 같은 디자인 톤으로 엑스배너, 현수막, 창문 시트지까지 함께 정리해 드립니다.</p></div></div>
+								<button type="button" class="faq-q"><em class="font-outfit">Q.</em><span>칼럼 내용을 병원 블로그에 인용해도 되나요?</span><i class="xi-angle-down-min"></i></button>
+								<div class="faq-a"><div class="faq-a-inner"><em class="font-outfit">A.</em><p>출처를 함께 표기해 주시면 일부 인용은 가능합니다. 전문 게재나 이미지 사용은 문의를 통해 먼저 확인 부탁드립니다.</p></div></div>
 							</li>
 							<li class="faq-item">
-								<button type="button" class="faq-q"><em class="font-outfit">Q.</em><span>인쇄용 파일만 받아 직접 출력해도 되나요?</span><i class="xi-angle-down-min"></i></button>
-								<div class="faq-a"><div class="faq-a-inner"><em class="font-outfit">A.</em><p>가능합니다. 재단 여백과 컬러 모드를 맞춘 인쇄용 PDF로 전달해 드립니다.</p></div></div>
+								<button type="button" class="faq-q"><em class="font-outfit">Q.</em><span>다루었으면 하는 주제를 요청할 수 있나요?</span><i class="xi-angle-down-min"></i></button>
+								<div class="faq-a"><div class="faq-a-inner"><em class="font-outfit">A.</em><p>가능합니다. 문의 페이지에 주제를 남겨 주시면 우선순위를 검토해 다음 칼럼에 반영합니다.</p></div></div>
 							</li>
 						</ul>
 					</div>

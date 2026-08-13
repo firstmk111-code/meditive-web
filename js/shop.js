@@ -575,6 +575,22 @@
 	/* ----------------------------------------------------
 	 * 상품 카드 렌더링
 	---------------------------------------------------- */
+	/* 진료과 태그 : 카드에서 "어느 병원을 위한 상품인지" 를 제목보다 먼저 읽히게 한다 */
+	function deptTagHTML(p) {
+		var names = deptNames(p);
+		if (!names.length) return '';
+		var h;
+		if (names.length >= ALL_DEPT.length) {
+			h = '<em>전체 진료과</em>';
+		} else {
+			var n = Math.min(names.length, 2), i;
+			h = '';
+			for (i = 0; i < n; i++) h += '<em>' + names[i] + '</em>';
+			if (names.length > n) h += '<em class="more">+' + (names.length - n) + '</em>';
+		}
+		return '<span class="shop-tags">' + h + '</span>';
+	}
+
 	function cardHTML(p) {
 		var badge = p.badge ? '<span class="shop-badge' + (p.badge === 'BEST' ? ' mint' : '') + ' font-outfit">' + p.badge + '</span>' : '';
 		var quote = isQuote(p);
@@ -590,11 +606,12 @@
 					'<a href="' + detailUrl(p) + '"><img src="' + imgPath(p) + '" alt="' + p.name + '" loading="lazy"></a>' + icon +
 				'</div>' +
 				'<div class="shop-meta">' +
+					deptTagHTML(p) +
 					'<h3 class="shop-tit"><a href="' + detailUrl(p) + '">' + p.name + '</a></h3>' +
 					'<p class="shop-txt">' + p.desc + '</p>' +
-					'<div class="shop-price-row">' + price +
-						'<a href="' + detailUrl(p) + '" class="shop-detail-btn">' + (quote ? '견적 문의' : '상세보기') + ' <i class="xi-angle-right-min"></i></a>' +
-					'</div>' +
+					'<div class="shop-price-row">' + price + '</div>' +
+					'<a href="' + detailUrl(p) + '" class="shop-detail-btn' + (quote ? ' is-quote' : '') + '">' +
+						(quote ? '견적 문의하기' : '옵션 선택하고 구매') + ' <i class="xi-angle-right-min"></i></a>' +
 				'</div>' +
 			'</li>';
 	}
@@ -807,6 +824,9 @@
 			var pt = make('strong', 'core-tit'); pt.textContent = tit;
 			panel.appendChild(pn); panel.appendChild(pt);
 			if (des) { var px = make('span', 'core-txt'); px.textContent = des; panel.appendChild(px); }
+			/* 상품 수 · 최저가 : .main-cat-grid 의 .meta 를 그대로 복제해 콘텐츠 출처를 하나로 유지한다 */
+			var srcMeta = a.querySelector('.meta');
+			if (srcMeta) { var pm = srcMeta.cloneNode(true); pm.className = 'core-meta'; panel.appendChild(pm); }
 			var goBtn = make('a', 'core-go');
 			goBtn.href = a.getAttribute('href') || '#';
 			goBtn.appendChild(d.createTextNode('상품 보기 '));
@@ -922,4 +942,182 @@
 	if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', init);
 	else init();
 
+})(window, document);
+
+
+/* ==========================================================================
+ * FAQ 아코디언 (공통)
+ * .faq-list > .faq-item > (button.faq-q + .faq-a) 구조면 어느 페이지에서든 동작한다.
+ * - 높이를 px 로 지정해 부드럽게 열고, 다 열린 뒤에는 auto 로 되돌려 리사이즈에 대응
+ * - 한 번에 하나만 열리게 (같은 목록 안에서)
+ * - 모션 최소화 설정이면 애니메이션 없이 즉시 열고 닫는다
+ * ========================================================================== */
+(function (w, d) {
+	'use strict';
+
+	var REDUCE = w.matchMedia && w.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	function panel(item) { return item.querySelector('.faq-a'); }
+
+	function close(item) {
+		var a = panel(item);
+		if (!a || !item.classList.contains('on')) return;
+		if (REDUCE) { a.style.height = '0px'; }
+		else {
+			a.style.height = a.scrollHeight + 'px';
+			a.offsetHeight;                       /* 강제 리플로우 : auto -> px 전환을 잡아준다 */
+			a.style.height = '0px';
+		}
+		item.classList.remove('on');
+		item.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+	}
+
+	function open(item) {
+		var a = panel(item);
+		if (!a || item.classList.contains('on')) return;
+		a.style.height = REDUCE ? 'auto' : (a.scrollHeight + 'px');
+		item.classList.add('on');
+		item.querySelector('.faq-q').setAttribute('aria-expanded', 'true');
+	}
+
+	function init() {
+		var lists = d.querySelectorAll('.faq-list');
+		if (!lists.length) return;
+
+		for (var i = 0; i < lists.length; i++) {
+			(function (list) {
+				var items = list.querySelectorAll('.faq-item');
+				for (var k = 0; k < items.length; k++) {
+					var btn = items[k].querySelector('.faq-q');
+					if (!btn) continue;
+					btn.setAttribute('aria-expanded', 'false');
+				}
+
+				list.addEventListener('click', function (e) {
+					var btn = e.target.closest ? e.target.closest('.faq-q') : null;
+					if (!btn || !list.contains(btn)) return;
+					var item = btn.parentNode;
+					var wasOpen = item.classList.contains('on');
+					/* 같은 목록 안에서는 하나만 열어 둔다 */
+					var open_ = list.querySelectorAll('.faq-item.on');
+					for (var j = 0; j < open_.length; j++) close(open_[j]);
+					if (!wasOpen) open(item);
+				});
+
+				/* 다 열린 뒤 height:auto — 답변이 길거나 창 크기가 바뀌어도 잘리지 않게 */
+				list.addEventListener('transitionend', function (e) {
+					if (e.propertyName !== 'height') return;
+					var a = e.target;
+					if (!a.classList.contains('faq-a')) return;
+					if (a.parentNode.classList.contains('on')) a.style.height = 'auto';
+				});
+			})(lists[i]);
+		}
+	}
+
+	if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', init);
+	else init();
+
+})(window, document);
+
+/* ==========================================================================
+ * 칼럼 게시판 (공통)
+ * - 목록(list.html) : 좌측 카테고리로 카드 필터. 주소에 ?cat= 를 남겨 뒤로가기까지 맞춘다.
+ * - 상세(view.html) : ?no= 에 해당하는 글 하나만 노출하고 이전 / 다음 링크를 만든다.
+ * 해당 마크업이 없는 페이지에서는 아무 일도 하지 않는다.
+ * ========================================================================== */
+(function (w, d) {
+	'use strict';
+
+	function param(k) {
+		var m = new RegExp('[?&]' + k + '=([^&#]*)').exec(w.location.search);
+		return m ? decodeURIComponent(m[1]) : '';
+	}
+
+	/* ---------------- 목록 : 카테고리 필터 ---------------- */
+	function initList() {
+		var main = d.querySelector('.col-main');
+		var grid = d.querySelector('.col-grid');
+		var btns = d.querySelectorAll('.col-cate-btn');
+		if (!main || !grid || !btns.length) return;
+
+		var cards = grid.querySelectorAll('.col-card');
+
+		function apply(cat, push) {
+			var shown = 0;
+			for (var i = 0; i < cards.length; i++) {
+				var hit = (cat === 'all' || cards[i].getAttribute('data-cat') === cat);
+				cards[i].classList.toggle('is-hide', !hit);
+				if (hit) shown++;
+			}
+			main.classList.toggle('is-empty', shown === 0);
+			for (var k = 0; k < btns.length; k++) {
+				btns[k].classList.toggle('on', btns[k].getAttribute('data-cat') === cat);
+			}
+			if (push && w.history && w.history.replaceState) {
+				var q = (cat === 'all') ? w.location.pathname : (w.location.pathname + '?cat=' + cat);
+				w.history.replaceState(null, '', q);
+			}
+		}
+
+		for (var i = 0; i < btns.length; i++) {
+			btns[i].addEventListener('click', function () {
+				apply(this.getAttribute('data-cat') || 'all', true);
+			});
+		}
+
+		apply(param('cat') || 'all', false);
+	}
+
+	/* ---------------- 상세 : ?no= 로 한 편만 노출 ---------------- */
+	function initView() {
+		var docs = d.querySelectorAll('.col-doc');
+		if (!docs.length) return;
+
+		var want = param('no') || docs[0].getAttribute('data-no');
+		var cur = null;
+		for (var i = 0; i < docs.length; i++) {
+			var on = (docs[i].getAttribute('data-no') === want);
+			docs[i].classList.toggle('on', on);
+			if (on) cur = docs[i];
+		}
+		/* 잘못된 번호로 들어오면 첫 글을 보여 준다 */
+		if (!cur) { cur = docs[0]; cur.classList.add('on'); }
+
+		function titleOf(no) {
+			for (var k = 0; k < docs.length; k++) {
+				if (docs[k].getAttribute('data-no') === no) {
+					var t = docs[k].querySelector('.col-doc-tit');
+					return t ? t.textContent : '';
+				}
+			}
+			return '';
+		}
+
+		var pairs = [['.col-nav-prev', 'data-prev'], ['.col-nav-next', 'data-next']];
+		for (var j = 0; j < pairs.length; j++) {
+			var btn = d.querySelector(pairs[j][0]);
+			if (!btn) continue;
+			var no = cur.getAttribute(pairs[j][1]);
+			var label = no ? titleOf(no) : '';
+			if (!no || !label) {
+				btn.classList.add('is-off');
+				btn.setAttribute('href', 'javascript:;');
+				continue;
+			}
+			btn.classList.remove('is-off');
+			btn.setAttribute('href', 'view.html?no=' + no);
+			var span = btn.querySelector('span');
+			if (span) span.textContent = label;
+		}
+
+		/* 브라우저 탭 제목도 글 제목으로 맞춘다 */
+		var tit = cur.querySelector('.col-doc-tit');
+		if (tit) d.title = tit.textContent + ' | MEDITIVE 병원 전문 디자인 스튜디오';
+	}
+
+	function initColumn() { initList(); initView(); }
+
+	if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', initColumn);
+	else initColumn();
 })(window, document);

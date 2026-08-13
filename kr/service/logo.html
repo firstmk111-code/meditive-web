@@ -19,13 +19,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <link rel="stylesheet" href="../../css/default.css">
-<link rel="stylesheet" href="../../css/layout.css">
+<link rel="stylesheet" href="../../css/layout.css?ver=260813">
 <link rel="stylesheet" href="../../css/content.css?ver=260805">
 <link rel="stylesheet" href="../../css/content_yt.css?ver=260812b">
-<link rel="stylesheet" href="../../css/main.css?ver=260812b" />
+<link rel="stylesheet" href="../../css/main.css?ver=260813" />
 <link rel="stylesheet" href="../../css/layout_responsive.css">
 <link rel="stylesheet" href="../../css/content_responsive.css">
-<link rel="stylesheet" href="../../css/main_responsive.css?ver=260805" />
+<link rel="stylesheet" href="../../css/main_responsive.css?ver=260813" />
 <link rel="stylesheet" href="../../css/animate.css" />
 <link rel="stylesheet" type="text/css" href="../../css/xeicon.min.css">
 <link rel="stylesheet" href="../../css/common/cm_sitemap.css">
@@ -34,7 +34,7 @@
 <link rel="stylesheet" type="text/css" href="../../css/plugin/swiper.css" />
 <link rel="stylesheet" type="text/css" href="../../css/plugin/spotlight.css" />
 <link rel="stylesheet" type="text/css" href="../../css/pf_popup.css">
-<link rel="stylesheet" href="../../css/shop.css?ver=260812b">
+<link rel="stylesheet" href="../../css/shop.css?ver=260813">
 <script type="text/javascript" src="../../js/vendor/jquery-3.6.0.min.js"></script>
 <script src="../../js/utile.js"></script>
 <style>
@@ -100,13 +100,6 @@
 					</a>
 				</h1>
 				<div class="header-util-box">
-					<!-- 외국어 선택 2 -->
-					<div class="header-lang-list">
-						<ul class="clearfix">
-							<li class="cur"><a href="../../home.html">KR</a></li>
-							<li><a href="#">EN</a></li>
-						</ul>
-					</div>
 					<a href="../../kr/shop/cart.html" class="header-cart-btn" title="장바구니"><i class="xi-cart-o"></i><em class="cart-count">0</em></a><a href="../../kr/shop/mypage.html" class="header-member-btn" title="마이페이지"><i class="xi-profile-o"></i></a>
 					<button class="sitemap-line-btn cm-sitemap-open-btn" title="Open the sitemap">
 						<span class="line line1"></span><span class="line line2">
@@ -154,11 +147,11 @@
 					</li>
 					<li class="gnb5">
 						<a href="../../kr/marketing/all_in_one.html">병원 마케팅</a>
-						<div class="gnb-2dep"><ul>
-							<li><a href="../../kr/marketing/all_in_one.html"><span>올인원 마케팅</span></a></li>
-						</ul></div>
 					</li>
 					<li class="gnb6">
+						<a href="../../kr/column/list.html">칼럼</a>
+					</li>
+					<li class="gnb7">
 						<a href="../../kr/contact/inquiry.html">문의</a>
 						<div class="gnb-2dep"><ul>
 							<li><a href="../../kr/contact/inquiry.html"><span>견적 문의</span></a></li>
@@ -198,6 +191,7 @@
 												<li><a href="../../kr/portfolio/all.html">포트폴리오</a></li>
 												<li><a href="../../kr/guide/binding.html">인쇄 가이드</a></li>
 												<li><a href="../../kr/marketing/all_in_one.html">병원 마케팅</a></li>
+												<li><a href="../../kr/column/list.html">칼럼</a></li>
 												<li><a href="../../kr/contact/inquiry.html">문의</a></li>
 											</ul>
 										</div>
@@ -236,7 +230,7 @@
 							</div>
 							<p class="pf-count font-outfit">Total <b>7</b> works</p>
 						</div>
-						<ul class="pf-grid">
+						<ul class="pf-grid pf-grid-card">
 							<li class="pf-item" data-scroll="fade-up">
 								<div class="pf-thumb"><img src="../../images/portfolio/p43.jpg" alt="니즈연합치과 로고" loading="lazy"></div>
 								<div class="pf-meta">
@@ -601,6 +595,33 @@
 						</div>
 					</div>
 				</section>
+				<!-- ****************** FAQ ********************** -->
+				<section class="faq-section">
+					<div class="area">
+						<div class="faq-head">
+							<span class="faq-sub font-outfit">FAQ</span>
+							<h2 class="faq-h2">로고 · 브랜딩 작업에 대해<br>자주 주시는 질문입니다.</h2>
+						</div>
+						<ul class="faq-list">
+							<li class="faq-item">
+								<button type="button" class="faq-q"><em class="font-outfit">Q.</em><span>로고만 단독으로 의뢰할 수 있나요?</span><i class="xi-angle-down-min"></i></button>
+								<div class="faq-a"><div class="faq-a-inner"><em class="font-outfit">A.</em><p>가능합니다. 다만 명함 · 사인물 · 인쇄물까지 함께 설계하면 병원 이미지가 훨씬 일관되게 정리되어 브랜드 패키지로 많이 진행하십니다.</p></div></div>
+							</li>
+							<li class="faq-item">
+								<button type="button" class="faq-q"><em class="font-outfit">Q.</em><span>시안은 몇 개나 받아볼 수 있나요?</span><i class="xi-angle-down-min"></i></button>
+								<div class="faq-a"><div class="faq-a-inner"><em class="font-outfit">A.</em><p>방향이 다른 시안 3종을 먼저 보여 드리고, 선택하신 방향으로 세부 조정을 이어갑니다.</p></div></div>
+							</li>
+							<li class="faq-item">
+								<button type="button" class="faq-q"><em class="font-outfit">Q.</em><span>기존 로고를 다듬는 리뉴얼도 가능한가요?</span><i class="xi-angle-down-min"></i></button>
+								<div class="faq-a"><div class="faq-a-inner"><em class="font-outfit">A.</em><p>네. 기존 로고가 가진 인상을 유지하면서 비례 · 자간 · 컬러만 정리하는 리파인 작업도 진행합니다.</p></div></div>
+							</li>
+							<li class="faq-item">
+								<button type="button" class="faq-q"><em class="font-outfit">Q.</em><span>최종 파일은 어떤 형식으로 주시나요?</span><i class="xi-angle-down-min"></i></button>
+								<div class="faq-a"><div class="faq-a-inner"><em class="font-outfit">A.</em><p>인쇄용 벡터(AI · PDF)와 웹용 이미지(PNG · SVG)를 함께 드리고, 사용 규정을 정리한 간단한 가이드도 제공합니다.</p></div></div>
+							</li>
+						</ul>
+					</div>
+				</section>
 			</section>
 		</div>
 	</div>
@@ -626,6 +647,7 @@
 						<li><a href="../../kr/portfolio/all.html"><span>Portfolio</span></a></li>
 						<li><a href="../../kr/guide/binding.html"><span>Print Guide</span></a></li>
 						<li><a href="../../kr/marketing/all_in_one.html"><span>Hospital Marketing</span></a></li>
+						<li><a href="../../kr/column/list.html"><span>Column</span></a></li>
 						<li><a href="../../kr/contact/inquiry.html"><span>Contact</span></a></li>
 					</ul></div>
 					<ul class="foot-menu clearfix">
@@ -680,6 +702,6 @@
 	<script type="text/javascript" src="../../js/sub.js?ver=260805"></script>
 	<script type="text/javascript" src="../../js/pf_popup.js"></script>
 	<script>window.SHOP_BASE='../../';</script>
-	<script type="text/javascript" src="../../js/shop.js?ver=260812b"></script>
+	<script type="text/javascript" src="../../js/shop.js?ver=260813"></script>
 </body>
 </html>

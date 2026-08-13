@@ -49,7 +49,8 @@
 @media all and ( max-width: 800px ){
 	.main-about-wrap .main-tit-box .main-tit {font-size: 3.8rem;}
 	.main-about-info {width: 100%; max-width: none; margin: 28rem 0 0 0;}
-	.main-about-point {width: 41.8rem; height: 48.2rem; bottom: auto; top: 50%;  margin-left: -8rem; margin-top: -28rem;}
+	.main-about-point {width: 36rem; height: 41.5rem; bottom: auto; top: 50%;  margin-left: -8rem; margin-top: -25rem;}
+	.main-about-point span:before {filter: blur(1.9rem);}
 	.count-num-box {font-size: 6rem;}
 	.main-about-flow-wrap  {bottom: 51rem;}
 	.main-about-flow-wrap .maskBg .marquee .absol h4 {font-size: 20rem;}
