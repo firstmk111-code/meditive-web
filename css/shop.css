@@ -93,12 +93,7 @@
 .shop-cart-icon.done i{color:#fff;}
 
 .shop-meta{padding:2.2rem .4rem 0; display:flex; flex-direction:column; flex:1;}
-/* 진료과 태그 : 제목 위에서 대상 병원을 먼저 알려 준다 */
-.shop-tags{display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1rem;}
-.shop-tags em{display:inline-flex; align-items:center; height:2.4rem; padding:0 .9rem; border-radius:1.2rem; background:var(--mist-color);
-	font-size:1.2rem; font-weight:600; color:#7C888E; letter-spacing:-0.02em;}
-.shop-tags em.more{background:none; padding:0 .2rem; color:var(--sub-color); font-weight:500;}
-.shop-tit{font-size:1.9rem; font-weight:600; color:var(--ink-color); letter-spacing:-0.02em; line-height:1.4;}
+.shop-tit{font-size:2.1rem; font-weight:600; color:var(--ink-color); letter-spacing:-0.02em; line-height:1.4;}
 .shop-tit a{color:inherit;}
 .shop-item:hover .shop-tit a{color:var(--main-color);}
 .shop-txt{font-size:1.5rem; color:#8A959A; line-height:1.6; letter-spacing:-0.02em; margin-top:.9rem;}
@@ -385,12 +380,10 @@
 	.shop-filter-label{flex:none; padding-top:0;}
 	.shop-chip{height:4rem; padding:0 1.7rem; font-size:1.4rem;}
 	.shop-grid{grid-template-columns:repeat(2,1fr); gap:3.4rem 1.6rem;}
-	.shop-tit{font-size:1.6rem;}
+	.shop-tit{font-size:1.8rem;}
 	.shop-txt{display:none;}
 	.shop-price{font-size:1.8rem;}
 	.shop-price-row{flex-direction:column; align-items:flex-start; gap:1.2rem;}
-	.shop-tags{margin-bottom:.8rem; gap:.4rem;}
-	.shop-tags em{height:2.2rem; padding:0 .7rem; font-size:1.1rem;}
 	.shop-detail-btn{height:3.6rem; padding:0 1.4rem; font-size:1.3rem;}
 	.shop-cart-icon{opacity:1; transform:none; width:3.8rem; height:3.8rem;}
 	.shop-cart-icon i{font-size:1.7rem;}
@@ -772,8 +765,8 @@
 .faq-item.on{background:#fff; box-shadow:0 1.2rem 3.2rem rgba(62,77,84,.08);}
 
 .faq-q{display:flex; align-items:flex-start; gap:1.4rem; width:100%; padding:2.5rem 3rem; border:0; background:none; cursor:pointer; text-align:left; font-family:inherit;}
-.faq-q em{flex:none; font-size:1.9rem; font-weight:700; color:var(--main-color); line-height:1.55;}
-.faq-q span{flex:1; font-size:1.9rem; font-weight:600; color:var(--ink-color); letter-spacing:-0.03em; line-height:1.55;}
+.faq-q em{flex:none; font-size:2.1rem; font-weight:700; color:var(--main-color); line-height:1.55;}
+.faq-q span{flex:1; font-size:2.1rem; font-weight:600; color:var(--ink-color); letter-spacing:-0.03em; line-height:1.55;}
 .faq-q i{flex:none; margin-top:.2rem; font-size:1.9rem; color:var(--sub-color); transition:transform .4s cubic-bezier(.16,.84,.44,1), color .3s;}
 .faq-q:hover span{color:var(--main-color);}
 .faq-item.on .faq-q i{transform:rotate(180deg); color:var(--main-color);}
@@ -781,8 +774,8 @@
 /* 높이는 JS 가 px 로 지정한다 (열린 뒤에는 auto 로 되돌려 리사이즈에 대응) */
 .faq-a{height:0; overflow:hidden; transition:height .4s cubic-bezier(.16,.84,.44,1);}
 .faq-a-inner{display:flex; gap:1.4rem; padding:0 3rem 2.7rem;}
-.faq-a-inner em{flex:none; font-size:1.9rem; font-weight:700; color:#B4C0C4; line-height:1.75;}
-.faq-a-inner p{flex:1; font-size:1.8rem; color:#7C888E; letter-spacing:-0.02em; line-height:1.75;}
+.faq-a-inner em{flex:none; font-size:2.1rem; font-weight:700; color:#B4C0C4; line-height:1.75;}
+.faq-a-inner p{flex:1; font-size:2rem; color:#7C888E; letter-spacing:-0.02em; line-height:1.75;}
 
 @media all and (max-width:1280px){
 	.faq-head .faq-h2{font-size:3.8rem;}
@@ -794,10 +787,10 @@
 	.faq-list{gap:1rem;}
 	.faq-q{padding:2rem 2rem;}
 	.faq-q em,
-	.faq-q span{font-size:1.75rem;}
+	.faq-q span{font-size:1.95rem;}
 	.faq-a-inner{padding:0 2rem 2.2rem;}
-	.faq-a-inner em{font-size:1.75rem;}
-	.faq-a-inner p{font-size:1.65rem;}
+	.faq-a-inner em{font-size:1.95rem;}
+	.faq-a-inner p{font-size:1.85rem;}
 }
 @media (prefers-reduced-motion: reduce){
 	.faq-item,

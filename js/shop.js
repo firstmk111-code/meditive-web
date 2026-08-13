@@ -575,22 +575,6 @@
 	/* ----------------------------------------------------
 	 * 상품 카드 렌더링
 	---------------------------------------------------- */
-	/* 진료과 태그 : 카드에서 "어느 병원을 위한 상품인지" 를 제목보다 먼저 읽히게 한다 */
-	function deptTagHTML(p) {
-		var names = deptNames(p);
-		if (!names.length) return '';
-		var h;
-		if (names.length >= ALL_DEPT.length) {
-			h = '<em>전체 진료과</em>';
-		} else {
-			var n = Math.min(names.length, 2), i;
-			h = '';
-			for (i = 0; i < n; i++) h += '<em>' + names[i] + '</em>';
-			if (names.length > n) h += '<em class="more">+' + (names.length - n) + '</em>';
-		}
-		return '<span class="shop-tags">' + h + '</span>';
-	}
-
 	function cardHTML(p) {
 		var badge = p.badge ? '<span class="shop-badge' + (p.badge === 'BEST' ? ' mint' : '') + ' font-outfit">' + p.badge + '</span>' : '';
 		var quote = isQuote(p);
@@ -606,7 +590,6 @@
 					'<a href="' + detailUrl(p) + '"><img src="' + imgPath(p) + '" alt="' + p.name + '" loading="lazy"></a>' + icon +
 				'</div>' +
 				'<div class="shop-meta">' +
-					deptTagHTML(p) +
 					'<h3 class="shop-tit"><a href="' + detailUrl(p) + '">' + p.name + '</a></h3>' +
 					'<p class="shop-txt">' + p.desc + '</p>' +
 					'<div class="shop-price-row">' + price +
