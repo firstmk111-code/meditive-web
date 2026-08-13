@@ -609,9 +609,9 @@
 					deptTagHTML(p) +
 					'<h3 class="shop-tit"><a href="' + detailUrl(p) + '">' + p.name + '</a></h3>' +
 					'<p class="shop-txt">' + p.desc + '</p>' +
-					'<div class="shop-price-row">' + price + '</div>' +
-					'<a href="' + detailUrl(p) + '" class="shop-detail-btn' + (quote ? ' is-quote' : '') + '">' +
-						(quote ? '견적 문의하기' : '옵션 선택하고 구매') + ' <i class="xi-angle-right-min"></i></a>' +
+					'<div class="shop-price-row">' + price +
+						'<a href="' + detailUrl(p) + '" class="shop-detail-btn">' + (quote ? '견적 문의' : '상세보기') + ' <i class="xi-angle-right-min"></i></a>' +
+					'</div>' +
 				'</div>' +
 			'</li>';
 	}

@@ -59,22 +59,6 @@
 .shop-benefit b{display:block; font-size:1.6rem; font-weight:700; color:var(--ink-color); letter-spacing:-0.03em;}
 .shop-benefit span{display:block; width:100%; padding-left:5.6rem; margin-top:.2rem; font-size:1.35rem; color:#8A959A; letter-spacing:-0.02em;}
 
-/* 목록 하단 CTA 밴드 */
-.shop-cta-band{display:flex; align-items:center; justify-content:space-between; gap:2.4rem 4rem; flex-wrap:wrap;
-	margin-top:8rem; padding:4.4rem 4.6rem; border-radius:1.6rem; background:var(--ink-color);}
-.shop-cta-band .cta-txt strong{display:block; font-size:2.6rem; font-weight:700; color:#fff; letter-spacing:-0.04em;}
-.shop-cta-band .cta-txt p{margin-top:1rem; font-size:1.6rem; color:rgba(255,255,255,.66); letter-spacing:-0.02em; line-height:1.7;}
-.shop-cta-band .cta-btns{display:flex; align-items:center; gap:1rem; flex:none;}
-.shop-cta-band .cta-primary{display:inline-flex; align-items:center; gap:.8rem; height:5.4rem; padding:0 2.8rem; border-radius:2.7rem;
-	background:var(--main-color); font-size:1.6rem; font-weight:700; color:#fff; letter-spacing:-0.02em; transition:var(--transition-custom);}
-.shop-cta-band .cta-primary:hover{background:#4FC2BD;}
-.shop-cta-band .cta-primary i{transition:var(--transition-custom);}
-.shop-cta-band .cta-primary:hover i{transform:translateX(.3rem);}
-.shop-cta-band .cta-ghost{display:inline-flex; align-items:center; height:5.4rem; padding:0 2.4rem; border-radius:2.7rem;
-	border:1px solid rgba(255,255,255,.24); font-size:1.6rem; font-weight:500; color:rgba(255,255,255,.8); letter-spacing:-0.02em;
-	transition:var(--transition-custom);}
-.shop-cta-band .cta-ghost:hover{border-color:#fff; color:#fff;}
-
 /* --------------------------------------------------
  * 2. 상품 카드
  *    포트폴리오 카드(.pf-item) 구조를 그대로 계승하고
@@ -119,23 +103,19 @@
 .shop-item:hover .shop-tit a{color:var(--main-color);}
 .shop-txt{font-size:1.5rem; color:#8A959A; line-height:1.6; letter-spacing:-0.02em; margin-top:.9rem;}
 
-/* 가격은 카드 아래쪽에 고정해 카드 높이가 달라도 가격 · 버튼 줄이 나란히 정렬되게 한다 */
-.shop-price-row{display:flex; align-items:flex-end; justify-content:space-between; gap:1.6rem; margin-top:auto; padding-top:1.8rem;
-	border-top:1px solid #EDF1F2;}
-.shop-price{font-family:var(--font-family2); font-size:2.4rem; font-weight:700; color:var(--ink-color); letter-spacing:-0.01em; line-height:1.1;}
+.shop-price-row{display:flex; align-items:center; justify-content:space-between; gap:1.6rem; margin-top:1.8rem;
+	padding-top:1.8rem; border-top:1px solid #EDF1F2;}
+.shop-price{font-family:var(--font-family2); font-size:2.2rem; font-weight:700; color:var(--ink-color); letter-spacing:-0.01em;}
 .shop-price .won{font-family:var(--font-family1); font-size:1.6rem; font-weight:600; margin-left:.2rem;}
-.shop-price .from{display:block; font-family:var(--font-family1); font-size:1.2rem; font-weight:500; color:var(--sub-color); letter-spacing:0; margin-bottom:.4rem;}
+.shop-price .from{display:block; font-family:var(--font-family1); font-size:1.2rem; font-weight:500; color:var(--sub-color); letter-spacing:0; margin-bottom:.2rem;}
 
-/* 구매 버튼 — 카드마다 확실한 다음 행동을 준다 */
-.shop-detail-btn{display:flex; align-items:center; justify-content:center; gap:.6rem; height:4.8rem; margin-top:1.4rem; padding:0 1.8rem;
-	border-radius:.8rem; border:1px solid var(--ink-color); background:var(--ink-color); font-family:var(--font-family1); font-size:1.5rem;
-	font-weight:600; color:#fff; letter-spacing:-0.02em; white-space:nowrap; transition:var(--transition-custom);}
+/* 상세보기 버튼 — 라운드 아웃라인, 미니멀 */
+.shop-detail-btn{display:inline-flex; align-items:center; gap:.7rem; height:4rem; padding:0 1.8rem; border-radius:2rem;
+	border:1px solid #DDE5E7; background:#fff; font-family:var(--font-family1); font-size:1.4rem; font-weight:500; color:#6B777D;
+	letter-spacing:-0.02em; white-space:nowrap; transition:var(--transition-custom);}
 .shop-detail-btn i{font-size:1.4rem; transition:var(--transition-custom);}
-.shop-detail-btn:hover{background:var(--main-color); border-color:var(--main-color); color:#fff;}
+.shop-detail-btn:hover{background:var(--ink-color); border-color:var(--ink-color); color:#fff;}
 .shop-detail-btn:hover i{transform:translateX(.3rem);}
-/* 견적 상품은 결제가 아니라 상담이므로 톤을 낮춘다 */
-.shop-detail-btn.is-quote{background:#fff; border-color:var(--main-color); color:var(--main-color);}
-.shop-detail-btn.is-quote:hover{background:var(--main-color); color:#fff;}
 
 /* 결과 없음 */
 .shop-empty{grid-column:1/-1; padding:10rem 0; text-align:center;}
@@ -345,22 +325,6 @@
 .main-cat-grid li a:hover .meta .cnt{background:rgba(255,255,255,.14); color:rgba(255,255,255,.78);}
 .main-cat-grid li a:hover .meta .from{color:var(--main-color);}
 
-/* CATEGORY : 하단 허브 바 — 구매 조건을 한 줄로 정리하고 상품몰로 밀어준다 */
-.main-cat-hub{display:flex; align-items:center; justify-content:space-between; gap:2.4rem 4rem; flex-wrap:wrap;
-	margin-top:2rem; padding:3rem 3.6rem; border-radius:2rem; background:var(--ink-color);}
-.main-cat-hub .hub-point{list-style:none; margin:0; padding:0; display:flex; align-items:center; flex-wrap:wrap; gap:1rem 2.8rem;}
-.main-cat-hub .hub-point li{display:inline-flex; align-items:center; gap:.7rem; font-size:1.5rem; color:rgba(255,255,255,.72); letter-spacing:-0.02em;}
-.main-cat-hub .hub-point i{font-size:1.5rem; color:var(--main-color);}
-.main-cat-hub .hub-btns{display:flex; align-items:center; gap:1rem; flex:none;}
-.main-cat-hub .hub-primary{display:inline-flex; align-items:center; gap:.8rem; height:5.4rem; padding:0 2.8rem; border-radius:2.7rem; background:var(--main-color);
-	font-size:1.6rem; font-weight:700; color:#fff; letter-spacing:-0.02em; transition:var(--transition-custom);}
-.main-cat-hub .hub-primary:hover{background:#4FC2BD;}
-.main-cat-hub .hub-primary i{transition:var(--transition-custom);}
-.main-cat-hub .hub-primary:hover i{transform:translateX(.3rem);}
-.main-cat-hub .hub-ghost{display:inline-flex; align-items:center; height:5.4rem; padding:0 2.4rem; border-radius:2.7rem; border:1px solid rgba(255,255,255,.24);
-	font-size:1.6rem; font-weight:500; color:rgba(255,255,255,.8); letter-spacing:-0.02em; transition:var(--transition-custom);}
-.main-cat-hub .hub-ghost:hover{border-color:#fff; color:#fff;}
-
 /* PACKAGE : 2분할 대형 라운드 카드 */
 .main-pkg-grid{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2,1fr); gap:2.4rem;}
 .main-pkg-grid li a{display:block; position:relative; border-radius:2.4rem; overflow:hidden; background:var(--ink-color); min-height:36rem;
@@ -413,11 +377,6 @@
 	.shop-benefit i{width:3.8rem; height:3.8rem; font-size:1.8rem;}
 	.shop-benefit b{font-size:1.5rem;}
 	.shop-benefit span{padding-left:5rem; font-size:1.3rem;}
-	.shop-cta-band{display:block; margin-top:5rem; padding:3.2rem 2.6rem 3.4rem;}
-	.shop-cta-band .cta-txt strong{font-size:2.1rem;}
-	.shop-cta-band .cta-txt p{margin-top:.8rem; font-size:1.5rem;}
-	.shop-cta-band .cta-btns{margin-top:2.4rem; gap:.8rem;}
-	.shop-cta-band .cta-primary,.shop-cta-band .cta-ghost{flex:1; justify-content:center; height:5rem; padding:0 1.4rem; font-size:1.5rem;}
 	.shop-head{margin-bottom:3.4rem;}
 	.shop-head .shop-h2{font-size:3.8rem;}
 	.shop-head .shop-desc{font-size:1.6rem;}
@@ -428,11 +387,11 @@
 	.shop-grid{grid-template-columns:repeat(2,1fr); gap:3.4rem 1.6rem;}
 	.shop-tit{font-size:1.6rem;}
 	.shop-txt{display:none;}
-	.shop-price{font-size:2rem;}
-	.shop-price-row{padding-top:1.4rem;}
+	.shop-price{font-size:1.8rem;}
+	.shop-price-row{flex-direction:column; align-items:flex-start; gap:1.2rem;}
 	.shop-tags{margin-bottom:.8rem; gap:.4rem;}
 	.shop-tags em{height:2.2rem; padding:0 .7rem; font-size:1.1rem;}
-	.shop-detail-btn{height:4.4rem; margin-top:1.1rem; padding:0 1.2rem; font-size:1.4rem;}
+	.shop-detail-btn{height:3.6rem; padding:0 1.4rem; font-size:1.3rem;}
 	.shop-cart-icon{opacity:1; transform:none; width:3.8rem; height:3.8rem;}
 	.shop-cart-icon i{font-size:1.7rem;}
 
@@ -474,11 +433,6 @@
 	.main-cat-grid .tit{font-size:2.2rem;}
 	.main-cat-grid .arw{bottom:3rem; right:2.4rem;}
 	.main-cat-grid .meta{margin-top:1.8rem; padding-right:3.4rem;}
-	.main-cat-hub{display:block; margin-top:1.2rem; padding:2.6rem 2.6rem 2.8rem;}
-	.main-cat-hub .hub-point{gap:.9rem 1.8rem;}
-	.main-cat-hub .hub-point li{font-size:1.4rem;}
-	.main-cat-hub .hub-btns{margin-top:2.2rem; gap:.8rem;}
-	.main-cat-hub .hub-primary,.main-cat-hub .hub-ghost{flex:1; justify-content:center; height:5rem; padding:0 1.6rem; font-size:1.5rem;}
 	.main-pkg-grid li a,.main-pkg-grid .inner{min-height:28rem;}
 	.main-pkg-grid .inner{padding:3.4rem 2.8rem;}
 	.main-pkg-grid .badge{top:3rem; left:2.8rem;}
@@ -596,9 +550,6 @@
 
 @media all and (min-width:901px){
 	.main-shop-cat .main-cat-grid{display:none;}
-	/* 잘린 호와 허브 바가 붙어 보이지 않게 데스크탑에서만 간격을 넓힌다 */
-	.main-shop-cat .main-cat-hub{margin-top:4.4rem;}
-
 	/* 바깥 상자는 자르지 않는다 : 좌우 노드 라벨이 원 밖으로 나가야 하기 때문 */
 	.cat-orbit{display:block; position:relative; width:100%; height:58rem; margin:1rem auto 0;}
 	/* 아래쪽 호를 잘라 아치 형태로 보여준다 */
@@ -694,12 +645,8 @@
 	.cat-orbit-core .core-item{transition:none !important;}
 	.main-cat-grid li a,
 	.main-cat-grid .meta .cnt,
-	.main-cat-grid .meta .from,
-	.main-cat-hub .hub-primary,
-	.main-cat-hub .hub-primary i,
-	.main-cat-hub .hub-ghost{transition:none !important;}
+	.main-cat-grid .meta .from{transition:none !important;}
 	.main-cat-grid li a:hover{transform:none;}
-	.main-cat-hub .hub-primary:hover i{transform:none;}
 }
 
 /* --------------------------------------------------
@@ -817,7 +764,7 @@
  *     장식 없이 라운드 박스 + Q. 표기만 두는 간결한 형태.
 -------------------------------------------------- */
 .faq-section{padding:0 0 16rem; background:#fff;}
-.faq-head{margin-bottom:4.6rem;}
+.faq-head{margin-bottom:4.6rem; text-align:center;}
 .faq-head .faq-h2{font-size:4.4rem; font-weight:800; color:var(--ink-color); letter-spacing:-0.05em; line-height:1.34;}
 
 .faq-list{list-style:none; margin:0 auto; padding:0; display:flex; flex-direction:column; gap:1.4rem; max-width:104rem;}
@@ -857,12 +804,8 @@
 	.faq-q i,
 	.faq-a{transition:none !important;}
 	.shop-detail-btn,
-	.shop-detail-btn i,
-	.shop-cta-band .cta-primary,
-	.shop-cta-band .cta-primary i,
-	.shop-cta-band .cta-ghost{transition:none !important;}
-	.shop-detail-btn:hover i,
-	.shop-cta-band .cta-primary:hover i{transform:none;}
+	.shop-detail-btn i{transition:none !important;}
+	.shop-detail-btn:hover i{transform:none;}
 }
 
 /* --------------------------------------------------
@@ -941,18 +884,6 @@
 .col-nav-list{flex:none; width:6.4rem; display:grid; place-items:center; border-radius:1.2rem; background:#F7FAFA; font-size:2rem; color:var(--sub-color); transition:background .35s, color .3s;}
 .col-nav-list:hover{background:var(--mist-color); color:var(--ink-color);}
 
-/* 상세 하단 전환 CTA */
-.col-doc-cta{display:flex; align-items:center; justify-content:space-between; gap:2.4rem 4rem; flex-wrap:wrap; max-width:88rem; margin:6rem auto 0; padding:4rem; border-radius:1.6rem; background:var(--ink-color);}
-.col-doc-cta-txt strong{display:block; font-size:2.2rem; font-weight:700; color:#fff; letter-spacing:-0.04em; line-height:1.45;}
-.col-doc-cta-txt p{margin-top:1rem; font-size:1.5rem; color:rgba(255,255,255,.62); letter-spacing:-0.02em;}
-.col-doc-cta-btns{display:flex; align-items:center; gap:1rem;}
-.col-cta-primary{display:inline-flex; align-items:center; gap:.7rem; height:5.4rem; padding:0 2.6rem; border-radius:3rem; background:var(--main-color); font-size:1.5rem; font-weight:700; color:#fff; transition:background .3s;}
-.col-cta-primary i{transition:transform .35s cubic-bezier(.16,.84,.44,1);}
-.col-cta-primary:hover{background:#4FBFBA;}
-.col-cta-primary:hover i{transform:translateX(.4rem);}
-.col-cta-ghost{display:inline-flex; align-items:center; height:5.4rem; padding:0 2.4rem; border-radius:3rem; border:1px solid rgba(255,255,255,.28); font-size:1.5rem; font-weight:600; color:#fff; transition:border-color .3s, background .3s;}
-.col-cta-ghost:hover{border-color:transparent; background:rgba(255,255,255,.12);}
-
 @media all and (max-width:1280px){
 	.col-head .col-h2{font-size:4.8rem;}
 	.col-body{gap:4rem;}
@@ -988,16 +919,11 @@
 	.col-nav-btn{padding:1.6rem;}
 	.col-nav-btn span{display:none;}
 	.col-nav-list{width:5.4rem;}
-	.col-doc-cta{padding:3rem 2.4rem;}
-	.col-doc-cta-txt strong{font-size:1.9rem;}
-	.col-doc-cta-btns{width:100%;}
-	.col-doc-cta-btns a{flex:1; justify-content:center;}
 }
 @media (prefers-reduced-motion: reduce){
 	.col-card > a,
 	.col-thumb img,
 	.col-side-cta,
-	.col-cta-primary i,
 	.col-side-cta span i{transition:none !important;}
 	.col-card > a:hover{transform:none;}
 	.col-card > a:hover .col-thumb img{transform:none;}
