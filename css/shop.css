@@ -50,14 +50,34 @@
 .shop-chip .num{margin-left:.7rem; font-size:1.3rem; color:var(--sub-color);}
 .shop-chip.on .num{color:rgba(255,255,255,.75);}
 
-/* 구매 안내 바 — 필터 위에서 "여기서 바로 살 수 있다" 는 신호를 준다 */
-.shop-benefit{list-style:none; margin:0 0 4.4rem; padding:2.6rem 3rem; display:grid; grid-template-columns:repeat(4,1fr); gap:2rem 1.6rem;
-	border-radius:1.6rem; background:var(--mist-color);}
-.shop-benefit li{display:flex; align-items:center; gap:1.2rem; flex-wrap:wrap;}
-.shop-benefit i{flex:none; display:inline-flex; align-items:center; justify-content:center; width:4.4rem; height:4.4rem; border-radius:50%;
-	background:#fff; font-size:2rem; color:var(--main-color);}
-.shop-benefit b{display:block; font-size:1.6rem; font-weight:700; color:var(--ink-color); letter-spacing:-0.03em;}
-.shop-benefit span{display:block; width:100%; padding-left:5.6rem; margin-top:.2rem; font-size:1.35rem; color:#8A959A; letter-spacing:-0.02em;}
+/* 구매 안내 타임라인 — 주문 조건을 왼쪽부터 한 단계씩 켜지는 순서로 읽힌다 */
+.shop-flow{position:relative; margin:0 0 5.6rem; padding-top:5.6rem;}
+.shop-flow-line{position:absolute; top:0; left:0; right:0; height:.2rem; border-radius:.1rem; background:rgba(62,77,84,.12); overflow:hidden;}
+.shop-flow-fill{display:block; width:0; height:100%; border-radius:.1rem; background:var(--main-color);
+	box-shadow:0 0 1.2rem rgba(100,211,206,.65); transition:width .7s cubic-bezier(.16,.84,.44,1);}
+
+.shop-flow-list{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4,1fr); gap:2.4rem;}
+.shop-flow-step{position:relative;}
+/* 라인 위의 점 — 각 단계의 시작 지점을 잡아 준다 */
+.shop-flow-step:before{content:''; position:absolute; top:-6.3rem; left:.2rem; width:1.2rem; height:1.2rem; border-radius:50%;
+	background:#fff; border:.2rem solid rgba(62,77,84,.14); box-sizing:border-box;
+	transition:background .45s, border-color .45s, box-shadow .45s, transform .45s cubic-bezier(.16,.84,.44,1);}
+.shop-flow-step.on:before{background:var(--main-color); border-color:var(--main-color); transform:scale(1.15);
+	box-shadow:0 0 0 .5rem rgba(100,211,206,.16);}
+
+.shop-flow-step .step-no{display:inline-flex; align-items:center; justify-content:center; width:5.6rem; height:5.6rem; margin-bottom:1.6rem;
+	border-radius:50%; background:#fff; border:.2rem solid rgba(62,77,84,.12); box-sizing:border-box;
+	font-size:1.8rem; font-weight:700; color:var(--sub-color); letter-spacing:0.02em;
+	transition:background .45s, border-color .45s, color .45s, box-shadow .45s;}
+.shop-flow-step.on .step-no{background:var(--main-color); border-color:var(--main-color); color:#fff;
+	box-shadow:0 .8rem 2rem rgba(100,211,206,.32);}
+
+.shop-flow-step b{display:block; font-size:1.8rem; font-weight:700; color:var(--sub-color); letter-spacing:-0.03em; line-height:1.4;
+	transition:color .45s;}
+.shop-flow-step.on b{color:var(--ink-color);}
+.shop-flow-step span:not(.step-no){display:block; margin-top:.7rem; font-size:1.45rem; color:#A6B0B4; letter-spacing:-0.02em; line-height:1.6;
+	transition:color .45s;}
+.shop-flow-step.on span:not(.step-no){color:#8A959A;}
 
 /* --------------------------------------------------
  * 2. 상품 카드
@@ -361,17 +381,23 @@
 @media all and (max-width:900px){
 	.main-pkg-grid{grid-template-columns:1fr;}
 	.pd-spec{grid-template-columns:1fr;}
-	.shop-benefit{grid-template-columns:repeat(2,1fr);}
+	/* 2열로 접히면 가로 라인이 의미를 잃으므로 숫자만 남긴다 */
+	.shop-flow{padding-top:0;}
+	.shop-flow-line{display:none;}
+	.shop-flow-step:before{display:none;}
+	.shop-flow-list{grid-template-columns:repeat(2,1fr); gap:3rem 2rem;}
+	.shop-flow-step .step-no{width:5rem; height:5rem; margin-bottom:1.2rem; font-size:1.6rem;}
 }
 @media all and (max-width:800px){
 	#content.wide > .rnd-page:first-child{padding-top:7rem;}
 }
 @media all and (max-width:767px){
 	.shop-section{padding:7rem 0 10rem;}
-	.shop-benefit{grid-template-columns:1fr; margin-bottom:3.4rem; padding:2.2rem 2.2rem 2.4rem; gap:1.6rem;}
-	.shop-benefit i{width:3.8rem; height:3.8rem; font-size:1.8rem;}
-	.shop-benefit b{font-size:1.5rem;}
-	.shop-benefit span{padding-left:5rem; font-size:1.3rem;}
+	.shop-flow{margin-bottom:4rem;}
+	.shop-flow-list{gap:2.4rem 1.6rem;}
+	.shop-flow-step .step-no{width:4.4rem; height:4.4rem; margin-bottom:1rem; font-size:1.5rem;}
+	.shop-flow-step b{font-size:1.6rem;}
+	.shop-flow-step span:not(.step-no){margin-top:.5rem; font-size:1.35rem;}
 	.shop-head{margin-bottom:3.4rem;}
 	.shop-head .shop-h2{font-size:3.8rem;}
 	.shop-head .shop-desc{font-size:1.6rem;}
@@ -799,6 +825,13 @@
 	.shop-detail-btn,
 	.shop-detail-btn i{transition:none !important;}
 	.shop-detail-btn:hover i{transform:none;}
+	/* 순차 점등 없이 처음부터 켜진 상태로 보여 준다 */
+	.shop-flow-fill,
+	.shop-flow-step:before,
+	.shop-flow-step .step-no,
+	.shop-flow-step b,
+	.shop-flow-step span:not(.step-no){transition:none !important;}
+	.shop-flow-step.on:before{transform:none;}
 }
 
 /* --------------------------------------------------

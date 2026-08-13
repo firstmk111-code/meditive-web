@@ -1104,3 +1104,70 @@
 	if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', initColumn);
 	else initColumn();
 })(window, document);
+
+/* ==========================================================================
+ * 진행 안내 타임라인 (공통)
+ * .shop-flow > (.shop-flow-line > .shop-flow-fill) + .shop-flow-list > li.shop-flow-step
+ * - 화면에 들어오면 왼쪽부터 한 단계씩 불이 켜지고, 켜진 지점까지 라인이 채워진다.
+ * - 한 번만 재생하고 관찰을 끊는다.
+ * - 모션 최소화 설정이면 전부 켜진 상태로 즉시 보여 준다.
+ * 해당 마크업이 없는 페이지에서는 아무 일도 하지 않는다.
+ * ========================================================================== */
+(function (w, d) {
+	'use strict';
+
+	var REDUCE = w.matchMedia && w.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	var GAP = 300;                                    /* 단계 사이 간격 (ms) */
+
+	/* 마지막으로 켜진 점까지만 채운다 (뒤쪽은 남겨 두어 "진행 중" 으로 읽히게) */
+	function fillTo(i, total) { return ((i / total) * 100 + 1) + '%'; }
+
+	function run(flow) {
+		if (flow.__lit) return;
+		flow.__lit = true;
+
+		var steps = flow.querySelectorAll('.shop-flow-step');
+		var fill = flow.querySelector('.shop-flow-fill');
+		var total = steps.length, i;
+		if (!total) return;
+
+		if (REDUCE) {
+			for (i = 0; i < total; i++) steps[i].classList.add('on');
+			if (fill) fill.style.width = fillTo(total - 1, total);
+			return;
+		}
+
+		for (i = 0; i < total; i++) {
+			(function (k) {
+				w.setTimeout(function () {
+					steps[k].classList.add('on');
+					if (fill) fill.style.width = fillTo(k, total);
+				}, k * GAP);
+			})(i);
+		}
+	}
+
+	function init() {
+		var flows = d.querySelectorAll('.shop-flow'), i;
+		if (!flows.length) return;
+
+		if (!w.IntersectionObserver) {
+			for (i = 0; i < flows.length; i++) run(flows[i]);
+			return;
+		}
+
+		var io = new w.IntersectionObserver(function (entries) {
+			for (var j = 0; j < entries.length; j++) {
+				if (!entries[j].isIntersecting) continue;
+				run(entries[j].target);
+				io.unobserve(entries[j].target);
+			}
+		}, { threshold: 0.35 });
+
+		for (i = 0; i < flows.length; i++) io.observe(flows[i]);
+	}
+
+	if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', init);
+	else init();
+
+})(window, document);
