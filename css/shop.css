@@ -113,7 +113,7 @@
 .shop-cart-icon.done i{color:#fff;}
 
 .shop-meta{padding:2.2rem .4rem 0; display:flex; flex-direction:column; flex:1;}
-.shop-tit{font-size:2.1rem; font-weight:600; color:var(--ink-color); letter-spacing:-0.02em; line-height:1.4;}
+.shop-tit{font-size:2.1rem; font-weight:700; color:var(--ink-color); letter-spacing:-0.02em; line-height:1.4;}
 .shop-tit a{color:inherit;}
 .shop-item:hover .shop-tit a{color:var(--main-color);}
 .shop-txt{font-size:1.5rem; color:#8A959A; line-height:1.6; letter-spacing:-0.02em; margin-top:.9rem;}
