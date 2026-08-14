@@ -777,6 +777,16 @@
 	.pf-grid.pf-grid-card{grid-template-columns:1fr; gap:2.8rem;}
 }
 
+/* 포트폴리오 더보기 — 서비스 페이지는 9개만 노출하고 전체는 포트폴리오로 넘긴다.
+   버튼은 메인 Journal 의 View More(.main-view-btn)를 그대로 재사용한다.
+   원본은 메인에서 스크롤 등장용이라 opacity:0 상태이므로, 여기서는 보이게만 되돌린다. */
+.pf-more{margin-top:7rem; display:flex; justify-content:center;}
+.pf-more .main-view-btn{opacity:1; transform:none; margin-top:0;}
+
+@media all and (max-width:767px){
+	.pf-more{margin-top:4.6rem;}
+}
+
 /* --------------------------------------------------
  * 13. FAQ 아코디언 (공통 컴포넌트)
  *     페이지 성격에 맞는 문답만 각 페이지에 넣고 스타일 · 동작은 여기서 한 번만 정의한다.
