@@ -44,40 +44,30 @@
 	var TILES = ['pr01', 'pr02', 'pr03', 'pr04', 'fm01', 'fm02', 'fm03', 'cd01', 'cd02', 'cd03',
 		'cd05', 'pm01', 'pm02', 'pm03', 'pm04', 'pm05', 'pm06', 'pm07', 'pr05', 'pk01'];
 
-	/* 테마 상품 레일 */
-	var RAILS = [
-		{
-			tit: '개원 준비, 이 구성이면 충분해요', emo: '🏥', more: shopUrl('package'),
-			ids: ['pk01', 'pk02', 'pk03', 'pk04', 'pr01', 'cd01', 'cd03', 'fm01', 'pm02', 'pr04']
-		},
-		{
-			tit: '매일 쓰는 병원 인쇄물, 재주문까지 간편하게', emo: '📋', more: shopUrl('reorder'),
-			ids: ['pr01', 'pr02', 'pr03', 'fm01', 'fm02', 'fm03', 'fm05', 'cd02', 'cd05', 'cd06']
-		},
-		{
-			tit: '환자에게 먼저 다가가는 홍보물', emo: '📣', more: shopUrl('promo'), cta: '바로 주문하기',
-			ids: ['pm01', 'pm02', 'pm03', 'pm04', 'pm05', 'pm06', 'pm07', 'pm08']
-		}
-	];
+	/* PICK — 해시태그로 골라 보는 큐레이션 */
+	var PICK = {
+		tit: '개원 준비, 이 구성이면 충분해요',
+		more: shopUrl('package'),
+		tags: [
+			{ lb: '#개원 패키지',    ids: ['pk01', 'pk02', 'pk03', 'pk04', 'pr01', 'cd01', 'fm01', 'pm02'] },
+			{ lb: '#진료 · 예약카드', ids: ['pr01', 'pr02', 'fm07', 'cd01', 'cd02', 'pr04', 'pr03', 'fm03'] },
+			{ lb: '#문진표 · 서식',  ids: ['fm01', 'fm02', 'fm03', 'fm04', 'fm05', 'fm06', 'fm07', 'pr04'] },
+			{ lb: '#명함 · 봉투',    ids: ['cd01', 'cd02', 'cd03', 'cd04', 'cd05', 'cd06', 'pr03', 'pr01'] },
+			{ lb: '#병원 안내물',    ids: ['pr05', 'pr06', 'pr07', 'pr08', 'pm04', 'pm05', 'pm06', 'pm07'] }
+		]
+	};
 
-	/* 혜택 · 꿀팁 3분할 */
-	var PROMOS = [
-		{
-			bg: 'p03.jpg', kSub: '개원 일정에 맞춰 한 번에', kTit: 'OPENING<br>PACKAGE',
-			tit: '낱개로 주문할 필요 없어요!', txt: '개원 · 리뉴얼에 필요한 구성을 묶어 제안합니다.',
-			ids: ['pk01', 'pk02', 'pk03'], href: shopUrl('package')
-		},
-		{
-			bg: 'p44.jpg', kSub: '클릭 몇 번으로 완성', kTit: '병원 템플릿<br>무료 제공',
-			tit: '진료과에 맞는 디자인을 골라보세요!', txt: '템플릿을 상품에 입혀보고 그대로 주문할 수 있습니다.',
-			ids: ['pr01', 'pr02', 'fm01'], href: '#tplPreview'
-		},
-		{
-			bg: 'p01.jpg', kSub: '개원 홍보부터 리뉴얼까지', kTit: '상황별<br>전용관 오픈',
-			tit: '지금 필요한 제작물만 모았습니다!', txt: '상황별로 필요한 인쇄물을 한 번에 확인하세요.',
-			ids: ['pm01', 'pm05', 'pr05'], href: shopUrl('promo')
-		}
-	];
+	/* 베스트 상품 — 카테고리 탭 */
+	var BEST = {
+		tit: '베스트 상품',
+		tabs: [
+			{ cat: 'print',   lb: '병원 인쇄물' },
+			{ cat: 'promo',   lb: '홍보물' },
+			{ cat: 'form',    lb: '서식류' },
+			{ cat: 'card',    lb: '명함 · 봉투' },
+			{ cat: 'package', lb: '개원 패키지' }
+		]
+	};
 
 	/* ---- 템플릿 미리보기 ----
 	 * 탭(상품군) → 칩(실제 상품) → 템플릿을 골라 목업에 입힌다.
@@ -185,22 +175,6 @@
 	/* ====================================================
 	 * 3. 섹션 마크업 만들기
 	==================================================== */
-	function gnbHTML(curCat) {
-		var isHome = (curCat === 'all');
-		return '<nav class="sh-gnb"><div class="sh-gnb-inner area">' +
-			'<ul class="sh-gnb-menu">' +
-				'<li class="' + (isHome ? 'on' : '') + '"><a href="' + shopUrl('all') + '">홈</a></li>' +
-				'<li class="' + (!isHome ? 'on' : '') + '"><a href="' + shopUrl('print') + '">스토어 상품</a></li>' +
-				'<li><a href="' + BASE + 'kr/contact/inquiry.html">맞춤 제작 문의</a></li>' +
-				'<li><a href="' + BASE + 'kr/shop/mypage.html">주문 · 배송</a></li>' +
-			'</ul>' +
-			'<div class="sh-gnb-util">' +
-				'<a href="' + BASE + 'kr/shop/mypage.html"><i class="xi-truck"></i><span>주문 조회</span></a>' +
-				'<a href="' + BASE + 'kr/shop/cart.html"><i class="xi-cart-o"></i><span>장바구니</span><em class="cart-count">0</em></a>' +
-			'</div>' +
-		'</div></nav>';
-	}
-
 	function catbarHTML(curCat) {
 		var li = '', i, c;
 		for (i = 1; i < S.CATS.length; i++) {          /* 0번은 '전체 상품' → 홈이 대신한다 */
@@ -244,13 +218,11 @@
 				'</a></div>';
 		}
 		return '<section class="sh-hero"><div class="sh-hero-view">' +
-			'<div class="sh-hero-track js-hero-track">' + s + '</div></div>' +
-			'<div class="sh-hero-ctrl">' +
-				'<span class="sh-hero-bar"><i style="width:' + (100 / HERO.length) + '%"></i></span>' +
-				'<div class="sh-navs"><button type="button" class="sh-nav-btn js-prev" title="이전 배너"><i class="xi-angle-left-min"></i></button>' +
-				'<button type="button" class="sh-nav-btn js-next" title="다음 배너"><i class="xi-angle-right-min"></i></button></div>' +
-				'<span class="sh-hero-num"><b class="js-hero-cur">1</b> | ' + HERO.length + '</span>' +
-			'</div></section>';
+			'<div class="sh-hero-track js-hero-track">' + s + '</div>' +
+			'<button type="button" class="sh-hero-nav js-prev" title="이전 배너"><i class="xi-angle-left-min"></i></button>' +
+			'<button type="button" class="sh-hero-nav js-next" title="다음 배너"><i class="xi-angle-right-min"></i></button>' +
+			'<span class="sh-hero-page"><b class="js-hero-cur">1</b> / ' + HERO.length + '</span>' +
+		'</div></section>';
 	}
 
 	function tilesHTML() {
@@ -267,45 +239,80 @@
 		'</div></section>';
 	}
 
-	function railHTML(r) {
-		var s = '', i, p;
-		for (i = 0; i < r.ids.length; i++) {
-			p = P(r.ids[i]); if (!p) continue;
-			s += cardHTML(p, r.cta);
+	/* 좌우 이동 버튼 한 벌 */
+	function navsHTML() {
+		return '<div class="sh-navs">' +
+			'<button type="button" class="sh-nav-btn js-prev" title="이전"><i class="xi-angle-left-min"></i></button>' +
+			'<button type="button" class="sh-nav-btn js-next" title="다음"><i class="xi-angle-right-min"></i></button></div>';
+	}
+
+	/* PICK — 해시태그 칩으로 상품 묶음을 바꿔 본다 */
+	function pickItemHTML(p) {
+		if (!p) return '';
+		var add = S.isQuote(p) ? '' :
+			'<button type="button" class="sh-card-add js-add" data-id="' + p.id + '" title="장바구니에 담기"><i class="xi-cart-o"></i></button>';
+		return '<li class="mp-item">' +
+			'<div class="mp-thumb-wrap">' +
+				'<a href="' + S.detailUrl(p) + '" class="mp-thumb">' +
+					'<span class="mp-img"><img src="' + S.imgPath(p) + '" alt="' + esc(p.name) + '" loading="lazy"></span>' +
+					'<span class="mp-dim"></span>' +
+				'</a>' + add +
+			'</div>' +
+			'<div class="mp-body">' +
+				'<a href="' + S.detailUrl(p) + '" class="mp-name">' + esc(p.name) + '</a>' +
+				priceHTML(p) +
+			'</div>' +
+		'</li>';
+	}
+
+	function pickHTML() {
+		var tg = '', i;
+		for (i = 0; i < PICK.tags.length; i++) {
+			tg += '<button type="button" class="mp-tag js-mptag' + (i === 0 ? ' on' : '') + '" data-i="' + i + '">' + PICK.tags[i].lb + '</button>';
 		}
-		return '<section class="sh-sec"><div class="sh-rail area">' +
-			secHead(r.tit, r.emo, r.more, true) +
-			'<div class="sh-rail-view"><ul class="sh-rail-track js-track">' + s + '</ul></div>' +
+		return '<section class="mp-sec"><div class="mp-inner area">' +
+			'<h2 class="mp-tit">' + PICK.tit + '</h2>' +
+			'<div class="mp-tags js-mptags">' + tg + '</div>' +
+			'<div class="mp-view"><ul class="mp-list js-mplist"></ul></div>' +
+			'<div class="mp-ctrl"><span class="mp-bar"><i class="js-bar"></i></span>' + navsHTML() + '</div>' +
 		'</div></section>';
 	}
 
-	function promoHTML() {
-		var s = '', i, j, pr, p, items;
-		for (i = 0; i < PROMOS.length; i++) {
-			pr = PROMOS[i]; items = '';
-			for (j = 0; j < pr.ids.length; j++) {
-				p = P(pr.ids[j]); if (!p) continue;
-				items += '<li><a href="' + S.detailUrl(p) + '">' +
-					'<span class="th"><img src="' + S.imgPath(p) + '" alt="" loading="lazy"></span>' +
-					'<span class="nm">' + esc(p.name) + '</span>' +
-					'<span class="pr">' + (S.isQuote(p) ? '견적 문의' : S.won(S.minPrice(p)) + '원~') + '</span>' +
-				'</a></li>';
-			}
-			s += '<div class="sh-promo">' +
-				'<a href="' + pr.href + '" class="sh-promo-key">' +
-					'<span class="bg" style="background-image:url(' + img(pr.bg) + ')"></span>' +
-					'<span class="k-sub">' + pr.kSub + '</span><strong class="k-tit">' + pr.kTit + '</strong>' +
-				'</a>' +
-				'<div class="sh-promo-body">' +
-					'<strong class="sh-promo-tit">' + pr.tit + '</strong>' +
-					'<p class="sh-promo-txt">' + pr.txt + '</p>' +
-					'<ul class="sh-promo-items">' + items + '</ul>' +
-					'<div class="sh-promo-btn"><a href="' + pr.href + '"><span>바로가기</span></a></div>' +
-				'</div></div>';
+	/* 베스트 상품 — 카테고리 탭 */
+	function bestItemHTML(p) {
+		if (!p) return '';
+		var add = S.isQuote(p) ? '' :
+			'<button type="button" class="sh-card-add js-add" data-id="' + p.id + '" title="장바구니에 담기"><i class="xi-cart-o"></i></button>';
+		return '<li class="bs-item"><div class="bs-box">' +
+			'<div class="bs-thumb-wrap">' +
+				'<a href="' + S.detailUrl(p) + '" class="bs-img"><img src="' + S.imgPath(p) + '" alt="' + esc(p.name) + '" loading="lazy"></a>' + add +
+			'</div>' +
+			'<div class="bs-body">' +
+				'<a href="' + S.detailUrl(p) + '" class="bs-name">' + esc(p.name) + '</a>' +
+				priceHTML(p) +
+			'</div>' +
+		'</div></li>';
+	}
+
+	function bestHTML() {
+		var tb = '', i;
+		for (i = 0; i < BEST.tabs.length; i++) {
+			tb += '<li class="' + (i === 0 ? 'on' : '') + '">' +
+				'<button type="button" class="bs-tab js-bstab" data-i="' + i + '">' + BEST.tabs[i].lb + '</button></li>';
 		}
-		return '<section class="sh-sec"><div class="area">' +
-			secHead('<span class="emo">📢</span>지금 진행 중인 혜택 · 꿀팁', '', '', false) +
-			'<div class="sh-promo-grid">' + s + '</div>' +
+		return '<section class="bs-sec"><span class="bs-bg"></span><div class="bs-inner area">' +
+			'<div class="bs-hd">' +
+				'<h2 class="bs-tit">' + BEST.tit + '</h2>' +
+				'<ul class="bs-tabs js-bstabs">' + tb + '</ul>' +
+				'<a href="' + shopUrl('print') + '" class="bs-more js-bsmore">전체보기</a>' +
+			'</div>' +
+			'<div class="bs-view"><ul class="bs-list js-bslist"></ul>' +
+				'<div class="bs-navs">' +
+					'<button type="button" class="sh-nav-btn js-prev" title="이전"><i class="xi-angle-left-min"></i></button>' +
+					'<button type="button" class="sh-nav-btn js-next" title="다음"><i class="xi-angle-right-min"></i></button>' +
+				'</div>' +
+			'</div>' +
+			'<span class="bs-bar"><i class="js-bar"></i></span>' +
 		'</div></section>';
 	}
 
@@ -469,7 +476,6 @@
 		var sec = root.querySelector('.sh-hero'); if (!sec) return;
 		var track = sec.querySelector('.js-hero-track');
 		var slides = track.children;
-		var bar = sec.querySelector('.sh-hero-bar i');
 		var cur = sec.querySelector('.js-hero-cur');
 		var n = slides.length, idx = 0, timer = null;
 
@@ -481,7 +487,6 @@
 			var off = (view.clientWidth - sw) / 2 - idx * (sw + gap);
 			track.style.transform = 'translateX(' + off + 'px)';
 			for (var i = 0; i < n; i++) slides[i].className = 'sh-hero-slide' + (i === idx ? ' on' : '');
-			if (bar) bar.style.width = ((idx + 1) / n * 100) + '%';
 			if (cur) cur.textContent = (idx + 1);
 		}
 		function go(i) { idx = (i + n) % n; layout(); }
@@ -516,6 +521,87 @@
 		next.addEventListener('click', function () { if (page < max()) { page++; paint(); } });
 		w.addEventListener('resize', function () { paint(); });
 		paint();
+	}
+
+	/* 5-3b. 아이템 단위 페이저 — 한 화면에 보이는 개수만큼 넘긴다 */
+	function makePager(sec, viewSel, trackSel) {
+		var view  = sec.querySelector(viewSel);
+		var track = sec.querySelector(trackSel);
+		var prev  = sec.querySelector('.js-prev');
+		var next  = sec.querySelector('.js-next');
+		var bar   = sec.querySelector('.js-bar');
+		if (!view || !track) return { paint: function () {}, reset: function () {} };
+		var page = 0;
+
+		function step() {
+			var it = track.children[0];
+			if (!it) return { w: 1, per: 1 };
+			var iw = it.offsetWidth;
+			var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || 0) || 0;
+			var per = Math.max(1, Math.round((view.clientWidth + gap) / (iw + gap)));
+			return { w: iw + gap, per: per };
+		}
+		function paint() {
+			var st = step();
+			var total = Math.max(1, Math.ceil(track.children.length / st.per));
+			if (page > total - 1) page = total - 1;
+			if (page < 0) page = 0;
+			/* 마지막 장에서 빈칸이 생기지 않도록 오른쪽 끝에 맞춰 멈춘다 */
+			var end = Math.max(0, track.scrollWidth - view.clientWidth);
+			track.style.transform = 'translateX(' + (-Math.min(page * st.per * st.w, end)) + 'px)';
+			if (prev) prev.disabled = (page <= 0);
+			if (next) next.disabled = (page >= total - 1);
+			if (bar) bar.style.width = ((page + 1) / total * 100) + '%';
+		}
+		if (prev) prev.addEventListener('click', function () { page--; paint(); });
+		if (next) next.addEventListener('click', function () { page++; paint(); });
+		w.addEventListener('resize', paint);
+		return { paint: paint, reset: function () { page = 0; paint(); } };
+	}
+
+	/* 5-3c. PICK — 해시태그 칩으로 묶음 교체 */
+	function initPick() {
+		var sec = root.querySelector('.mp-sec'); if (!sec) return;
+		var list = sec.querySelector('.js-mplist');
+		var tags = sec.querySelector('.js-mptags');
+		var pager = makePager(sec, '.mp-view', '.js-mplist');
+
+		function fill(i) {
+			var t = PICK.tags[i], s = '', k;
+			for (k = 0; k < t.ids.length; k++) s += pickItemHTML(P(t.ids[k]));
+			list.innerHTML = s;
+			var bs = tags.querySelectorAll('.js-mptag');
+			for (k = 0; k < bs.length; k++) bs[k].className = 'mp-tag js-mptag' + (k === i ? ' on' : '');
+			pager.reset();
+		}
+		tags.addEventListener('click', function (e) {
+			var b = e.target.closest ? e.target.closest('.js-mptag') : null;
+			if (b) fill(+b.getAttribute('data-i'));
+		});
+		fill(0);
+	}
+
+	/* 5-3d. 베스트 상품 — 카테고리 탭 */
+	function initBest() {
+		var sec = root.querySelector('.bs-sec'); if (!sec) return;
+		var list = sec.querySelector('.js-bslist');
+		var tabs = sec.querySelector('.js-bstabs');
+		var more = sec.querySelector('.js-bsmore');
+		var pager = makePager(sec, '.bs-view', '.js-bslist');
+
+		function fill(i) {
+			var t = BEST.tabs[i], arr = S.filterList(t.cat, 'all'), s = '', k;
+			for (k = 0; k < arr.length && k < 9; k++) s += bestItemHTML(arr[k]);
+			list.innerHTML = s;
+			for (k = 0; k < tabs.children.length; k++) tabs.children[k].className = (k === i ? 'on' : '');
+			if (more) more.setAttribute('href', shopUrl(t.cat));
+			pager.reset();
+		}
+		tabs.addEventListener('click', function (e) {
+			var b = e.target.closest ? e.target.closest('.js-bstab') : null;
+			if (b) fill(+b.getAttribute('data-i'));
+		});
+		fill(0);
 	}
 
 	/* 5-4. 템플릿 미리보기 */
@@ -677,16 +763,14 @@
 	var isCate = (cat !== 'all' && CATE_HEAD[cat]);
 	if (cat !== 'all' && !CATE_HEAD[cat]) cat = 'all';
 
-	var html = gnbHTML(isCate ? cat : 'all') + catbarHTML(isCate ? cat : '');
+	var html = catbarHTML(isCate ? cat : '');
 
 	if (isCate) {
 		html += cateHTML(cat, dept, q) + endHTML();
 		d.title = S.catName(cat) + ' - 상품몰 | MEDITIVE 병원 전문 디자인 스튜디오';
 	} else {
 		html += heroHTML() + tilesHTML();
-		html += railHTML(RAILS[0]) + railHTML(RAILS[1]);
-		html += promoHTML();
-		html += railHTML(RAILS[2]);
+		html += pickHTML() + bestHTML();
 		html += tplHTML() + statHTML() + reviewHTML() + endHTML();
 	}
 	root.innerHTML = html;
@@ -697,9 +781,11 @@
 		initSearch(cat, dept);
 	} else {
 		initHero();
+		initPick();
+		initBest();
 		initTpl();
 		initStat();
-		var secs = root.querySelectorAll('.sh-tiles, .sh-rail'), i;
+		var secs = root.querySelectorAll('.sh-tiles'), i;
 		for (i = 0; i < secs.length; i++) initTrack(secs[i]);
 	}
 	S.paintCount();
