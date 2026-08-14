@@ -119,10 +119,10 @@
 
 	/* 스탯 */
 	var STATS = [
-		'<b>240</b>종의 병원 템플릿을 🎨',
-		'<b>33</b>종의 인쇄 상품을 🖨️',
-		'<b>45</b>건의 실제 병원 작업물을 📷',
-		'<b>6</b>개 진료과 전용 구성을 ✨'
+		'<b>240</b>종의 병원 템플릿을',
+		'<b>33</b>종의 인쇄 상품을',
+		'<b>50</b>건의 실제 병원 작업물을',
+		'<b>6</b>개 진료과 전용 구성을'
 	];
 
 	/* 후기 */
@@ -352,7 +352,7 @@
 							'<a href="#" class="tp-cta js-cta">이 상품 만들러 가기<i class="xi-angle-right-min"></i></a>' +
 						'</div>' +
 						'<div class="tp-tpl-head">' +
-							'<span class="tp-tpl-tit">템플릿을 눌러 구경해보세요 👀</span>' +
+							'<span class="tp-tpl-tit">템플릿을 눌러 구경해보세요</span>' +
 							'<a href="' + BASE + 'kr/portfolio/all.html" class="tp-tpl-more">템플릿 전체보기</a>' +
 						'</div>' +
 						'<div class="tp-tpl-list js-tpls"></div>' +
@@ -390,7 +390,7 @@
 		var s = '';
 		for (i = 0; i < 3; i++) s += '<div class="sh-rv-row"><div class="sh-rv-track">' + rows[i] + rows[i] + '</div></div>';
 		return '<section class="sh-review">' +
-			secHead('무료 템플릿으로 만든 병원들의 진짜 후기 👀', '', '', false) + s +
+			secHead('무료 템플릿으로 만든 병원들의 진짜 후기', '', '', false) + s +
 		'</section>';
 	}
 
@@ -640,7 +640,7 @@
 				p = P(t.ids[k]); if (!p) continue;
 				h += '<button type="button" class="tp-chip js-chip' + (k === 0 ? ' on' : '') + '" data-id="' + p.id + '">' + esc(p.name) + '</button>';
 			}
-			h += '<a href="' + t.all + '" class="tp-chip all">' + t.lb + ' 전체 보기 👀</a>';
+			h += '<a href="' + t.all + '" class="tp-chip all">' + t.lb + ' 전체 보기</a>';
 			chipsEl.innerHTML = h;
 			setProd(t.ids[0]);
 		}
