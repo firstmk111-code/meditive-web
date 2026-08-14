@@ -155,7 +155,7 @@
 			spec: { '규격': '210 × 297 mm (A4)', '페이지': '8p / 12p / 16p', '제본': '중철 제본', '제작기간': '10~14일' }
 		},
 		{
-			id: 'pm02', cat: 'promo', name: '3단 리플렛', img: 'p04.jpg',
+			id: 'pm02', cat: 'promo', name: '3단 리플렛', img: 'niz01.jpg',
 			desc: '진료 항목과 시술 안내를 간결하게 정리한 3단 리플렛.',
 			depts: ALL_DEPT, best: true,
 			qty: qty([{ label: '500부', price: 138000 }, { label: '1,000부', price: 198000 }, { label: '3,000부', price: 438000 }]),
@@ -271,7 +271,7 @@
 
 		/* ===== 명함 / 봉투 ===== */
 		{
-			id: 'cd01', cat: 'card', name: '원장 명함', img: 'p37.jpg',
+			id: 'cd01', cat: 'card', name: '원장 명함', img: 'niz02.jpg',
 			desc: '병원의 인상을 결정하는 원장 명함. 고급 용지 선택 가능.',
 			depts: ALL_DEPT, best: true, reorder: true, badge: 'BEST',
 			qty: qty([{ label: '200매', price: 42000 }, { label: '500매', price: 68000 }, { label: '1,000매', price: 108000 }]),
@@ -279,7 +279,7 @@
 			spec: { '규격': '90 × 50 mm', '인쇄': '단면 / 양면 선택', '제작기간': '4~6일', '최소수량': '200매' }
 		},
 		{
-			id: 'cd02', cat: 'card', name: '직원 명함', img: 'p39.jpg',
+			id: 'cd02', cat: 'card', name: '직원 명함', img: 'niz03.jpg',
 			desc: '원장 명함과 톤을 맞춘 상담실장 · 간호팀 명함.',
 			depts: ALL_DEPT, reorder: true,
 			qty: qty([{ label: '200매', price: 34000 }, { label: '500매', price: 54000 }, { label: '1,000매', price: 86000 }]),
@@ -287,7 +287,7 @@
 			spec: { '규격': '90 × 50 mm', '인쇄': '단면 / 양면 선택', '제작기간': '4~6일', '최소수량': '200매' }
 		},
 		{
-			id: 'cd03', cat: 'card', name: '소봉투 (서양 봉투)', img: 'p31.jpg',
+			id: 'cd03', cat: 'card', name: '소봉투 (서양 봉투)', img: 'niz04.jpg',
 			desc: '안내문 · 영수증을 담아 전달하는 병원 소봉투.',
 			depts: ALL_DEPT, reorder: true,
 			qty: qty([{ label: '1,000매', price: 86000 }, { label: '3,000매', price: 208000 }, { label: '5,000매', price: 318000 }]),
@@ -348,7 +348,7 @@
 			include: ['명함 리디자인 (원장 · 직원)', '진료카드 1,000매', '서식류 3종 리디자인', '3단 리플렛 500부']
 		},
 		{
-			id: 'pk04', cat: 'package', name: '브랜딩 풀패키지', img: 'p11.jpg',
+			id: 'pk04', cat: 'package', name: '브랜딩 풀패키지', img: 'niz05.jpg',
 			desc: 'CI부터 인쇄물 · 디지털까지 병원 브랜드 전체를 설계합니다.',
 			depts: ALL_DEPT, badge: 'PACKAGE',
 			qty: qty([{ label: '기본 구성', price: 4800000 }, { label: '홈페이지 포함 구성', price: 7800000 }]),

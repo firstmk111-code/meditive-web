@@ -31,25 +31,25 @@
 	 * 1. 콘텐츠 정의
 	==================================================== */
 
-	/* 히어로 배너 */
+	/* 히어로 배너 — 좌측 다크 민트 그라데이션 + 텍스트 / 우측 작업물 이미지 */
 	var HERO = [
-		{ label: '개원 준비', tit: '개원에 필요한 인쇄물,<br><b>한 번에 끝내세요</b>', desc: '명함부터 문진표까지 하나의 톤으로 묶은 개원 패키지', cta: '패키지 보러 가기', href: shopUrl('package'), bg: 'p02.jpg' },
-		{ label: '재주문', tit: '매일 쓰는 진료카드 · 문진표<br><b>1클릭 재주문</b>', desc: '이전 주문 조건 그대로 담고 바로 결제까지', cta: '재주문 상품 보기', href: shopUrl('reorder'), bg: 'p05.jpg' },
-		{ label: '무료 템플릿', tit: '병원 템플릿을 상품에<br><b>미리 입혀보세요</b>', desc: '진료과에 맞는 디자인을 목업 위에서 바로 비교', cta: '템플릿 미리보기', href: '#tplPreview', bg: 'p12.jpg' },
-		{ label: '명함 · 봉투', tit: '병원의 첫인상을 바꾸는<br><b>원장 명함</b>', desc: '박 · 형압 후가공까지 4~6영업일 제작', cta: '명함 보러 가기', href: shopUrl('card'), bg: 'p37.jpg' },
-		{ label: '홍보물', tit: '환자에게 먼저 다가가는<br><b>브로슈어 · 리플렛</b>', desc: '시안 확인 후 제작, 확정 전까지 수정 가능', cta: '홍보물 보러 가기', href: shopUrl('promo'), bg: 'p01.jpg' }
+		{ label: '대표 작업물', tit: '한 장으로 전하는<br><b>병원 3단 리플렛</b>', desc: '진료 안내부터 오시는 길까지 한 흐름으로 담은 리플렛', cta: '홍보물 보러 가기', href: shopUrl('promo'), pic: 'niz01.jpg' },
+		{ label: '명함 · 봉투', tit: '병원의 첫인상을 바꾸는<br><b>원장 명함</b>', desc: '박 · 형압 후가공까지 4~6영업일 제작', cta: '명함 보러 가기', href: shopUrl('card'), pic: 'niz02.jpg' },
+		{ label: '개원 패키지', tit: '로고부터 사인물까지<br><b>하나의 브랜드 톤</b>', desc: '개원에 필요한 인쇄물을 한 번에 묶어 드립니다', cta: '패키지 보러 가기', href: shopUrl('package'), pic: 'niz05.jpg' },
+		{ label: '재주문', tit: '매일 쓰는 봉투 · 서식<br><b>1클릭 재주문</b>', desc: '이전 주문 조건 그대로 담고 바로 결제까지', cta: '재주문 상품 보기', href: shopUrl('reorder'), pic: 'niz04.jpg' },
+		{ label: '무료 템플릿', tit: '병원 템플릿을 상품에<br><b>미리 입혀보세요</b>', desc: '진료과에 맞는 디자인을 목업 위에서 바로 비교', cta: '템플릿 미리보기', href: '#tplPreview', pic: 'niz03.jpg' }
 	];
 
-	/* 상품 둘러보기 타일 — 상품 상세로 바로 보낸다 */
-	var TILES = ['pr01', 'pr02', 'pr03', 'pr04', 'fm01', 'fm02', 'fm03', 'cd01', 'cd02', 'cd03',
-		'cd05', 'pm01', 'pm02', 'pm03', 'pm04', 'pm05', 'pm06', 'pm07', 'pr05', 'pk01'];
+	/* 상품 둘러보기 타일 — 상품 상세로 바로 보낸다 (대표 작업물을 앞쪽에 둔다) */
+	var TILES = ['pm02', 'cd01', 'cd02', 'cd03', 'pk04', 'pr01', 'pr02', 'pr03', 'pr04', 'fm01',
+		'fm02', 'fm03', 'cd05', 'pm01', 'pm03', 'pm04', 'pm05', 'pm06', 'pm07', 'pr05'];
 
 	/* PICK — 해시태그로 골라 보는 큐레이션 */
 	var PICK = {
 		tit: '개원 준비, 이 구성이면 충분해요',
 		more: shopUrl('package'),
 		tags: [
-			{ lb: '#개원 패키지',    ids: ['pk01', 'pk02', 'pk03', 'pk04', 'pr01', 'cd01', 'fm01', 'pm02'] },
+			{ lb: '#개원 패키지',    ids: ['pk04', 'pm02', 'cd01', 'pk01', 'pk02', 'pk03', 'pr01', 'fm01'] },
 			{ lb: '#진료 · 예약카드', ids: ['pr01', 'pr02', 'fm07', 'cd01', 'cd02', 'pr04', 'pr03', 'fm03'] },
 			{ lb: '#문진표 · 서식',  ids: ['fm01', 'fm02', 'fm03', 'fm04', 'fm05', 'fm06', 'fm07', 'pr04'] },
 			{ lb: '#명함 · 봉투',    ids: ['cd01', 'cd02', 'cd03', 'cd04', 'cd05', 'cd06', 'pr03', 'pr01'] },
@@ -57,15 +57,17 @@
 		]
 	};
 
-	/* 베스트 상품 — 카테고리 탭 */
+	/* 베스트 상품 — 카테고리 탭
+	 * 대표 작업물(리플렛)이 맨 처음 보이도록 홍보물 탭을 앞에 둔다.
+	 * first : 해당 탭에서 맨 앞으로 끌어올릴 대표 작업물 상품 id */
 	var BEST = {
 		tit: '베스트 상품',
 		tabs: [
+			{ cat: 'promo',   lb: '홍보물',      first: 'pm02' },
 			{ cat: 'print',   lb: '병원 인쇄물' },
-			{ cat: 'promo',   lb: '홍보물' },
 			{ cat: 'form',    lb: '서식류' },
-			{ cat: 'card',    lb: '명함 · 봉투' },
-			{ cat: 'package', lb: '개원 패키지' }
+			{ cat: 'card',    lb: '명함 · 봉투',  first: 'cd01' },
+			{ cat: 'package', lb: '개원 패키지',  first: 'pk04' }
 		]
 	};
 
@@ -208,13 +210,14 @@
 			h = HERO[i];
 			s += '<div class="sh-hero-slide' + (i === 0 ? ' on' : '') + '">' +
 				'<a href="' + h.href + '" class="sh-hero-link">' +
-					'<span class="sh-hero-bg" style="background-image:url(' + img(h.bg) + ')"></span>' +
 					'<span class="sh-hero-txt">' +
 						'<span class="sh-hero-label">' + h.label + '</span>' +
 						'<strong class="sh-hero-tit">' + h.tit + '</strong>' +
 						'<span class="sh-hero-desc">' + h.desc + '</span>' +
 						'<span class="sh-hero-cta">' + h.cta + '<i class="xi-angle-right-min"></i></span>' +
 					'</span>' +
+					'<span class="sh-hero-pic"><img src="' + img(h.pic) + '" alt="" ' +
+						(i === 0 ? '' : 'loading="lazy" ') + 'width="740" height="480"></span>' +
 				'</a></div>';
 		}
 		return '<section class="sh-hero"><div class="sh-hero-view">' +
@@ -591,6 +594,12 @@
 
 		function fill(i) {
 			var t = BEST.tabs[i], arr = S.filterList(t.cat, 'all'), s = '', k;
+			/* 대표 작업물이 지정된 탭은 그 상품을 맨 앞으로 끌어올린다 */
+			if (t.first) {
+				for (k = 0; k < arr.length; k++) {
+					if (arr[k].id === t.first) { arr = arr.slice(); arr.unshift(arr.splice(k, 1)[0]); break; }
+				}
+			}
 			for (k = 0; k < arr.length && k < 9; k++) s += bestItemHTML(arr[k]);
 			list.innerHTML = s;
 			for (k = 0; k < tabs.children.length; k++) tabs.children[k].className = (k === i ? 'on' : '');

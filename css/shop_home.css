@@ -77,17 +77,23 @@
 /* ========================================================
  * 2. 히어로 배너 슬라이더
  *   3:1 비율 · 좌우 슬라이드가 살짝 보이는 센터 모드
+ *   좌측 다크 민트 그라데이션 + 텍스트 / 우측 작업물 이미지
  *   슬라이드 모서리에 걸치는 원형 이전 · 다음 버튼 + 우측 하단 페이지 표시
 ======================================================== */
-.sh-hero{--sh-hero-w:134rem; --sh-hero-gap:8rem; position:relative; padding:3rem 0 0; overflow:hidden;}
+.sh-hero{--sh-hero-w:134rem; --sh-hero-gap:8rem; --sh-hero-pic:52%; position:relative; padding:3rem 0 0; overflow:hidden;}
 .sh-hero-view{position:relative; width:var(--sh-hero-w); margin:0 auto;}
 .sh-hero-track{display:flex; align-items:stretch; gap:var(--sh-hero-gap); transition:transform 0.55s cubic-bezier(0.22,0.61,0.36,1); will-change:transform;}
 .sh-hero-slide{flex:0 0 auto; width:var(--sh-hero-w); border-radius:2rem; overflow:hidden;}
-.sh-hero-link{position:relative; display:block; aspect-ratio:3 / 1; padding:0 6rem; overflow:hidden;}
-.sh-hero-bg{position:absolute; inset:0; background-size:cover; background-position:50% 50%; transform:scale(1.04);}
+.sh-hero-link{position:relative; display:flex; align-items:stretch; aspect-ratio:3 / 1; overflow:hidden; background:#072429;}
+
+/* 우측 : 첨부 작업물 이미지 */
+.sh-hero-pic{position:relative; flex:0 0 var(--sh-hero-pic); overflow:hidden;}
+.sh-hero-pic img{display:block; width:100%; height:100%; object-fit:cover; object-position:50% 50%;}
+
+/* 좌측 : 다크 민트 그라데이션 — 텍스트 영역은 불투명하게 덮고 이미지 쪽으로 자연스럽게 사라진다 */
 .sh-hero-link:before{content:''; position:absolute; inset:0; z-index:1;
-	background:linear-gradient(102deg, rgba(24,44,50,0.92) 0%, rgba(24,44,50,0.78) 38%, rgba(24,44,50,0.16) 74%, rgba(24,44,50,0) 100%);}
-.sh-hero-txt{position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:flex-start; max-width:56rem;}
+	background:linear-gradient(90deg, #062227 0%, #0B343A 28%, #114846 46%, rgba(17,72,70,0.58) 53%, rgba(17,72,70,0.16) 59%, rgba(17,72,70,0) 66%);}
+.sh-hero-txt{position:relative; z-index:2; flex:1 1 0; min-width:0; padding:0 3rem 0 6rem; display:flex; flex-direction:column; justify-content:center; align-items:flex-start;}
 .sh-hero-label{display:inline-flex; align-items:center; height:2.8rem; padding:0 1.1rem; border-radius:1.4rem; background:var(--main-color); color:#0E2A2B; font-size:1.3rem; font-weight:700; letter-spacing:0;}
 .sh-hero-tit{margin-top:1.4rem; font-size:3.6rem; font-weight:800; line-height:1.28; color:#fff;}
 .sh-hero-tit b{color:var(--main-color); font-weight:800;}
@@ -421,11 +427,11 @@
 	.sh-tile-grid{grid-auto-columns:calc((100% - 2 * var(--sh-gap)) / 3);}
 	.sh-card-grid{grid-template-columns:repeat(3,1fr);}
 	.sh-allpanel-inner{grid-template-columns:repeat(3,1fr);}
-	.sh-hero{--sh-hero-gap:4rem;}
-	.sh-hero-link{aspect-ratio:5 / 2; padding:0 4rem;}
+	.sh-hero{--sh-hero-gap:4rem; --sh-hero-pic:58%;}
+	.sh-hero-link{aspect-ratio:5 / 2;}
+	.sh-hero-link:before{background:linear-gradient(90deg, #062227 0%, #0B343A 24%, #114846 40%, rgba(17,72,70,0.58) 47%, rgba(17,72,70,0.16) 54%, rgba(17,72,70,0) 61%);}
+	.sh-hero-txt{padding:0 2rem 0 3.4rem;}
 	.sh-hero-tit{font-size:2.8rem;}
-	.sh-hero-nav.js-prev{left:1.4rem;}
-	.sh-hero-nav.js-next{right:1.4rem;}
 	.sh-hero-page{right:2rem; bottom:2rem;}
 	.tp-panel{padding:2.2rem 2rem 2.4rem;}
 	.sh-rv-card{width:32rem;}
@@ -459,14 +465,19 @@
 	.sh-all-btn .bars span:nth-child(1){top:0.7rem;}
 	.sh-all-btn .bars span:nth-child(3){bottom:0.7rem;}
 	.sh-catlist > li > a{font-size:1.5rem;}
-	.sh-hero{padding-top:2rem; --sh-hero-gap:2rem;}
+	.sh-hero{padding-top:2rem; --sh-hero-gap:2rem; --sh-hero-pic:54%;}
 	.sh-hero-slide{border-radius:1.4rem;}
-	.sh-hero-link{aspect-ratio:16 / 9; padding:0 2.4rem;}
-	/* 배너가 좁아지면 사진 위로 글자가 걸치므로 어둡게 깔아 준다 */
-	.sh-hero-link:before{background:linear-gradient(96deg, rgba(24,44,50,0.94) 0%, rgba(24,44,50,0.86) 52%, rgba(24,44,50,0.44) 82%, rgba(24,44,50,0.16) 100%);}
-	.sh-hero-tit{font-size:2.4rem;}
-	.sh-hero-desc{font-size:1.45rem;}
+	.sh-hero-link{aspect-ratio:9 / 4;}
+	/* 배너가 좁아지면 사진 쪽으로 글자가 다가오므로 그라데이션을 조금 더 길게 깔아 준다 */
+	.sh-hero-link:before{background:linear-gradient(90deg, #062227 0%, #0B343A 26%, #114846 44%, rgba(17,72,70,0.6) 51%, rgba(17,72,70,0.18) 57%, rgba(17,72,70,0) 64%);}
+	.sh-hero-txt{padding:0 1.4rem 0 2.4rem;}
+	.sh-hero-label{height:2.5rem; padding:0 0.9rem; font-size:1.2rem;}
+	.sh-hero-tit{margin-top:1.1rem; font-size:2.4rem;}
+	.sh-hero-desc{margin-top:0.8rem; font-size:1.45rem;}
+	.sh-hero-cta{margin-top:1.6rem; height:3.8rem; padding:0 1.5rem; font-size:1.4rem;}
 	.sh-hero-nav{width:3.6rem; height:3.6rem; margin-top:-1.8rem; font-size:1.7rem;}
+	.sh-hero-nav.js-prev{left:-1.8rem;}
+	.sh-hero-nav.js-next{right:-1.8rem;}
 	.sh-hero-page{right:1.4rem; bottom:1.4rem; min-width:5.2rem; height:2.6rem; font-size:1.3rem;}
 	.sh-tile-grid{grid-auto-columns:calc((100% - var(--sh-gap)) / 2);}
 	.sh-tile-thumb{width:6rem; height:6rem;}
@@ -509,8 +520,14 @@
 @media all and (max-width:520px){
 	.sh-card-add{opacity:1; transform:none;}
 	.tp-tpl-list{grid-template-columns:repeat(3,1fr);}
-	.sh-hero-link{aspect-ratio:4 / 3; padding:0 2rem;}
+	/* 폭이 좁으면 좌우 분할이 불가능하므로 위 : 작업물 / 아래 : 다크 민트 패널로 쌓는다 */
+	.sh-hero-link{flex-direction:column; aspect-ratio:auto;}
+	.sh-hero-link:before{display:none;}
+	.sh-hero-pic{order:1; flex:0 0 auto; width:100%; aspect-ratio:37 / 24;}
+	.sh-hero-txt{order:2; flex:0 0 auto; width:100%; padding:2.2rem 2.2rem 2.6rem;
+		background:linear-gradient(150deg, #114846 0%, #0B343A 46%, #062227 100%);}
 	.sh-hero-tit{font-size:2.1rem;}
+	.sh-hero-page{bottom:auto; top:1.4rem;}
 	.bs-sec{padding:6rem 0 8rem;}
 	.bs-bg{width:70%; height:46rem; border-radius:0 5rem 5rem 0;}
 	.bs-item{width:100%;}
