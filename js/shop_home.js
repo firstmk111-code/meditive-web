@@ -79,13 +79,13 @@
 		card:     ['p05.jpg', 'p44.jpg', 'p17.jpg', 'p43.jpg', 'p45.jpg', 'p46.jpg', 'p37.jpg', 'p39.jpg'],
 		env:      ['p21.jpg', 'p31.jpg', 'p33.jpg', 'p34.jpg', 'p35.jpg', 'p29.jpg'],
 		holder:   ['p24.jpg', 'p19.jpg', 'p15.jpg', 'p02.jpg', 'p47.jpg'],
-		form:     ['p12.jpg', 'p20.jpg', 'p22.jpg', 'p23.jpg', 'p25.jpg', 'p13.jpg'],
+		form:     ['p15.jpg', 'p20.jpg', 'p22.jpg', 'p23.jpg', 'p25.jpg', 'p13.jpg'],
 		leaflet:  ['p04.jpg', 'p07.jpg', 'p08.jpg', 'p10.jpg', 'p18.jpg', 'p36.jpg'],
 		brochure: ['p01.jpg', 'p11.jpg', 'p03.jpg', 'p06.jpg', 'p42.jpg'],
 		poster:   ['p09.jpg', 'p16.jpg', 'p26.jpg', 'p28.jpg', 'p41.jpg', 'p32.jpg'],
 		sign:     ['p27.jpg', 'p30.jpg', 'p32.jpg', 'p38.jpg'],
 		pack:     ['p02.jpg', 'p03.jpg', 'p06.jpg', 'p11.jpg', 'p47.jpg'],
-		best:     ['p05.jpg', 'p01.jpg', 'p04.jpg', 'p12.jpg', 'p37.jpg', 'p02.jpg']
+		best:     ['p05.jpg', 'p01.jpg', 'p04.jpg', 'p19.jpg', 'p37.jpg', 'p02.jpg']
 	};
 	/* 상품별 목업 형태 · 템플릿 풀 */
 	var MOCK = {

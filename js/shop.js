@@ -213,7 +213,7 @@
 
 		/* ===== 서식류 ===== */
 		{
-			id: 'fm01', cat: 'form', name: '초진 문진표', img: 'p12.jpg',
+			id: 'fm01', cat: 'form', name: '초진 문진표', img: 'p15.jpg',
 			desc: '첫 내원 환자의 정보를 정돈된 서식으로 받는 문진표.',
 			depts: ALL_DEPT, best: true, reorder: true,
 			qty: qty([{ label: '1,000매', price: 64000 }, { label: '3,000매', price: 148000 }, { label: '5,000매', price: 218000 }]),
