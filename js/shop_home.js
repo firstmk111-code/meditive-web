@@ -286,9 +286,11 @@
 		if (!p) return '';
 		var add = S.isQuote(p) ? '' :
 			'<button type="button" class="sh-card-add js-add" data-id="' + p.id + '" title="장바구니에 담기"><i class="xi-cart-o"></i></button>';
+		/* 리플렛 · 브로슈어 썸네일은 펼침면 사진이라 가운데를 자르면 접지선이 걸린다 */
+		var cover = /리플렛|브로슈어/.test(p.name) ? ' is-cover' : '';
 		return '<li class="bs-item"><div class="bs-box">' +
 			'<div class="bs-thumb-wrap">' +
-				'<a href="' + S.detailUrl(p) + '" class="bs-img"><img src="' + S.imgPath(p) + '" alt="' + esc(p.name) + '" loading="lazy"></a>' + add +
+				'<a href="' + S.detailUrl(p) + '" class="bs-img' + cover + '"><img src="' + S.imgPath(p) + '" alt="' + esc(p.name) + '" loading="lazy"></a>' + add +
 			'</div>' +
 			'<div class="bs-body">' +
 				'<a href="' + S.detailUrl(p) + '" class="bs-name">' + esc(p.name) + '</a>' +
@@ -329,7 +331,7 @@
 				'</button></li>';
 		}
 		return '<section class="tp-sec" id="tplPreview"><div class="tp-inner area">' +
-			'<h2 class="sh-sec-tit">무료 템플릿을 상품에 미리 입혀보세요!' +
+			'<h2 class="sh-sec-tit is-big">무료 템플릿을 상품에 미리 입혀보세요!' +
 				'<span class="sh-sec-desc">진료과에 맞는 디자인을 고르면 실제 제작 규격의 목업 위에 바로 적용됩니다.</span></h2>' +
 			'<div class="tp-panel">' +
 				'<ul class="tp-tabs js-tabs">' + tabs + '</ul>' +
@@ -390,18 +392,44 @@
 		var s = '';
 		for (i = 0; i < 3; i++) s += '<div class="sh-rv-row"><div class="sh-rv-track">' + rows[i] + rows[i] + '</div></div>';
 		return '<section class="sh-review">' +
-			secHead('무료 템플릿으로 만든 병원들의 진짜 후기', '', '', false) + s +
+			'<div class="sh-sec-head"><h2 class="sh-sec-tit is-big">다양한 병원들의 후기</h2></div>' + s +
 		'</section>';
 	}
 
-	function endHTML() {
-		return '<section class="sh-end"><div class="area">' +
-			'<h2 class="sh-end-tit">규격이 정해진 인쇄물은 바로 주문,<br>병원에 맞춘 설계는 맞춤 제작으로.</h2>' +
-			'<p class="sh-end-txt">어떤 구성이 필요한지 모르겠다면 진료과와 개원 일정만 알려주세요.<br>필요한 인쇄물을 정리해 견적으로 보내드립니다.</p>' +
-			'<div class="sh-end-btns">' +
-				'<a href="' + shopUrl('package') + '" class="mint">개원 패키지 보기<i class="xi-angle-right-min"></i></a>' +
-				'<a href="' + BASE + 'kr/contact/inquiry.html" class="line">맞춤 제작 문의하기<i class="xi-angle-right-min"></i></a>' +
-			'</div>' +
+	/* 하단 : 자주 묻는 질문 (아코디언은 shop.css / shop.js 의 공통 컴포넌트를 그대로 쓴다) */
+	var FAQ = [
+		{ q: '주문한 인쇄물은 언제 받아볼 수 있나요?',
+		  a: '시안을 확정하신 뒤 인쇄와 후가공까지 영업일 기준 3~5일이 걸립니다. 명함 · 서식류처럼 규격이 정해진 상품은 2~3일이면 출고됩니다.' },
+		{ q: '무료 템플릿은 그대로 주문해도 되나요?',
+		  a: '네. 상품몰의 템플릿은 모두 무료이고, 병원명 · 진료과 · 연락처만 바꿔 바로 주문할 수 있습니다. 색과 서체를 병원 톤에 맞게 다듬는 것도 추가 비용 없이 도와드립니다.' },
+		{ q: '시안 수정은 몇 번까지 가능한가요?',
+		  a: '기본 2회까지 무료로 수정해 드립니다. 구성 자체를 바꾸는 큰 변경은 맞춤 제작으로 다시 안내드립니다.' },
+		{ q: '로고나 사진 파일이 없어도 주문할 수 있나요?',
+		  a: '가능합니다. 로고가 없으면 병원명을 정리한 텍스트 로고를 만들어 드리고, 사진은 진료과에 맞는 이미지를 골라 제안해 드립니다.' },
+		{ q: '개원 패키지에는 무엇이 들어 있나요?',
+		  a: '명함 · 진료카드 · 예약카드 · 문진표 · 리플렛처럼 개원할 때 반드시 필요한 인쇄물을 한 번에 묶은 구성입니다. 진료과와 개원 일정을 알려주시면 필요한 항목만 남겨 조정해 드립니다.' },
+		{ q: '지난번과 똑같이 다시 주문할 수 있나요?',
+		  a: '마이페이지의 주문내역에서 재주문을 누르면 이전 조건과 확정 시안이 그대로 불러와집니다. 수량만 바꿔 바로 결제할 수 있습니다.' }
+	];
+
+	function faqHTML() {
+		var li = '', i;
+		for (i = 0; i < FAQ.length; i++) {
+			li += '<li class="faq-item">' +
+				'<button type="button" class="faq-q">' +
+					'<em class="font-outfit">Q.</em>' +
+					'<span>' + esc(FAQ[i].q) + '</span>' +
+					'<i class="xi-angle-down-min"></i>' +
+				'</button>' +
+				'<div class="faq-a"><div class="faq-a-inner">' +
+					'<em class="font-outfit">A.</em>' +
+					'<p>' + esc(FAQ[i].a) + '</p>' +
+				'</div></div>' +
+			'</li>';
+		}
+		return '<section class="faq-section sh-faq"><div class="area">' +
+			'<div class="faq-head"><h2 class="faq-h2">자주 묻는 질문</h2></div>' +
+			'<ul class="faq-list">' + li + '</ul>' +
 		'</div></section>';
 	}
 
@@ -629,7 +657,6 @@
 		var btn3d   = sec.querySelector('.js-3d');
 
 		var tabI = 0, prod = null, pool = [], shape = 'card', tplI = 0, is3d = false;
-		var FACES = { card: 2, env: 2, a4: 2, fold2: 2, fold3: 3, poster: 1, holder: 2 };
 
 		function setTab(i) {
 			tabI = i;
@@ -661,10 +688,8 @@
 				: S.won(S.minPrice(prod)) + '원~ <span class="u">(' + prod.qty[0].label + ' 기준)</span>';
 			ctaEl.setAttribute('href', S.detailUrl(prod));
 			ctaEl.innerHTML = (S.isQuote(prod) ? '이 상품 견적 받기' : '이 상품 만들러 가기') + '<i class="xi-angle-right-min"></i>';
-			/* 목업 뼈대 */
-			var faces = FACES[shape] || 1, f = '';
-			for (k = 0; k < faces; k++) f += '<span class="tp-face' + (k === 1 ? ' f2' : '') + '"></span>';
-			mockEl.innerHTML = f;
+			/* 목업 뼈대 : 템플릿 한 장이 무대를 가득 채운다 */
+			mockEl.innerHTML = '<span class="tp-face"></span>';
 			mockEl.className = 'tp-mock js-mock is-' + shape + (is3d ? ' is-3d' : '');
 			/* 템플릿 목록 */
 			var t = '', src;
@@ -683,22 +708,11 @@
 		function setTpl(i) {
 			tplI = i;
 			var src = img(pool[i]);
-			var faces = mockEl.children, k;
-			for (k = 0; k < faces.length; k++) {
-				faces[k].style.backgroundImage = 'url(' + src + ')';
-				if (shape === 'fold2' || shape === 'fold3') {
-					/* 한 장의 디자인을 접지 면 수만큼 쪼개 실제 접지 상품처럼 보이게 한다 */
-					var n = faces.length;
-					faces[k].style.backgroundSize = (n * 100) + '% 100%';
-					faces[k].style.backgroundPosition = (k * (100 / (n - 1))) + '% 50%';
-				} else {
-					faces[k].style.backgroundSize = 'cover';
-					faces[k].style.backgroundPosition = (k === 1 ? '60% 50%' : '50% 50%');
-				}
-			}
+			var face = mockEl.firstChild;
+			if (face) face.style.backgroundImage = 'url(' + src + ')';
 			bgEl.style.backgroundImage = 'url(' + src + ')';
 			cntEl.textContent = (i + 1) + ' / ' + pool.length;
-			var ts = tplsEl.querySelectorAll('.js-tpl');
+			var ts = tplsEl.querySelectorAll('.js-tpl'), k;
 			for (k = 0; k < ts.length; k++) ts[k].className = 'tp-tpl js-tpl' + (k === i ? ' on' : '');
 		}
 
@@ -775,12 +789,12 @@
 	var html = catbarHTML(isCate ? cat : '');
 
 	if (isCate) {
-		html += cateHTML(cat, dept, q) + endHTML();
+		html += cateHTML(cat, dept, q) + faqHTML();
 		d.title = S.catName(cat) + ' - 상품몰 | MEDITIVE 병원 전문 디자인 스튜디오';
 	} else {
 		html += heroHTML() + tilesHTML();
 		html += pickHTML() + bestHTML();
-		html += tplHTML() + statHTML() + reviewHTML() + endHTML();
+		html += tplHTML() + statHTML() + reviewHTML() + faqHTML();
 	}
 	root.innerHTML = html;
 
@@ -798,6 +812,7 @@
 		for (i = 0; i < secs.length; i++) initTrack(secs[i]);
 	}
 	S.paintCount();
+	if (w.MTFaq) w.MTFaq.init();                     /* FAQ 는 이 시점에 처음 DOM 에 올라온다 */
 
 	/* 앵커(#tplPreview)로 들어온 경우 헤더 높이만큼 보정해 이동 */
 	if (location.hash === '#tplPreview') {

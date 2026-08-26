@@ -204,13 +204,7 @@
 .pd-desc{font-size:1.7rem; color:#6B777D; line-height:1.9; letter-spacing:-0.02em;}
 .pd-desc + .pd-spec{margin-top:3.4rem;}
 
-/* 제작 과정 */
-.pd-flow{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4,1fr); gap:1.6rem;}
-.pd-flow li{position:relative; padding:3.4rem 2.8rem; border-radius:1.6rem; border:1px solid #E4EAEC; background:#fff; transition:var(--transition-custom);}
-.pd-flow li:hover{border-color:var(--main-color); box-shadow:0 1.6rem 4rem rgba(62,77,84,.08); transform:translateY(-.6rem);}
-.pd-flow .step{display:block; font-family:var(--font-family2); font-size:1.3rem; font-weight:700; letter-spacing:.14em; color:var(--main-color); margin-bottom:1.6rem;}
-.pd-flow .tit{font-size:1.9rem; font-weight:700; color:var(--ink-color); letter-spacing:-0.03em;}
-.pd-flow .txt{font-size:1.5rem; color:#8A959A; line-height:1.65; letter-spacing:-0.02em; margin-top:1rem;}
+/* 제작 과정 : 서비스 페이지와 같은 .mgp-process-list 공통 컴포넌트를 쓴다 (css/content_yt.css) */
 
 /* --------------------------------------------------
  * 4. 장바구니
@@ -366,7 +360,6 @@
 	.shop-head .shop-h2{font-size:5.5rem;}
 	.main-shop-head .main-tit{font-size:4.4rem;}
 	.pd-tit{font-size:3.8rem;}
-	.pd-flow{grid-template-columns:repeat(2,1fr);}
 }
 @media all and (max-width:1200px){
 	.shop-grid{grid-template-columns:repeat(2,1fr); gap:4.4rem 2.6rem;}
@@ -426,7 +419,6 @@
 	.mt-btn{height:5.6rem; font-size:1.6rem;}
 	.pd-block{padding-top:6rem;}
 	.pd-block-tit{font-size:2.4rem; margin-bottom:2.4rem;}
-	.pd-flow{grid-template-columns:1fr;}
 
 	.cart-row{flex-wrap:wrap; gap:1.6rem; padding:2rem;}
 	.cart-thumb{flex:0 0 9rem; width:9rem;}
@@ -561,7 +553,9 @@
 /* ==========================================================================
  * 11. 상품몰 CATEGORY : 원형(오빗) 배치
  * 굵은 그레이 원형 트랙 위에 6개 노드를 놓고, 활성 노드 쪽으로 민트 호(arc)가
- * 회전하며 중앙 카드가 교체된다. 3초 자동 순환 / hover 시 정지 + 해당 항목 활성.
+ * 회전하며 노드에 불이 켜진다. 3초 자동 순환 / hover 시 정지 + 해당 항목 활성.
+ * 원은 섹션 하단 경계에 걸쳐 잘린다 (.cat-orbit 의 음수 margin-bottom 이
+ * .main-shop 의 13rem 하단 패딩을 상쇄해 잘린 면이 섹션 끝과 맞닿는다).
  * 900px 이하는 기존 .main-cat-grid 카드를 그대로 쓴다.
  * 노드 내용은 JS 가 .main-cat-grid 원본에서 읽어 구성한다 (콘텐츠 단일 출처)
  * ========================================================================== */
@@ -570,11 +564,11 @@
 @media all and (min-width:901px){
 	.main-shop-cat .main-cat-grid{display:none;}
 	/* 바깥 상자는 자르지 않는다 : 좌우 노드 라벨이 원 밖으로 나가야 하기 때문 */
-	.cat-orbit{display:block; position:relative; width:100%; height:58rem; margin:1rem auto 0;}
-	/* 아래쪽 호를 잘라 아치 형태로 보여준다 */
-	.cat-orbit-stage{position:absolute; left:50%; top:0; width:66rem; height:58rem; margin-left:-33rem; overflow:hidden;}
+	.cat-orbit{display:block; position:relative; width:100%; height:64rem; margin:1rem auto -13rem;}
+	/* 아래쪽 호를 잘라 아치 형태로 보여준다 (지름 84rem 중 하단 20rem 절단) */
+	.cat-orbit-stage{position:absolute; left:50%; top:0; width:84rem; height:64rem; margin-left:-42rem; overflow:hidden;}
 	/* 원의 좌표계 : 정사각형이라 자식의 % 값이 지름 기준으로 계산된다 */
-	.cat-orbit-plane{position:absolute; left:0; top:0; width:66rem; height:66rem;}
+	.cat-orbit-plane{position:absolute; left:0; top:0; width:84rem; height:84rem;}
 
 	/* 굵은 그레이 원형 트랙 (SVG stroke) + 중앙 광원 */
 	.cat-orbit-ring{position:absolute; left:0; top:0; width:100%; height:100%;}
@@ -586,35 +580,24 @@
 	/* 활성 노드 쪽으로 도는 민트 호 + 선단 광점 */
 	.cat-orbit-spin{position:absolute; left:0; top:0; width:100%; height:100%;
 		transition:transform .9s cubic-bezier(.65,.02,.3,1); will-change:transform;}
-	.cat-orbit-spin .dot{position:absolute; left:50%; top:2.25%; width:1.5rem; height:1.5rem; margin:-.75rem 0 0 -.75rem; border-radius:50%;
-		background:var(--main-color); box-shadow:0 0 0 .7rem rgba(100,211,206,.16), 0 0 2.4rem .2rem rgba(100,211,206,.62);}
+	.cat-orbit-spin .dot{position:absolute; left:50%; top:2.25%; width:2rem; height:2rem; margin:-1rem 0 0 -1rem; border-radius:50%;
+		background:var(--main-color); box-shadow:0 0 0 .9rem rgba(100,211,206,.16), 0 0 3rem .5rem rgba(100,211,206,.62);}
 
-	/* 중앙 : 활성 카테고리 상세 */
-	.cat-orbit-core{position:absolute; left:50%; top:50%; width:40rem; transform:translate(-50%,-50%); text-align:center;}
-	.cat-orbit-core .core-slot{position:relative;}
-	.cat-orbit-core .core-item{position:absolute; left:0; top:0; width:100%; opacity:0; transform:translateY(1.2rem); pointer-events:none;
-		transition:opacity .45s ease-in-out, transform .45s cubic-bezier(.22,.61,.36,1);}
-	.cat-orbit-core .core-item.on{position:relative; opacity:1; transform:none; pointer-events:auto;}
-	.cat-orbit-core .core-num{display:block; font-family:var(--font-family2); font-size:6.4rem; font-weight:700; line-height:1; color:var(--ink-color); opacity:.13;}
-	.cat-orbit-core .core-tit{display:block; margin-top:-1rem; font-size:3rem; font-weight:700; letter-spacing:-.04em; color:var(--ink-color);}
-	.cat-orbit-core .core-txt{display:block; margin-top:1.1rem; font-size:1.5rem; line-height:1.7; letter-spacing:-.02em; color:#8A959A;}
-	/* 상품 수 · 최저가 (마크업은 JS 가 .main-cat-grid .meta 에서 복제) */
-	.cat-orbit-core .core-meta{display:flex; align-items:center; justify-content:center; gap:.9rem; margin-top:1.6rem;}
-	.cat-orbit-core .core-meta .cnt{display:inline-flex; align-items:center; height:2.6rem; padding:0 1rem; border-radius:1.3rem;
-		background:rgba(62,77,84,.07); font-size:1.25rem; font-weight:600; color:#6B777D; letter-spacing:-.02em;}
-	.cat-orbit-core .core-meta .from{font-size:1.5rem; font-weight:700; color:var(--ink-color); letter-spacing:-.02em;}
-	.cat-orbit-core .core-go{display:inline-flex; align-items:center; gap:.7rem; margin-top:2rem; height:4.6rem; padding:0 2.4rem; border-radius:2.3rem;
-		background:var(--ink-color); color:#fff; font-size:1.5rem; font-weight:600; letter-spacing:-.02em; transition:var(--transition-custom);}
-	.cat-orbit-core .core-go:hover{background:var(--main-color);}
+	/* 중앙 : 단일 CTA */
+	.cat-orbit-core{position:absolute; left:50%; top:43%; width:40rem; transform:translate(-50%,-50%); text-align:center;}
+	.cat-orbit-core .core-go{display:inline-flex; align-items:center; gap:.8rem; height:6.4rem; padding:0 3.8rem; border-radius:100rem;
+		background:var(--main-color); color:#fff; font-size:1.9rem; font-weight:700; letter-spacing:-.03em;
+		box-shadow:0 1.2rem 3rem rgba(100,211,206,.35); transition:var(--transition-custom);}
+	.cat-orbit-core .core-go:hover{background:var(--ink-color); box-shadow:0 1.2rem 3rem rgba(62,77,84,.24);}
 	.cat-orbit-core .core-go i{transition:var(--transition-custom);}
 	.cat-orbit-core .core-go:hover i{transform:translateX(.3rem);}
 
 	/* 원 위의 6개 노드 : 트랙 중심선(반지름 47.75%) 위에 정확히 올린다 */
-	.cat-orbit-nodes{position:absolute; left:50%; top:0; width:66rem; height:66rem; margin-left:-33rem; list-style:none; padding:0; z-index:2;}
+	.cat-orbit-nodes{position:absolute; left:50%; top:0; width:84rem; height:84rem; margin-left:-42rem; list-style:none; padding:0; z-index:2;}
 	.cat-node{position:absolute; transform:translate(-50%,-50%);}
 	.cat-node .node-btn{position:relative; display:block; padding:0; border:0; background:none; cursor:pointer;}
-	.cat-node .node-mark{display:flex; align-items:center; justify-content:center; width:6rem; height:6rem; border-radius:50%; background:#fff;
-		border:1px solid #DCE6E8; font-family:var(--font-family2); font-size:1.5rem; font-weight:700; color:#B4C0C4;
+	.cat-node .node-mark{display:flex; align-items:center; justify-content:center; width:7.2rem; height:7.2rem; border-radius:50%; background:#fff;
+		border:1px solid #DCE6E8; font-family:var(--font-family2); font-size:1.7rem; font-weight:700; color:#B4C0C4;
 		transition:background .3s ease-in-out, border-color .3s ease-in-out, color .3s ease-in-out, box-shadow .3s ease-in-out;}
 	.cat-node .node-tit{position:absolute; top:50%; transform:translateY(-50%); font-size:1.6rem; font-weight:600; letter-spacing:-.03em;
 		color:#9AA7AC; white-space:nowrap; transition:color .3s ease-in-out;}
@@ -626,7 +609,8 @@
 	.cat-node.n4 .node-tit{top:calc(100% + 1.1rem); left:50%; transform:translateX(-50%);}
 	.cat-node .node-btn:hover .node-mark,
 	.cat-node .node-btn:focus-visible .node-mark,
-	.cat-node.on .node-mark{background:var(--main-color); border-color:var(--main-color); color:#fff; box-shadow:0 .8rem 2rem rgba(100,211,206,.34);}
+	.cat-node.on .node-mark{background:var(--main-color); border-color:var(--main-color); color:#fff;
+		box-shadow:0 0 0 .8rem rgba(100,211,206,.16), 0 0 2.2rem .3rem rgba(100,211,206,.5);}
 	.cat-node .node-btn:hover .node-tit,
 	.cat-node .node-btn:focus-visible .node-tit,
 	.cat-node.on .node-tit{color:var(--ink-color);}
@@ -648,20 +632,18 @@
 }
 
 @media all and (min-width:901px) and (max-width:1200px){
-	.cat-orbit{height:50rem;}
-	.cat-orbit-stage{width:57rem; height:50rem; margin-left:-28.5rem;}
-	.cat-orbit-plane{width:57rem; height:57rem;}
-	.cat-orbit-nodes{width:57rem; height:57rem; margin-left:-28.5rem;}
+	.cat-orbit{height:52rem;}
+	.cat-orbit-stage{width:68rem; height:52rem; margin-left:-34rem;}
+	.cat-orbit-plane{width:68rem; height:68rem;}
+	.cat-orbit-nodes{width:68rem; height:68rem; margin-left:-34rem;}
 	.cat-orbit-core{width:32rem;}
-	.cat-orbit-core .core-num{font-size:5.4rem;}
-	.cat-orbit-core .core-tit{font-size:2.6rem;}
-	.cat-node .node-mark{width:5.2rem; height:5.2rem; font-size:1.4rem;}
+	.cat-orbit-core .core-go{height:5.6rem; padding:0 3rem; font-size:1.7rem;}
+	.cat-node .node-mark{width:6rem; height:6rem; font-size:1.5rem;}
 	.cat-node .node-tit{font-size:1.5rem;}
 }
 
 @media (prefers-reduced-motion: reduce){
-	.cat-orbit-spin,
-	.cat-orbit-core .core-item{transition:none !important;}
+	.cat-orbit-spin{transition:none !important;}
 	.main-cat-grid li a,
 	.main-cat-grid .meta .cnt,
 	.main-cat-grid .meta .from{transition:none !important;}

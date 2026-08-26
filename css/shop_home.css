@@ -32,6 +32,8 @@
 .sh-sec{padding:6rem 0 0;}
 .sh-sec-head{display:flex; align-items:flex-end; justify-content:space-between; gap:2rem; margin-bottom:2.4rem;}
 .sh-sec-tit{font-size:2.4rem; font-weight:700; line-height:1.3; color:var(--ink-color); display:flex; align-items:center; gap:0.8rem;}
+/* 큰 제목 : PICK(.mp-tit) · 베스트 상품(.bs-tit) 과 같은 위계로 맞춘다 */
+.sh-sec-tit.is-big{display:block; font-size:4rem; font-weight:700; line-height:1.3;}
 .sh-sec-tit .emo{font-size:2.2rem; line-height:1;}
 .sh-sec-desc{display:block; margin-top:0.8rem; font-size:1.5rem; font-weight:400; color:var(--sub-color); letter-spacing:-0.01em;}
 .sh-sec-side{display:flex; align-items:center; gap:1.2rem; flex:none;}
@@ -86,13 +88,17 @@
 .sh-hero-slide{flex:0 0 auto; width:var(--sh-hero-w); border-radius:2rem; overflow:hidden;}
 .sh-hero-link{position:relative; display:flex; align-items:stretch; aspect-ratio:3 / 1; overflow:hidden; background:#072429;}
 
-/* 우측 : 첨부 작업물 이미지 */
-.sh-hero-pic{position:relative; flex:0 0 var(--sh-hero-pic); overflow:hidden;}
+/* 우측 : 첨부 작업물 이미지
+ * 이미지 왼쪽 끝을 마스크로 서서히 지워 다크 민트 면과 경계선 없이 이어지게 한다.
+ * (오버레이 그라데이션만으로는 이미지가 시작되는 지점에 세로 이음매가 남는다) */
+.sh-hero-pic{position:relative; flex:0 0 var(--sh-hero-pic); overflow:hidden;
+	-webkit-mask-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.22) 10%, rgba(0,0,0,0.68) 22%, rgba(0,0,0,0.92) 30%, #000 40%);
+	mask-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.22) 10%, rgba(0,0,0,0.68) 22%, rgba(0,0,0,0.92) 30%, #000 40%);}
 .sh-hero-pic img{display:block; width:100%; height:100%; object-fit:cover; object-position:50% 50%;}
 
-/* 좌측 : 다크 민트 그라데이션 — 텍스트 영역은 불투명하게 덮고 이미지 쪽으로 자연스럽게 사라진다 */
+/* 좌측 : 다크 민트 그라데이션 — 텍스트 영역은 불투명하게 덮고 이미지 쪽으로 길게 흩어진다 */
 .sh-hero-link:before{content:''; position:absolute; inset:0; z-index:1;
-	background:linear-gradient(90deg, #062227 0%, #0B343A 28%, #114846 46%, rgba(17,72,70,0.58) 53%, rgba(17,72,70,0.16) 59%, rgba(17,72,70,0) 66%);}
+	background:linear-gradient(90deg, #062227 0%, #0B343A 26%, #114846 44%, rgba(17,72,70,0.86) 51%, rgba(17,72,70,0.62) 57%, rgba(17,72,70,0.38) 63%, rgba(17,72,70,0.18) 70%, rgba(17,72,70,0.06) 77%, rgba(17,72,70,0) 84%);}
 .sh-hero-txt{position:relative; z-index:2; flex:1 1 0; min-width:0; padding:0 3rem 0 6rem; display:flex; flex-direction:column; justify-content:center; align-items:flex-start;}
 .sh-hero-label{display:inline-flex; align-items:center; height:2.8rem; padding:0 1.1rem; border-radius:1.4rem; background:var(--main-color); color:#0E2A2B; font-size:1.3rem; font-weight:700; letter-spacing:0;}
 .sh-hero-tit{margin-top:1.4rem; font-size:3.6rem; font-weight:800; line-height:1.28; color:#fff;}
@@ -170,10 +176,11 @@
 .mp-list{display:flex; gap:2rem; transition:transform 0.5s cubic-bezier(0.22,0.61,0.36,1);}
 .mp-item{flex:0 0 auto; width:calc((100% - 3 * 2rem) / 4);}
 .mp-thumb-wrap{position:relative;}
-.mp-thumb{position:relative; display:flex; align-items:center; justify-content:center; border-radius:2rem; overflow:hidden; background:var(--sh-panel); aspect-ratio:345 / 400;}
-.mp-img{display:block; width:56%; aspect-ratio:3 / 4; border-radius:0.8rem; overflow:hidden; box-shadow:0 1.2rem 2.4rem rgba(12,26,30,0.16); transition:transform 0.4s ease;}
-.mp-img img{width:100%; height:100%; object-fit:cover;}
-.mp-item:hover .mp-img{transform:translateY(-0.6rem);}
+.mp-thumb{position:relative; display:block; border-radius:2rem; overflow:hidden; background:var(--sh-panel); aspect-ratio:345 / 400;}
+/* 이미지는 라운딩 박스를 여백 없이 가득 채운다 */
+.mp-img{display:block; width:100%; height:100%; overflow:hidden; transition:transform 0.5s ease;}
+.mp-img img{width:100%; height:100%; object-fit:cover; object-position:50% 50%;}
+.mp-item:hover .mp-img{transform:scale(1.05);}
 .mp-dim{position:absolute; inset:0; background:rgba(0,0,0,0.4); opacity:0; transition:opacity 0.3s;}
 .mp-item:hover .mp-dim{opacity:1;}
 .mp-thumb-wrap .sh-card-add{top:auto; bottom:1.4rem; right:1.4rem;}
@@ -209,17 +216,22 @@
 .bs-list{display:flex; transition:transform 0.5s cubic-bezier(0.22,0.61,0.36,1);}
 .bs-item{flex:0 0 auto; width:calc(100% / 3);}
 .bs-thumb-wrap{position:relative;}
-.bs-img{position:relative; display:block; width:58.3%; margin:0 auto; aspect-ratio:280 / 390; border-radius:0.6rem; overflow:hidden; background:#fff; box-shadow:0 1.4rem 3rem rgba(12,26,30,0.18); transition:transform 0.4s ease;}
-.bs-img img{width:100%; height:100%; object-fit:cover;}
+/* 라운딩은 PICK 카드(.mp-thumb)와 동일한 2rem, 카드 폭은 58.3% -> 68% 로 키웠다.
+ * 폭을 바꾸면 .bs-navs 의 padding-bottom(카드 세로 중앙)과
+ * .sh-card-add 의 right(카드 오른쪽 모서리)도 같이 다시 계산해야 한다. */
+.bs-img{position:relative; display:block; width:68%; margin:0 auto; aspect-ratio:280 / 390; border-radius:2rem; overflow:hidden; background:#fff; box-shadow:0 1.4rem 3rem rgba(12,26,30,0.18); transition:transform 0.4s ease;}
+.bs-img img{width:100%; height:100%; object-fit:cover; object-position:50% 50%;}
+/* 리플렛 · 브로슈어는 펼침면 사진이라 우측 표지 쪽을 잘라 쓴다 (JS 가 클래스를 붙인다) */
+.bs-img.is-cover img{object-position:100% 50%;}
 .bs-item:hover .bs-img{transform:translateY(-0.8rem);}
-.bs-thumb-wrap .sh-card-add{top:auto; bottom:1rem; right:calc(20.85% + 1rem);}
+.bs-thumb-wrap .sh-card-add{top:auto; bottom:1rem; right:calc(16% + 1rem);}
 .bs-body{margin-top:3.4rem; height:5.2rem; padding:0 2rem; text-align:center;}
 .bs-name{display:block; font-size:2.8rem; font-weight:700; line-height:1.2; color:var(--ink-color); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 .bs-item:hover .bs-name{text-decoration:underline; text-underline-offset:4px;}
 .bs-body .sh-card-price{margin-top:0.6rem; font-size:1.6rem;}
 
 /* 이미지 사이 여백에 놓이는 원형 버튼 */
-.bs-navs{position:absolute; left:0; right:0; top:0; height:0; padding-bottom:27.07%; z-index:4; pointer-events:none;}
+.bs-navs{position:absolute; left:0; right:0; top:0; height:0; padding-bottom:31.57%; z-index:4; pointer-events:none;}
 .bs-navs .sh-nav-btn{position:absolute; top:50%; width:4.4rem; height:4.4rem; margin-top:-2.2rem; border:0; border-radius:100%; background:#fff; font-size:2rem; box-shadow:0 5px 30px 0 rgba(0,0,0,0.1); pointer-events:auto; transform:translateX(-50%);}
 .bs-navs .js-prev{left:33.333%;}
 .bs-navs .js-next{left:66.667%;}
@@ -257,38 +269,31 @@
 .tp-chip.all{color:var(--sub-color);}
 
 /* 본문 */
-.tp-body{margin-top:2rem; display:grid; grid-template-columns:42rem 1fr; gap:2.4rem; align-items:stretch;}
+.tp-body{margin-top:2rem; display:grid; grid-template-columns:52rem 1fr; gap:2.4rem; align-items:stretch;}
 
 /* 좌 : 목업 무대 */
-.tp-stage{position:relative; border-radius:1.4rem; overflow:hidden; background:#DDE5E7; min-height:40rem; display:flex; align-items:center; justify-content:center; perspective:1400px;}
+.tp-stage{position:relative; border-radius:1.4rem; overflow:hidden; background:#DDE5E7; min-height:54rem; display:flex; align-items:center; justify-content:center; perspective:1400px;}
 /* 배경은 초점을 흐려 스튜디오처럼 두고, 목업만 또렷하게 보이게 한다 */
 .tp-stage-bg{position:absolute; inset:-6%; background-size:cover; background-position:50% 50%; filter:blur(2.6rem) saturate(0.45) brightness(0.92); transform:scale(1.12);}
 .tp-stage:after{content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,36,40,0.1) 0%, rgba(20,36,40,0.3) 100%);}
 
-.tp-mock{position:relative; z-index:2; display:flex; gap:0.2rem; transition:transform 0.55s cubic-bezier(0.22,0.61,0.36,1); transform-style:preserve-3d;
+/* 목업은 작은 조각 여러 장이 아니라 템플릿 한 장을 무대에 가득 채워 보여준다 */
+.tp-mock{position:absolute; inset:3.4rem; z-index:2; display:flex; transition:transform 0.55s cubic-bezier(0.22,0.61,0.36,1); transform-style:preserve-3d;
 	filter:drop-shadow(0 2.4rem 3.2rem rgba(12,26,30,0.34));}
-.tp-face{position:relative; overflow:hidden; background:#fff no-repeat 50% 50%; background-size:cover;}
+.tp-face{position:relative; flex:1 1 auto; overflow:hidden; border-radius:0.8rem; background:#fff no-repeat 50% 50%; background-size:cover;}
 .tp-face:after{content:''; position:absolute; inset:0;}
 
-/* 형태별 목업 : 실제 상품 규격 비율을 따른다 */
-.tp-mock.is-card .tp-face{width:24rem; height:13.3rem; border-radius:0.7rem;}          /* 90 x 50 */
-.tp-mock.is-card .tp-face.f2{width:18.4rem; height:10.2rem; align-self:flex-end; margin-left:-5.4rem; margin-bottom:-3.2rem; opacity:0.97;}
-.tp-mock.is-env .tp-face{width:15rem; height:29rem; border-radius:0.4rem;}              /* 120 x 235 */
-.tp-mock.is-env .tp-face.f2{width:11rem; height:21rem; align-self:flex-end; margin-left:-5rem; margin-bottom:-2.4rem;}
-.tp-mock.is-a4 .tp-face{width:19.8rem; height:28rem; border-radius:0.4rem;}             /* A4 */
-.tp-mock.is-a4 .tp-face.f2{width:16rem; height:22.6rem; align-self:flex-end; margin-left:-6rem; margin-bottom:-2.4rem;}
-.tp-mock.is-fold2 .tp-face{width:14.6rem; height:20.6rem; border-radius:0.3rem;}       /* 2단 접지 : A4 반접 = A5 */
-.tp-mock.is-fold2 .tp-face:nth-child(2):after{background:linear-gradient(90deg, rgba(12,26,30,0.18) 0%, rgba(12,26,30,0) 24%);}
-.tp-mock.is-fold3 .tp-face{width:9.4rem; height:26.6rem; border-radius:0.3rem;}         /* 3단 접지 */
-.tp-mock.is-fold3 .tp-face:nth-child(2):after{background:linear-gradient(90deg, rgba(12,26,30,0.16) 0%, rgba(12,26,30,0) 26%);}
-.tp-mock.is-fold3 .tp-face:nth-child(3):after{background:linear-gradient(90deg, rgba(12,26,30,0.2) 0%, rgba(12,26,30,0) 30%);}
-.tp-mock.is-poster .tp-face{width:21rem; height:29.6rem; border-radius:0.3rem;}         /* A2 포스터 */
-.tp-mock.is-holder .tp-face{width:20.6rem; height:29rem; border-radius:0.5rem 1.4rem 1.4rem 0.5rem;}
-.tp-mock.is-holder .tp-face.f2{width:17rem; height:24rem; align-self:flex-end; margin-left:-8rem; margin-bottom:-2rem; border-radius:0.3rem;}
+/* 형태별로 달라지는 건 모서리와 접지선뿐이다 */
+.tp-mock.is-card .tp-face{border-radius:1.4rem;}
+.tp-mock.is-holder .tp-face{border-radius:0.6rem 2.2rem 2.2rem 0.6rem;}
+.tp-mock.is-fold2 .tp-face:after{background:linear-gradient(90deg, rgba(12,26,30,0) 47%, rgba(12,26,30,0.17) 50%, rgba(12,26,30,0) 53%);}
+.tp-mock.is-fold3 .tp-face:after{background:linear-gradient(90deg,
+	rgba(12,26,30,0) 30.3%, rgba(12,26,30,0.15) 33.3%, rgba(12,26,30,0) 36.3%,
+	rgba(12,26,30,0) 63.7%, rgba(12,26,30,0.15) 66.7%, rgba(12,26,30,0) 69.7%);}
 
 /* 3D 보기 */
-.tp-mock.is-3d{transform:rotateY(-24deg) rotateX(6deg) rotateZ(-1.5deg) scale(1.02);}
-.tp-mock.is-3d .tp-face:first-child:after{background:linear-gradient(115deg, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0) 42%, rgba(12,26,30,0.14) 100%);}
+.tp-mock.is-3d{transform:rotateY(-18deg) rotateX(5deg) rotateZ(-1.5deg) scale(0.94);}
+.tp-mock.is-3d .tp-face:after{background:linear-gradient(115deg, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0) 42%, rgba(12,26,30,0.14) 100%);}
 
 /* 무대 위 컨트롤 */
 .tp-count{position:absolute; left:1.4rem; bottom:1.4rem; z-index:3; height:2.8rem; padding:0 1rem; border-radius:1.4rem; background:rgba(20,36,40,0.5); color:#fff; font-family:var(--font-family2); font-size:1.3rem; display:flex; align-items:center;}
@@ -357,16 +362,8 @@
 .sh-rv-pd .lb{display:block; font-size:1.2rem; color:var(--sub-color);}
 .sh-rv-pd .nm{display:block; margin-top:0.2rem; font-size:1.4rem; font-weight:600; color:var(--ink-color); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 
-/* 하단 마무리 CTA */
-.sh-end{padding:8rem 0 10rem; text-align:center;}
-.sh-end-tit{font-size:2.8rem; font-weight:700; line-height:1.4; color:var(--ink-color);}
-.sh-end-txt{margin-top:1.4rem; font-size:1.6rem; color:var(--sub-color); line-height:1.6;}
-.sh-end-btns{margin-top:3rem; display:flex; align-items:center; justify-content:center; gap:1.2rem;}
-.sh-end-btns a{display:inline-flex; align-items:center; gap:0.6rem; height:5.2rem; padding:0 2.4rem; border-radius:1rem; font-size:1.55rem; font-weight:600; transition:all 0.22s;}
-.sh-end-btns .mint{background:var(--main-color); color:#0E2A2B;}
-.sh-end-btns .mint:hover{background:var(--ink-color); color:#fff;}
-.sh-end-btns .line{border:1px solid var(--sh-line); color:var(--ink-color);}
-.sh-end-btns .line:hover{border-color:var(--ink-color);}
+/* 하단 마무리 : 자주 묻는 질문 (아코디언 본체는 shop.css 의 .faq-* 공통 컴포넌트) */
+.sh-faq{padding-top:9rem;}
 
 /* ========================================================
  * 9. 카테고리 목록 뷰 ( list.html?cat=xxx )
@@ -403,7 +400,8 @@
 	.sh-hero{--sh-hero-w:calc(100vw - 2 * var(--area-padding));}
 }
 @media all and (max-width:1280px){
-	.tp-body{grid-template-columns:36rem 1fr;}
+	.tp-body{grid-template-columns:44rem 1fr;}
+	.tp-stage{min-height:46rem;}
 	.sh-tile-grid{grid-auto-columns:calc((100% - 3 * var(--sh-gap)) / 4);}
 	.sh-card-grid{grid-template-columns:repeat(4,1fr);}
 	.sh-allpanel-inner{grid-template-columns:repeat(4,1fr);}
@@ -412,10 +410,11 @@
 @media all and (max-width:1100px){
 	.sh-hero-tit{font-size:3.2rem;}
 	.tp-body{grid-template-columns:1fr; }
-	.tp-stage{min-height:36rem;}
+	.tp-stage{min-height:44rem;}
+	.tp-mock{inset:2.6rem;}
 	.tp-tabs > li{min-width:9rem; flex:0 0 auto;}
 	.sh-stat-list li{font-size:2.8rem;}
-	.mp-tit, .bs-tit{font-size:3.4rem;}
+	.mp-tit, .bs-tit, .sh-sec-tit.is-big{font-size:3.4rem;}
 	.bs-name{font-size:2.4rem;}
 }
 @media all and (max-width:900px){
@@ -429,14 +428,14 @@
 	.sh-allpanel-inner{grid-template-columns:repeat(3,1fr);}
 	.sh-hero{--sh-hero-gap:4rem; --sh-hero-pic:58%;}
 	.sh-hero-link{aspect-ratio:5 / 2;}
-	.sh-hero-link:before{background:linear-gradient(90deg, #062227 0%, #0B343A 24%, #114846 40%, rgba(17,72,70,0.58) 47%, rgba(17,72,70,0.16) 54%, rgba(17,72,70,0) 61%);}
+	.sh-hero-link:before{background:linear-gradient(90deg, #062227 0%, #0B343A 22%, #114846 38%, rgba(17,72,70,0.86) 45%, rgba(17,72,70,0.6) 52%, rgba(17,72,70,0.34) 59%, rgba(17,72,70,0.14) 67%, rgba(17,72,70,0) 76%);}
 	.sh-hero-txt{padding:0 2rem 0 3.4rem;}
 	.sh-hero-tit{font-size:2.8rem;}
 	.sh-hero-page{right:2rem; bottom:2rem;}
 	.tp-panel{padding:2.2rem 2rem 2.4rem;}
 	.sh-rv-card{width:32rem;}
 	.mp-sec{padding:7rem 0 0;}
-	.mp-tit, .bs-tit{font-size:2.8rem;}
+	.mp-tit, .bs-tit, .sh-sec-tit.is-big{font-size:2.8rem;}
 	.mp-item{width:calc((100% - 2rem) / 2);}
 	.mp-name{font-size:1.8rem; min-height:4.7rem;}
 	.bs-sec{padding:7rem 0 10rem;}
@@ -448,7 +447,7 @@
 	.bs-item{width:50%;}
 	.bs-name{font-size:2.2rem;}
 	.bs-body{margin-top:2.4rem;}
-	.bs-navs{padding-bottom:40.6%;}
+	.bs-navs{padding-bottom:47.36%;}
 	.bs-navs .sh-nav-btn{width:3.8rem; height:3.8rem; margin-top:-1.9rem; font-size:1.7rem;}
 	.bs-navs .js-prev{left:0; transform:none;}
 	.bs-navs .js-next{left:auto; right:0; transform:none;}
@@ -469,7 +468,7 @@
 	.sh-hero-slide{border-radius:1.4rem;}
 	.sh-hero-link{aspect-ratio:9 / 4;}
 	/* 배너가 좁아지면 사진 쪽으로 글자가 다가오므로 그라데이션을 조금 더 길게 깔아 준다 */
-	.sh-hero-link:before{background:linear-gradient(90deg, #062227 0%, #0B343A 26%, #114846 44%, rgba(17,72,70,0.6) 51%, rgba(17,72,70,0.18) 57%, rgba(17,72,70,0) 64%);}
+	.sh-hero-link:before{background:linear-gradient(90deg, #062227 0%, #0B343A 24%, #114846 42%, rgba(17,72,70,0.86) 49%, rgba(17,72,70,0.6) 56%, rgba(17,72,70,0.34) 63%, rgba(17,72,70,0.14) 71%, rgba(17,72,70,0) 80%);}
 	.sh-hero-txt{padding:0 1.4rem 0 2.4rem;}
 	.sh-hero-label{height:2.5rem; padding:0 0.9rem; font-size:1.2rem;}
 	.sh-hero-tit{margin-top:1.1rem; font-size:2.4rem;}
@@ -483,7 +482,7 @@
 	.sh-tile-thumb{width:6rem; height:6rem;}
 	.sh-card-grid{grid-template-columns:repeat(2,1fr); gap:2.6rem var(--sh-gap);}
 	.sh-allpanel-inner{grid-template-columns:repeat(2,1fr); padding:2.4rem 0 3rem;}
-	.mp-tit, .bs-tit{font-size:2.4rem;}
+	.mp-tit, .bs-tit, .sh-sec-tit.is-big{font-size:2.4rem;}
 	.mp-tags{margin-top:2.2rem; gap:0.8rem;}
 	.mp-tag{height:4rem; padding:0 1.8rem; font-size:1.5rem;}
 	.mp-view{margin-top:2.4rem;}
@@ -512,10 +511,7 @@
 	.sh-cate-head{flex-direction:column; align-items:flex-start; gap:1.2rem;}
 	.sh-cate-tit{font-size:2.4rem;}
 	.sh-search{width:100%;}
-	.sh-end{padding:6rem 0 8rem;}
-	.sh-end-tit{font-size:2.2rem;}
-	.sh-end-btns{flex-direction:column;}
-	.sh-end-btns a{width:100%; justify-content:center;}
+	.sh-faq{padding-top:6rem;}
 }
 @media all and (max-width:520px){
 	.sh-card-add{opacity:1; transform:none;}
@@ -531,11 +527,10 @@
 	.bs-sec{padding:6rem 0 8rem;}
 	.bs-bg{width:70%; height:46rem; border-radius:0 5rem 5rem 0;}
 	.bs-item{width:100%;}
-	.bs-navs{padding-bottom:81.2%;}
+	.bs-navs{padding-bottom:94.71%;}
 	.bs-name{font-size:2rem;}
-	/* 좁은 화면에서 카드 목업이 무대 폭을 넘지 않게 줄인다 */
-	.tp-mock.is-card .tp-face{width:19.8rem; height:11rem;}
-	.tp-mock.is-card .tp-face.f2{width:15rem; height:8.4rem; margin-left:-4.4rem; margin-bottom:-2.6rem;}
+	/* 세로로 쌓이면 그라데이션 오버레이가 없으므로 이미지 마스크도 함께 끈다 */
+	.sh-hero-pic{-webkit-mask-image:none; mask-image:none;}
 }
 
 /* 모션 최소화 설정 존중 */

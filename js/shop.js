@@ -749,8 +749,7 @@
 		var spin  = make('div', 'cat-orbit-spin');
 		var nodes = make('ul', 'cat-orbit-nodes');
 		var core  = make('div', 'cat-orbit-core');
-		var slot  = make('div', 'core-slot');
-		var nodeEls = [], btnEls = [], panelEls = [], i;
+		var nodeEls = [], btnEls = [], i;
 
 		/* 굵은 그레이 트랙 */
 		var ringSvg = svgRoot();
@@ -777,48 +776,32 @@
 		spin.appendChild(arcSvg);
 		spin.appendChild(make('span', 'dot'));
 
-		nodes.setAttribute('role', 'tablist');
 		nodes.setAttribute('aria-label', '상품 카테고리');
 
 		for (i = 0; i < total; i++) {
 			var a   = src[i];
 			var num = pick(a, '.num') || (i < 9 ? '0' + (i + 1) : String(i + 1));
-			var tit = pick(a, '.tit');
-			var des = pick(a, '.txt');
-			var uid = 'catOrbitPanel' + (i + 1);
 
 			/* 원 위의 노드 */
 			var li  = make('li', 'cat-node n' + (i + 1));
 			var btn = make('button', 'node-btn');
 			btn.type = 'button';
-			btn.setAttribute('role', 'tab');
-			btn.setAttribute('aria-controls', uid);
+			btn.setAttribute('aria-pressed', 'false');
 			var mark = make('span', 'node-mark'); mark.textContent = num;
-			var ntit = make('span', 'node-tit');  ntit.textContent = tit;
+			var ntit = make('span', 'node-tit');  ntit.textContent = pick(a, '.tit');
 			btn.appendChild(mark); btn.appendChild(ntit);
 			li.appendChild(btn); nodes.appendChild(li);
 			nodeEls.push(li); btnEls.push(btn);
-
-			/* 중앙 : 활성 카테고리 상세 */
-			var panel = make('div', 'core-item');
-			panel.id = uid;
-			panel.setAttribute('role', 'tabpanel');
-			var pn = make('span', 'core-num'); pn.textContent = num;
-			var pt = make('strong', 'core-tit'); pt.textContent = tit;
-			panel.appendChild(pn); panel.appendChild(pt);
-			if (des) { var px = make('span', 'core-txt'); px.textContent = des; panel.appendChild(px); }
-			/* 상품 수 · 최저가 : .main-cat-grid 의 .meta 를 그대로 복제해 콘텐츠 출처를 하나로 유지한다 */
-			var srcMeta = a.querySelector('.meta');
-			if (srcMeta) { var pm = srcMeta.cloneNode(true); pm.className = 'core-meta'; panel.appendChild(pm); }
-			var goBtn = make('a', 'core-go');
-			goBtn.href = a.getAttribute('href') || '#';
-			goBtn.appendChild(d.createTextNode('상품 보기 '));
-			goBtn.appendChild(make('i', 'xi-angle-right-min'));
-			panel.appendChild(goBtn);
-			slot.appendChild(panel); panelEls.push(panel);
 		}
 
-		core.appendChild(slot);
+		/* 중앙 : 무료 템플릿 미리보기로 보내는 단일 CTA
+		 * 목적지는 섹션 헤드의 more 링크와 하나로 묶어 둔다 */
+		var more  = root.querySelector('.main-shop-more');
+		var goBtn = make('a', 'core-go');
+		goBtn.href = (more && more.getAttribute('href')) || ((src[0].getAttribute('href') || '').split('?')[0] + '#tplPreview');
+		goBtn.appendChild(d.createTextNode('상품 만들기'));
+		goBtn.appendChild(make('i', 'xi-angle-right-min'));
+		core.appendChild(goBtn);
 		plane.appendChild(ring);
 		plane.appendChild(spin);
 		plane.appendChild(core);
@@ -838,11 +821,7 @@
 			for (var k = 0; k < total; k++) {
 				var on = (k === idx);
 				nodeEls[k].className = 'cat-node n' + (k + 1) + (on ? ' on' : '');
-				btnEls[k].setAttribute('aria-selected', on ? 'true' : 'false');
-				btnEls[k].tabIndex = on ? 0 : -1;
-				panelEls[k].className = 'core-item' + (on ? ' on' : '');
-				if (on) panelEls[k].removeAttribute('aria-hidden');
-				else panelEls[k].setAttribute('aria-hidden', 'true');
+				btnEls[k].setAttribute('aria-pressed', on ? 'true' : 'false');
 			}
 			orbit.className = 'cat-orbit on' + (idx + 1);
 		}
@@ -898,7 +877,7 @@
 			if (k > -1) { go(k); restart(); }
 		});
 
-		/* 좌우 방향키로도 이동 (tablist 기본 동작) */
+		/* 좌우 방향키로도 이동 */
 		nodes.addEventListener('keydown', function (e) {
 			var step = (e.keyCode === 39) ? 1 : (e.keyCode === 37 ? -1 : 0);
 			if (!step) return;
@@ -968,6 +947,8 @@
 		if (!lists.length) return;
 
 		for (var i = 0; i < lists.length; i++) {
+			if (lists[i].getAttribute('data-faq-ready')) continue;   /* 나중에 그려진 목록만 새로 묶는다 */
+			lists[i].setAttribute('data-faq-ready', '1');
 			(function (list) {
 				var items = list.querySelectorAll('.faq-item');
 				for (var k = 0; k < items.length; k++) {
@@ -997,6 +978,9 @@
 			})(lists[i]);
 		}
 	}
+
+	/* 상품몰 홈처럼 JS 로 나중에 그려지는 화면에서 다시 부를 수 있게 열어 둔다 */
+	w.MTFaq = { init: init };
 
 	if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', init);
 	else init();
