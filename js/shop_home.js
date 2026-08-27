@@ -52,8 +52,7 @@
 			{ lb: '#개원 패키지',    ids: ['pk04', 'pm02', 'cd01', 'pk01', 'pk02', 'pk03', 'pr01', 'fm01'] },
 			{ lb: '#진료 · 예약카드', ids: ['pr01', 'pr02', 'fm07', 'cd01', 'cd02', 'pr04', 'pr03', 'fm03'] },
 			{ lb: '#문진표 · 서식',  ids: ['fm01', 'fm02', 'fm03', 'fm04', 'fm05', 'fm06', 'fm07', 'pr04'] },
-			{ lb: '#명함 · 봉투',    ids: ['cd01', 'cd02', 'cd03', 'cd04', 'cd05', 'cd06', 'pr03', 'pr01'] },
-			{ lb: '#병원 안내물',    ids: ['pr05', 'pr06', 'pr07', 'pr08', 'pm04', 'pm05', 'pm06', 'pm07'] }
+			{ lb: '#명함 · 봉투',    ids: ['cd01', 'cd02', 'cd03', 'cd04', 'cd05', 'cd06', 'pr03', 'pr01'] }
 		]
 	};
 
@@ -66,8 +65,7 @@
 			{ cat: 'promo',   lb: '홍보물',      first: 'pm02' },
 			{ cat: 'print',   lb: '병원 인쇄물' },
 			{ cat: 'form',    lb: '서식류' },
-			{ cat: 'card',    lb: '명함 · 봉투',  first: 'cd01' },
-			{ cat: 'package', lb: '개원 패키지',  first: 'pk04' }
+			{ cat: 'card',    lb: '명함 · 봉투',  first: 'cd01' }
 		]
 	};
 
@@ -152,7 +150,7 @@
 	==================================================== */
 	function secHead(tit, emo, moreHref, withNav) {
 		return '<div class="sh-sec-head">' +
-			'<h2 class="sh-sec-tit">' + tit + (emo ? '<span class="emo">' + emo + '</span>' : '') + '</h2>' +
+			'<h2 class="sh-sec-tit is-big">' + tit + (emo ? '<span class="emo">' + emo + '</span>' : '') + '</h2>' +
 			'<div class="sh-sec-side">' +
 			(moreHref ? '<a href="' + moreHref + '" class="sh-more">전체보기</a>' : '') +
 			(withNav ? '<div class="sh-navs"><button type="button" class="sh-nav-btn js-prev" title="이전"><i class="xi-angle-left-min"></i></button><button type="button" class="sh-nav-btn js-next" title="다음"><i class="xi-angle-right-min"></i></button></div>' : '') +
@@ -177,10 +175,14 @@
 	/* ====================================================
 	 * 3. 섹션 마크업 만들기
 	==================================================== */
+	/* 카테고리 바에 노출하지 않는 항목 : 전체보기 패널과 GNB 로만 들어간다 */
+	var CATBAR_HIDE = { form: 1, reorder: 1 };
+
 	function catbarHTML(curCat) {
 		var li = '', i, c;
 		for (i = 1; i < S.CATS.length; i++) {          /* 0번은 '전체 상품' → 홈이 대신한다 */
 			c = S.CATS[i];
+			if (CATBAR_HIDE[c.id] && c.id !== curCat) continue;
 			li += '<li class="' + (c.id === curCat ? 'on' : '') + (c.id === 'package' ? ' hot' : '') + '">' +
 				'<a href="' + shopUrl(c.id) + '">' + c.name + '</a></li>';
 		}
@@ -189,7 +191,7 @@
 		for (i = 1; i < S.CATS.length; i++) {
 			c = S.CATS[i];
 			list = S.filterList(c.id, 'all');
-			panel += '<dl><dt><a href="' + shopUrl(c.id) + '">' + c.name + '</a></dt>';
+			panel += '<dl><dt><a href="' + shopUrl(c.id) + '">' + c.name + '<i class="xi-angle-right-min"></i></a></dt>';
 			for (j = 0, k = Math.min(list.length, 8); j < k; j++) {
 				panel += '<dd><a href="' + S.detailUrl(list[j]) + '">' + esc(list[j].name) + '</a></dd>';
 			}
@@ -447,15 +449,8 @@
 
 	function cateHTML(cat, dept, q) {
 		var h = CATE_HEAD[cat] || CATE_HEAD.print;
-		var c = null, i;
-		for (i = 0; i < S.CATS.length; i++) if (S.CATS[i].id === cat) c = S.CATS[i];
+		var i;
 		var list = S.searchList(q, S.filterList(cat, dept));
-
-		var dp = '';
-		for (i = 0; i < S.DEPTS.length; i++) {
-			var u = 'list.html?cat=' + cat + (S.DEPTS[i].id !== 'all' ? '&dept=' + S.DEPTS[i].id : '') + (q ? '&q=' + encodeURIComponent(q) : '');
-			dp += '<a href="' + u + '" class="' + (S.DEPTS[i].id === dept ? 'on' : '') + '">' + S.DEPTS[i].name + '</a>';
-		}
 
 		var cards = '';
 		if (!list.length) cards = '<li class="sh-empty"><i class="xi-search"></i><p>선택하신 조건에 맞는 상품이 없습니다.</p></li>';
@@ -466,16 +461,10 @@
 
 		return '<section class="sh-cate">' +
 			'<div class="sh-cate-head"><div>' +
-				'<span class="sh-cate-en">' + (c ? c.en : '') + '</span>' +
 				'<h2 class="sh-cate-tit">' + h.tit + '</h2>' +
 				'<p class="sh-cate-desc">' + h.desc + '</p>' +
 			'</div><p class="sh-cate-cnt">Total <b>' + list.length + '</b> items</p></div>' +
-			'<div class="sh-cate-tools">' +
-				'<div class="sh-dept">' + dp + '</div>' +
-				'<div class="sh-search"><label for="shQ" class="blind">상품 검색</label>' +
-					'<input type="text" id="shQ" value="' + esc(q) + '" placeholder="상품명 · 진료과 검색" autocomplete="off">' +
-					'<button type="button" class="js-q" title="검색"><i class="xi-search"></i></button></div>' +
-			'</div>' + searched +
+			searched +
 			'<ul class="sh-card-grid">' + cards + '</ul>' +
 		'</section>';
 	}
@@ -764,19 +753,6 @@
 		});
 	}
 
-	/* 5-7. 카테고리 검색 */
-	function initSearch(cat, dept) {
-		var input = root.querySelector('#shQ');
-		var btn = root.querySelector('.js-q');
-		if (!input || !btn) return;
-		function go() {
-			var v = input.value.trim();
-			location.href = 'list.html?cat=' + cat + (dept !== 'all' ? '&dept=' + dept : '') + (v ? '&q=' + encodeURIComponent(v) : '');
-		}
-		btn.addEventListener('click', go);
-		input.addEventListener('keydown', function (e) { if (e.keyCode === 13) go(); });
-	}
-
 	/* ====================================================
 	 * 6. 조립
 	==================================================== */
@@ -800,9 +776,7 @@
 
 	initAllPanel();
 	initAdd();
-	if (isCate) {
-		initSearch(cat, dept);
-	} else {
+	if (!isCate) {
 		initHero();
 		initPick();
 		initBest();
