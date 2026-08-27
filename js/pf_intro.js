@@ -117,16 +117,33 @@
 			});
 		}
 
-		function finish () {
+		/* 인트로를 끝까지 재생했든 시작조차 못 했든 카드를 원래 상태로 되돌리는 공통 처리.
+		   숨긴 카드는 반드시 여기를 거쳐 되살아나게 해서 opacity:0 인 채로 남는 일이 없게 한다. */
+		function reveal () {
 			cards.forEach(function (el) {
 				gsap.set(el, { clearProps: 'all' });             /* transform 잔여값 초기화 */
 				el.classList.remove('pf-intro');
 			});
+		}
+
+		function finish () {
+			reveal();
 			if ( window.ScrollTrigger && ScrollTrigger.refresh ) ScrollTrigger.refresh();
 		}
 
-		var fired = false;
-		function once () { if ( fired ) return; fired = true; play(); }
+		var fired = false, guard = null;
+		function once () { if ( fired ) return; fired = true; clearTimeout(guard); play(); }
+
+		/* 최후의 안전장치.
+		   자동 스크롤이 중간에 끊기거나(SmoothScroll · 트랙패드 관성과 충돌) 되돌아온 페이지라
+		   스크롤이 복원되는 등으로 인트로가 시작되지 못하면 카드가 숨은 채로 남는다.
+		   그때는 Grid 가 가까우면 인트로를 재생하고, 아직 멀면 인트로를 포기하고 카드부터 되살린다. */
+		guard = setTimeout(function () {
+			if ( fired ) return;
+			if ( grid.getBoundingClientRect().top < window.innerHeight ) { once(); return; }
+			fired = true;                                        /* 이후 감시가 카드를 다시 숨기지 않도록 */
+			reveal();
+		}, 4000);
 
 		/* 이미 Grid 가 보이는 상태로 들어왔다면 곧바로 시작 */
 		if ( grid.getBoundingClientRect().top < window.innerHeight * .92 ) { once(); return; }
