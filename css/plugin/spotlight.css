@@ -78,12 +78,12 @@
   opacity: 0;
 }
 .spl-spinner.spin {
-  background-image: url("../../images/icon/spotlight/preloader.svg");
+  background-image: url("../../images/icons/spotlight/preloader.svg");
   transition: opacity 0.2s linear 0.25s;
   opacity: 1;
 }
 .spl-spinner.error {
-  background-image: url("../../images/icon/spotlight/error.svg");
+  background-image: url("../../images/icons/spotlight/error.svg");
   background-size: 128px;
   transition: none;
   opacity: 0.5;
@@ -203,38 +203,38 @@
   float: right;
 }
 .spl-fullscreen {
-  background-image: url("../../images/icon/spotlight/maximize.svg");
+  background-image: url("../../images/icons/spotlight/maximize.svg");
 }
 .spl-fullscreen.on {
-  background-image: url("../../images/icon/spotlight/minimize.svg");
+  background-image: url("../../images/icons/spotlight/minimize.svg");
 }
 .spl-autofit {
-  background-image: url("../../images/icon/spotlight/autofit.svg");
+  background-image: url("../../images/icons/spotlight/autofit.svg");
 }
 .spl-zoom-out {
-  background-image: url("../../images/icon/spotlight/zoom-out.svg");
+  background-image: url("../../images/icons/spotlight/zoom-out.svg");
   background-size: 22px;
 }
 .spl-zoom-in {
-  background-image: url("../../images/icon/spotlight/zoom-in.svg");
+  background-image: url("../../images/icons/spotlight/zoom-in.svg");
   background-size: 22px;
 }
 .spl-download {
-  background-image: url("../../images/icon/spotlight/download.svg");
+  background-image: url("../../images/icons/spotlight/download.svg");
   background-size: 20px;
 }
 .spl-theme {
-  background-image: url("../../images/icon/spotlight/theme.svg");
+  background-image: url("../../images/icons/spotlight/theme.svg");
 }
 .spl-play {
-  background-image: url("../../images/icon/spotlight/play.svg");
+  background-image: url("../../images/icons/spotlight/play.svg");
 }
 .spl-play.on {
-  background-image: url("../../images/icon/spotlight/pause.svg");
+  background-image: url("../../images/icons/spotlight/pause.svg");
   animation: pulsate 1s ease infinite;
 }
 .spl-close {
-  background-image: url("../../images/icon/spotlight/close.svg");
+  background-image: url("../../images/icons/spotlight/close.svg");
 }
 .spl-prev,
 .spl-next {
@@ -250,7 +250,7 @@
   margin-top: -25px;
   transform: translateX(-100px);
   transition: transform 0.35s ease;
-  background-image: url("../../images/icon/spotlight/arrow.svg");
+  background-image: url("../../images/icons/spotlight/arrow.svg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: 30px;

@@ -445,7 +445,7 @@
 .bbs-comment-con .bbs-cm-head{font-size:18px; color:#2f2f2f; letter-spacing:-0.25px;padding-bottom:15px; font-weight:600;}
 .cm-write-con{border:1px solid #d7d7d7; border-top:1px solid #000; margin-bottom:20px; }
 .cm-write-top{position:relative; overflow:hidden; padding:10px 20px; background-color:#f4f4f4; border-bottom:1px solid #e5e5e5;}
-.cm-writer-info{line-height:26px; /*padding-left:30px; background:url(images/board/cm_writer_icon.png) no-repeat*/}
+.cm-writer-info{line-height:26px;}
 .cm-write-top .cm-writer{font-weight:600; font-size:15px; color:#333; margin-right:10px;  vertical-align:middle;}
 .cm-write-top .cm-write-sub-txt{color:#9d9d9d; font-size:12px; font-weight:400; vertical-align:middle;}
 .cm-write-bottom{padding:10px; overflow:hidden;}

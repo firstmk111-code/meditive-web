@@ -56,9 +56,12 @@
 }
 .mfp-pf img.mfp-img {
 	padding: 0;
-	/* 팝업은 images/portfolio/full/ 의 1480px 원본을 쓰므로 컨테이너 폭을 꽉 채워도 화질이 유지된다. */
-	width: 100%;
-	max-width: none;
+	/* images/portfolio/full/ 의 1480px 원본은 컨테이너 폭(68rem)보다 크므로 그대로 꽉 찬다.
+	   반대로 원본이 작은 작업물(370px 목업 등)은 억지로 늘리지 않고 원본 크기까지만 보여 준다. */
+	width: auto;
+	max-width: 100%;
+	display: block;
+	margin: 0 auto;
 	background: #fff;
 	border-radius: 1.6rem;
 	box-shadow: 0 3rem 8rem rgba(0, 0, 0, .5);
@@ -165,4 +168,18 @@
 	.mfp-pf .mfp-counter {
 		right: 5rem;
 	}
+}
+
+/* --------------------------------------------------
+ * 작업물 Grid 진입 인트로 (js/pf_intro.js)
+ *   포트폴리오 · 서비스 카테고리 페이지가 같은 Grid 를 쓰므로 규칙도 공용으로 둔다.
+ *   인트로 동안에는 GSAP 이 inline transform 으로 카드를 직접 제어하므로 CSS transition 을 비운다.
+ *   인트로가 끝나면 JS 가 .pf-intro 를 떼고 inline transform 을 모두 지워 Grid 가 틀어지지 않게 한다.
+-------------------------------------------------- */
+html:not(.no-js) .pf-grid .pf-item.pf-intro[data-scroll] {
+	opacity: 1;
+	transform: none;
+	transition: none;
+	transition-delay: 0s;
+	will-change: transform, opacity;
 }

@@ -10,7 +10,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="포트폴리오 - MEDITIVE 병원 전문 디자인 스튜디오">
 <meta property="og:description" content="MEDITIVE가 감각적인 시선으로 완성한 병원 디자인 포트폴리오">
-<meta property="og:image" content="../../images/common/logo.png">
+<meta property="og:image" content="../../images/brand/logo.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="format-detection" content="telephone=no">
 <meta name="theme-color" content="#3E4D54">
@@ -20,8 +20,8 @@
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <link rel="stylesheet" href="../../css/default.css">
 <link rel="stylesheet" href="../../css/layout.css?ver=260813">
-<link rel="stylesheet" href="../../css/content.css?ver=260805">
-<link rel="stylesheet" href="../../css/content_yt.css?ver=260812b">
+<link rel="stylesheet" href="../../css/content.css?ver=260827">
+<link rel="stylesheet" href="../../css/content_yt.css?ver=260827">
 <link rel="stylesheet" href="../../css/main.css?ver=260813" />
 <link rel="stylesheet" href="../../css/layout_responsive.css">
 <link rel="stylesheet" href="../../css/content_responsive.css">
@@ -33,7 +33,8 @@
 <link rel="stylesheet" type="text/css" href="../../css/plugin/magnific-popup.css">
 <link rel="stylesheet" type="text/css" href="../../css/plugin/swiper.css" />
 <link rel="stylesheet" type="text/css" href="../../css/plugin/spotlight.css" />
-<link rel="stylesheet" type="text/css" href="../../css/pf_popup.css">
+<link rel="stylesheet" type="text/css" href="../../css/pf_popup.css?ver=260827c">
+<link rel="stylesheet" type="text/css" href="../../css/dc_gallery.css?ver=260827b">
 <link rel="stylesheet" href="../../css/shop.css?ver=260825">
 <script type="text/javascript" src="../../js/vendor/jquery-3.6.0.min.js"></script>
 <script src="../../js/utile.js"></script>
@@ -70,10 +71,7 @@
 	/* 같은 행 안에서 왼쪽 → 오른쪽 순서로 안착 */
 	html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(3n+2){transition-delay:.1s;}
 	html:not(.no-js) .pf-grid .pf-item[data-scroll]:nth-child(3n+3){transition-delay:.2s;}
-	/* 첫 화면 카드는 스크롤에 물려 움직이므로(GSAP 이 inline 로 제어) CSS transition 을 비운다.
-	   .pf-intro 는 데스크톱(901px~)에서만 JS 가 붙인다 → 태블릿 / 모바일 반응형은 위 규칙 그대로 유지 */
-	html:not(.no-js) .pf-grid .pf-item.pf-intro[data-scroll]{opacity:1; transform:none; transition:none; transition-delay:0s; will-change:transform, opacity;}
-	html:not(.no-js) .pf-grid .pf-item.pf-intro.is-settled{will-change:auto;}
+	/* 진입 인트로(.pf-intro) 관련 규칙은 서비스 카테고리 페이지와 공유하므로 css/pf_popup.css 에 둔다. */
 	/* 터치 기기 : hover 가 없으므로 정보를 항상 노출 */
 	@media (hover:none){
 		.pf-item:before{opacity:1;}
@@ -130,8 +128,8 @@
 			<div id="headerInner">
 				<h1 class="logo">
 					<a href="../../home.html" title="to home">
-						<img src="../../images/common/logo.png?ver=260805b" class="logo-w" alt="MEDITIVE - 병원 전문 디자인 스튜디오" />
-						<img src="../../images/common/logo_black.png?ver=260805b" class="logo-b" alt="MEDITIVE - 병원 전문 디자인 스튜디오" />
+						<img src="../../images/brand/logo.png?ver=260805b" class="logo-w" alt="MEDITIVE - 병원 전문 디자인 스튜디오" />
+						<img src="../../images/brand/logo_black.png?ver=260805b" class="logo-b" alt="MEDITIVE - 병원 전문 디자인 스튜디오" />
 					</a>
 				</h1>
 				<div class="header-util-box">
@@ -188,9 +186,6 @@
 					</li>
 					<li class="gnb7">
 						<a href="../../kr/contact/inquiry.html">문의</a>
-						<div class="gnb-2dep"><ul>
-							<li><a href="../../kr/contact/inquiry.html"><span>견적 문의</span></a></li>
-						</ul></div>
 					</li>
 				</ul>
 			</nav>
@@ -208,7 +203,7 @@
 					<!-- visual -->
 			<section id="visual" class="sub-visual-product">
 				<div class="visual-img-con">
-					<div class="visual-img-inner" style="background:#3E4D54 url(../../images/layout/sub_visual_portfolio_main.jpg?ver=260811) no-repeat 50% 50%"></div>
+					<div class="visual-img-inner" style="background:#3E4D54 url(../../images/banners/sub_visual_portfolio_main.jpg?ver=260811) no-repeat 50% 50%"></div>
 				</div>
 				<div class="area visual-txt-con">
 					<div class="table-cell-layout">
@@ -257,7 +252,7 @@
 								<span class="pf-sub font-outfit">All Works</span>
 								<h2 class="pf-h2">병원의 이야기를 하나의 감각으로<br>완성한 전체 작업물</h2>
 							</div>
-							<p class="pf-count font-outfit">Total <b>49</b> works</p>
+							<p class="pf-count font-outfit">Total <b>60</b> works</p>
 						</div>
 						<ul class="pf-grid">							<li class="pf-item" data-scroll="fade-up">
 								<div class="pf-thumb"><img src="../../images/portfolio/niz01.jpg" alt="니즈연합치과 3단 리플렛" width="370" height="240"></div>
@@ -602,7 +597,95 @@
 									<h3 class="pf-tit">위아</h3>
 								</div>
 							</li>
+							<li class="pf-item" data-scroll="fade-up">
+								<div class="pf-thumb"><img src="../../images/portfolio/poster/ps01.jpg" alt="제92회 대한치과보철학회 학술대회 포스터" width="370" height="240" loading="lazy"></div>
+								<div class="pf-meta">
+									<span class="pf-cat">포스터</span>
+									<h3 class="pf-tit">제92회 대한치과보철학회 학술대회</h3>
+								</div>
+							</li>
+							<li class="pf-item" data-scroll="fade-up">
+								<div class="pf-thumb"><img src="../../images/portfolio/poster/ps02.jpg" data-full="../../images/portfolio/poster/ps02.jpg" alt="한국스포츠과학기술포럼 포스터" width="370" height="240" loading="lazy"></div>
+								<div class="pf-meta">
+									<span class="pf-cat">포스터</span>
+									<h3 class="pf-tit">한국스포츠과학기술포럼</h3>
+								</div>
+							</li>
+							<li class="pf-item" data-scroll="fade-up">
+								<div class="pf-thumb"><img src="../../images/portfolio/poster/ps03.jpg" data-full="../../images/portfolio/poster/ps03.jpg" alt="렉터소프트 포스터" width="370" height="240" loading="lazy"></div>
+								<div class="pf-meta">
+									<span class="pf-cat">포스터</span>
+									<h3 class="pf-tit">렉터소프트</h3>
+								</div>
+							</li>
+							<li class="pf-item" data-scroll="fade-up">
+								<div class="pf-thumb"><img src="../../images/portfolio/poster/ps04.jpg" data-full="../../images/portfolio/poster/ps04.jpg" alt="서플러스글로벌 보건경영방침 포스터" width="370" height="240" loading="lazy"></div>
+								<div class="pf-meta">
+									<span class="pf-cat">포스터</span>
+									<h3 class="pf-tit">서플러스글로벌 보건경영방침</h3>
+								</div>
+							</li>
+							<li class="pf-item" data-scroll="fade-up">
+								<div class="pf-thumb"><img src="../../images/portfolio/poster/ps05.jpg" data-full="../../images/portfolio/poster/ps05.jpg" alt="오수아 포스터" width="370" height="240" loading="lazy"></div>
+								<div class="pf-meta">
+									<span class="pf-cat">포스터</span>
+									<h3 class="pf-tit">(주)오수아</h3>
+								</div>
+							</li>
+							<li class="pf-item" data-scroll="fade-up">
+								<div class="pf-thumb"><img src="../../images/portfolio/poster/ps06.jpg" data-full="../../images/portfolio/poster/ps06.jpg" alt="에스피메드 잡지광고" width="370" height="240" loading="lazy"></div>
+								<div class="pf-meta">
+									<span class="pf-cat">포스터</span>
+									<h3 class="pf-tit">에스피메드 잡지광고</h3>
+								</div>
+							</li>
+							<li class="pf-item" data-scroll="fade-up">
+								<div class="pf-thumb"><img src="../../images/portfolio/poster/ps07.jpg" data-full="../../images/portfolio/poster/ps07.jpg" alt="명신 ENG 포스터" width="370" height="240" loading="lazy"></div>
+								<div class="pf-meta">
+									<span class="pf-cat">포스터</span>
+									<h3 class="pf-tit">명신 ENG</h3>
+								</div>
+							</li>
+							<li class="pf-item" data-scroll="fade-up">
+								<div class="pf-thumb"><img src="../../images/portfolio/poster/ps08.jpg" data-full="../../images/portfolio/poster/ps08.jpg" alt="에스피메드 단면광고" width="370" height="240" loading="lazy"></div>
+								<div class="pf-meta">
+									<span class="pf-cat">포스터</span>
+									<h3 class="pf-tit">에스피메드 단면광고</h3>
+								</div>
+							</li>
+							<li class="pf-item" data-scroll="fade-up">
+								<div class="pf-thumb"><img src="../../images/portfolio/website/web01.jpg" alt="에필성형외과 홈페이지" width="370" height="240" loading="lazy"></div>
+								<div class="pf-meta">
+									<span class="pf-cat">홈페이지</span>
+									<h3 class="pf-tit">에필성형외과</h3>
+								</div>
+							</li>
+							<li class="pf-item" data-scroll="fade-up">
+								<div class="pf-thumb"><img src="../../images/portfolio/website/web02.jpg" alt="파미셀 홈페이지" width="370" height="240" loading="lazy"></div>
+								<div class="pf-meta">
+									<span class="pf-cat">홈페이지</span>
+									<h3 class="pf-tit">파미셀</h3>
+								</div>
+							</li>
+							<li class="pf-item" data-scroll="fade-up">
+								<div class="pf-thumb"><img src="../../images/portfolio/website/web03.jpg" alt="H2 Corporation 홈페이지" width="370" height="240" loading="lazy"></div>
+								<div class="pf-meta">
+									<span class="pf-cat">홈페이지</span>
+									<h3 class="pf-tit">H2 Corporation</h3>
+								</div>
+							</li>
 						</ul>
+						<!-- 디지털 콘텐츠 (서비스 > 디지털 콘텐츠와 동일한 프로젝트 데이터 사용) -->
+						<div class="dc-block">
+							<div class="pf-head">
+								<div>
+									<span class="pf-sub font-outfit">Digital Contents</span>
+									<h2 class="pf-h2">화면에서 이어지는<br>디지털 콘텐츠 작업물</h2>
+								</div>
+								<p class="pf-count font-outfit">Total <b>14</b> works</p>
+							</div>
+							<ul class="pf-grid dc-grid" data-dc-grid></ul>
+						</div>
 					</div>
 				</section>
 				<!-- ****************** FAQ ********************** -->
@@ -639,7 +722,7 @@
 		<article id="footerTop">
 			<div class="area"><div class="footer-top-inner">
 				<div class="footer-top-left clearfix">
-					<span class="foot-logo"><img src="../../images/common/footer_logo.png?ver=260805b" alt="MEDITIVE - 병원 전문 디자인 스튜디오" /></span>
+					<span class="foot-logo"><img src="../../images/brand/footer_logo.png?ver=260805b" alt="MEDITIVE - 병원 전문 디자인 스튜디오" /></span>
 					<div class="footer-address">
 						<strong class="font-outfit">Company Information</strong>
 						<div class="footer-address-txt">
@@ -670,7 +753,7 @@
 			<div class="area clearfix">
 				<article class="footer-left-con"><div class="foot-sns-menu"><ul class="clearfix">
 					<li><a href="https://www.instagram.com/" target="_blank" title="새창으로열기"><i class="xi-instagram"></i></a></li>
-					<li><a href="https://blog.naver.com/" target="_blank" title="새창으로열기"><img src="../../images/common/sns_blog_icon.png" alt=""></a></li>
+					<li><a href="https://blog.naver.com/" target="_blank" title="새창으로열기"><img src="../../images/brand/sns_blog_icon.png" alt=""></a></li>
 				</ul></div></article>
 				<article class="footer-right-con"><div class="footer-copyright font-outfit">COPYRIGHT &copy; MEDITIVE ALL RIGHTS RESERVED.</div></article>
 			</div>
@@ -710,81 +793,11 @@
 	<script type="text/javascript" src="../../js/layer_popup.js"></script>
 	<script type="text/javascript" src="../../js/common.js?ver=251216"></script>
 	<script type="text/javascript" src="../../js/sub.js"></script>
-	<script type="text/javascript" src="../../js/pf_popup.js"></script>
+	<script type="text/javascript" src="../../js/pf_popup.js?ver=260827b"></script>
 	<script>window.SHOP_BASE='../../';</script>
+	<script type="text/javascript" src="../../js/dc_projects.js?ver=260827b"></script>
+	<script type="text/javascript" src="../../js/dc_gallery.js?ver=260827b"></script>
 	<script type="text/javascript" src="../../js/shop.js?ver=260825"></script>
-	<script>
-	/* ************************
-	* Func : 포트폴리오 진입 모션
-	*        첫 화면 카드 6장이 화면 주변(좌 · 우 · 아래)에서 시작해
-	*        스크롤에 물려 이동 + Scale + Opacity + Stagger 로 3열 Grid 자리에 안착한다.
-	*        안착 이후 나머지 카드는 기존 [data-scroll] 등장 모션 그대로 → 일반 Grid 처럼 스크롤.
-	*        901px 미만 / 모션 최소화 설정에서는 아무 것도 하지 않는다.
-	************************ */
-	(function () {
-		var grid = document.querySelector('.pf-grid');
-		if ( !grid || !window.gsap || !window.ScrollTrigger ) return;
-		if ( window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ) return;
-
-		/* 3열 기준 두 줄 = 6장을 진입 카드로 쓴다 */
-		var items = [].slice.call(grid.children, 0, 6);
-		if ( items.length < 3 ) return;
-
-		/* 열별 출발 지점 : 1열은 화면 왼쪽 밖, 3열은 오른쪽 밖, 2열은 아래쪽에서 올라온다 */
-		var FROM = [
-			{ x: -88, y: 22, s: 0.60 },
-			{ x:   0, y: 52, s: 0.50 },
-			{ x:  88, y: 22, s: 0.60 }
-		];
-		var mq = window.matchMedia('(min-width: 901px)');
-		var tl = null;
-
-		function build () {
-			if ( tl ) return;
-			tl = gsap.timeline({
-				scrollTrigger: {
-					trigger: grid,
-					start: 'top 90%',
-					end: 'top 12%',
-					scrub: 0.6,
-					invalidateOnRefresh: true,
-					/* 정렬이 끝나면 will-change 를 내려 이후 스크롤은 일반 Grid 와 동일하게 가볍게 */
-					onLeave: function () { items.forEach(function (el) { el.classList.add('is-settled'); }); },
-					onEnterBack: function () { items.forEach(function (el) { el.classList.remove('is-settled'); }); }
-				}
-			});
-
-			items.forEach(function (el, i) {
-				var f = FROM[i % 3];
-				/* 뒷줄은 출발 지점을 완만하게 → 두 줄이 서로 겹쳐 보이지 않게 */
-				var k = i < 3 ? 1 : 0.55;
-				el.classList.add('pf-intro');
-				gsap.set(el, {
-					xPercent: f.x * k, yPercent: f.y * k,
-					scale: f.s + (1 - f.s) * (1 - k),
-					opacity: 0, transformOrigin: '50% 50%'
-				});
-				tl.to(el, { xPercent: 0, yPercent: 0, scale: 1, opacity: 1, duration: 1, ease: 'power1.out' }, i * 0.08);
-			});
-		}
-
-		function destroy () {
-			if ( !tl ) return;
-			if ( tl.scrollTrigger ) tl.scrollTrigger.kill();
-			tl.kill();
-			tl = null;
-			items.forEach(function (el) {
-				gsap.set(el, { clearProps: 'all' });
-				el.classList.remove('pf-intro', 'is-settled');
-			});
-		}
-
-		function sync () { mq.matches ? build() : destroy(); }
-
-		sync();
-		if ( mq.addEventListener ) mq.addEventListener('change', sync);
-		else if ( mq.addListener ) mq.addListener(sync);
-	})();
-	</script>
+	<script type="text/javascript" src="../../js/pf_intro.js?ver=260827c"></script>
 </body>
 </html>

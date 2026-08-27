@@ -1,0 +1,82 @@
+@charset "utf-8";
+/* ===============================================
+ * 디지털 콘텐츠(카드뉴스) 전용 보정
+ * - 카드 그리드는 기존 .pf-grid / .pf-item 디자인을 그대로 쓴다.
+ *   여기서는 "여러 장 묶음" 표시와, 세로형 카드뉴스를 위한 팝업 크기만 보정한다.
+ * =============================================== */
+
+/* 포트폴리오 페이지 하단 디지털 콘텐츠 영역 (기존 그리드 아래에 이어 붙는 블록) */
+.dc-block {
+	margin-top: 12rem;
+}
+
+/* 묶음 장수 배지
+   (.pf-thumb 는 기존 CSS 에서 이미 position:absolute 이라 그대로 기준으로 쓴다.
+    호버 시 나타나는 .pf-item:after 화살표와 겹치지 않게 왼쪽 위에 둔다) */
+.dc-item .dc-count {
+	position: absolute;
+	top: 1.6rem;
+	left: 1.6rem;
+	z-index: 2;
+	display: inline-flex;
+	align-items: center;
+	gap: .4rem;
+	height: 2.6rem;
+	padding: 0 1rem;
+	border-radius: 1.3rem;
+	background: rgba(30, 40, 44, .62);
+	font-size: 1.3rem;
+	line-height: 1;
+	letter-spacing: .02em;
+	color: #fff;
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+}
+.dc-item .dc-count i {
+	font-size: 1.4rem;
+}
+
+/* 팝업: 카드뉴스는 세로/정사각 비율이 섞여 있어 원본 비율을 유지해야 한다.
+   (.mfp-pf 기본값은 가로형 1480px 원본 기준이라 width:100% 로 늘어난다) */
+.mfp-dc .mfp-content {
+	max-width: 52rem;
+}
+.mfp-dc img.mfp-img {
+	width: auto;
+	max-width: 100%;
+	/* magnific-popup 이 이미지에 인라인 max-height(=화면 높이)를 직접 넣기 때문에
+	   닫기 버튼/카운터 자리를 남기려면 !important 가 필요하다. */
+	max-height: calc(100vh - 16rem) !important;
+	margin: 0 auto;
+	border-radius: 1.2rem;
+}
+.mfp-dc .mfp-figure figure {
+	text-align: center;
+}
+
+@media all and (max-width:1024px) {
+	.mfp-dc .mfp-content {
+		max-width: 44rem;
+	}
+	.mfp-dc img.mfp-img {
+		max-height: calc(100vh - 14rem) !important;
+	}
+}
+@media all and (max-width:767px) {
+	.dc-block {
+		margin-top: 7rem;
+	}
+	.dc-item .dc-count {
+		top: 1rem;
+		left: 1rem;
+		height: 2.2rem;
+		padding: 0 .8rem;
+		font-size: 1.2rem;
+	}
+	.mfp-dc .mfp-container {
+		padding: 0 1.2rem;
+	}
+	.mfp-dc .mfp-content {
+		max-width: 100%;
+	}
+}
