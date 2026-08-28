@@ -224,7 +224,8 @@
     }
 }    
 
-.main-about-point {opacity: 0; position: absolute; bottom: 17rem; left: 50%; transform: translate(-50%, 5rem); width: 53rem; height: 52.7rem; margin-left: -5rem; transition:var(--transition-custom2); }
+/* 심볼 위치 : 기준선(-5rem)에서 왼쪽으로 15rem(약 4cm) 더 옮긴다 */
+.main-about-point {opacity: 0; position: absolute; bottom: 17rem; left: 50%; transform: translate(-50%, 5rem); width: 53rem; height: 52.7rem; margin-left: -20rem; transition:var(--transition-custom2); }
 .main-about-point span {position: relative; display: block; width: 100%; height: 100%; animation: image-ani 2.5s infinite;}
 /* 심볼 뒤 민트 블러 : PNG 에서 추출한 민트(#38A8A2 · #67C3C0)로 심볼 뒤를 살짝만 눌러준다.
    radial-gradient 가 이미 가장자리에서 사라지므로 blur 는 약하게만 걸어 과하게 퍼지지 않게 한다 */

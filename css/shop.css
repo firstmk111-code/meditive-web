@@ -605,8 +605,9 @@
 	.cat-node.n2 .node-tit{right:calc(100% + 1.4rem);}
 	.cat-node.n5 .node-tit,
 	.cat-node.n6 .node-tit{left:calc(100% + 1.4rem);}
+	/* 12시에 가까운 두 노드(03 · 04)는 라벨이 원 안으로 들어가므로 원 바깥(위쪽)에 붙인다 */
 	.cat-node.n3 .node-tit,
-	.cat-node.n4 .node-tit{top:calc(100% + 1.1rem); left:50%; transform:translateX(-50%);}
+	.cat-node.n4 .node-tit{top:auto; bottom:calc(100% + 1.1rem); left:50%; transform:translateX(-50%);}
 	.cat-node .node-btn:hover .node-mark,
 	.cat-node .node-btn:focus-visible .node-mark,
 	.cat-node.on .node-mark{background:var(--main-color); border-color:var(--main-color); color:#fff;

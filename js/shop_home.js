@@ -313,13 +313,9 @@
 				'<ul class="bs-tabs js-bstabs">' + tb + '</ul>' +
 				'<a href="' + shopUrl('print') + '" class="bs-more js-bsmore">전체보기</a>' +
 			'</div>' +
-			'<div class="bs-view"><ul class="bs-list js-bslist"></ul>' +
-				'<div class="bs-navs">' +
-					'<button type="button" class="sh-nav-btn js-prev" title="이전"><i class="xi-angle-left-min"></i></button>' +
-					'<button type="button" class="sh-nav-btn js-next" title="다음"><i class="xi-angle-right-min"></i></button>' +
-				'</div>' +
-			'</div>' +
-			'<span class="bs-bar"><i class="js-bar"></i></span>' +
+			'<div class="bs-view"><ul class="bs-list js-bslist"></ul></div>' +
+			/* 진행바 + 좌우 버튼은 개원 준비(.mp-ctrl) 와 같은 형태로 목록 아래에 나란히 둔다 */
+			'<div class="bs-ctrl"><span class="bs-bar"><i class="js-bar"></i></span>' + navsHTML() + '</div>' +
 		'</div></section>';
 	}
 
@@ -337,7 +333,6 @@
 				'<span class="sh-sec-desc">진료과에 맞는 디자인을 고르면 실제 제작 규격의 목업 위에 바로 적용됩니다.</span></h2>' +
 			'<div class="tp-panel">' +
 				'<ul class="tp-tabs js-tabs">' + tabs + '</ul>' +
-				'<div class="tp-chips js-chips"></div>' +
 				'<div class="tp-body">' +
 					'<div class="tp-stage js-stage">' +
 						'<span class="tp-stage-bg js-stagebg"></span>' +
@@ -634,7 +629,6 @@
 	function initTpl() {
 		var sec = root.querySelector('.tp-sec'); if (!sec) return;
 		var tabsEl  = sec.querySelector('.js-tabs');
-		var chipsEl = sec.querySelector('.js-chips');
 		var mockEl  = sec.querySelector('.js-mock');
 		var bgEl    = sec.querySelector('.js-stagebg');
 		var cntEl   = sec.querySelector('.js-count');
@@ -651,24 +645,15 @@
 			tabI = i;
 			var t = TABS[i], k;
 			for (k = 0; k < tabsEl.children.length; k++) tabsEl.children[k].className = (k === i ? 'on' : '');
-			var h = '', p;
-			for (k = 0; k < t.ids.length; k++) {
-				p = P(t.ids[k]); if (!p) continue;
-				h += '<button type="button" class="tp-chip js-chip' + (k === 0 ? ' on' : '') + '" data-id="' + p.id + '">' + esc(p.name) + '</button>';
-			}
-			h += '<a href="' + t.all + '" class="tp-chip all">' + t.lb + ' 전체 보기</a>';
-			chipsEl.innerHTML = h;
 			setProd(t.ids[0]);
 		}
 
 		function setProd(id) {
 			prod = P(id); if (!prod) return;
 			var m = MOCK[id] || ['card', 'card'];
+			var k;
 			shape = m[0];
 			pool = POOL[m[1]] || POOL.card;
-			/* 칩 활성화 */
-			var cs = chipsEl.querySelectorAll('.js-chip'), k;
-			for (k = 0; k < cs.length; k++) cs[k].className = 'tp-chip js-chip' + (cs[k].getAttribute('data-id') === id ? ' on' : '');
 			/* 상품 정보 */
 			nameEl.textContent = prod.name;
 			descEl.textContent = prod.desc;
@@ -684,10 +669,10 @@
 			var t = '', src;
 			for (k = 0; k < pool.length; k++) {
 				src = img(pool[k]);
-				t += '<button type="button" class="tp-tpl js-tpl' + (k === 0 ? ' on' : '') + '" data-i="' + k + '">' +
+				t += '<button type="button" class="tp-tpl js-tpl' + (k === 0 ? ' on' : '') + '" data-i="' + k + '"' +
+					' title="' + esc(TPL_NAME[k % TPL_NAME.length]) + '">' +
 					'<img src="' + src + '" alt="' + esc(TPL_NAME[k % TPL_NAME.length]) + ' 템플릿" loading="lazy">' +
 					'<span class="chk"><i class="xi-check"></i></span>' +
-					'<span class="nm">' + esc(TPL_NAME[k % TPL_NAME.length]) + '</span>' +
 				'</button>';
 			}
 			tplsEl.innerHTML = t;
@@ -708,10 +693,6 @@
 		tabsEl.addEventListener('click', function (e) {
 			var b = e.target.closest ? e.target.closest('.js-tab') : null;
 			if (b) setTab(+b.getAttribute('data-i'));
-		});
-		chipsEl.addEventListener('click', function (e) {
-			var b = e.target.closest ? e.target.closest('.js-chip') : null;
-			if (b) setProd(b.getAttribute('data-id'));
 		});
 		tplsEl.addEventListener('click', function (e) {
 			var b = e.target.closest ? e.target.closest('.js-tpl') : null;

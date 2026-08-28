@@ -221,36 +221,32 @@
 .bs-item{flex:0 0 auto; width:calc(100% / 3);}
 .bs-thumb-wrap{position:relative;}
 /* 라운딩은 PICK 카드(.mp-thumb)와 동일한 2rem, 카드 폭은 58.3% -> 68% 로 키웠다.
- * 폭을 바꾸면 .bs-navs 의 padding-bottom(카드 세로 중앙)과
- * .sh-card-add 의 right(카드 오른쪽 모서리)도 같이 다시 계산해야 한다. */
+ * 폭을 바꾸면 .sh-card-add 의 right(카드 오른쪽 모서리)도 같이 다시 계산해야 한다. */
 .bs-img{position:relative; display:block; width:68%; margin:0 auto; aspect-ratio:280 / 390; border-radius:2rem; overflow:hidden; background:#fff; box-shadow:0 1.4rem 3rem rgba(12,26,30,0.18); transition:transform 0.4s ease;}
 .bs-img img{width:100%; height:100%; object-fit:cover; object-position:50% 50%;}
 /* 리플렛 · 브로슈어는 펼침면 사진이라 우측 표지 쪽을 잘라 쓴다 (JS 가 클래스를 붙인다) */
 .bs-img.is-cover img{object-position:100% 50%;}
 .bs-item:hover .bs-img{transform:translateY(-0.8rem);}
 .bs-thumb-wrap .sh-card-add{top:auto; bottom:1rem; right:calc(16% + 1rem);}
-.bs-body{margin-top:3.4rem; height:5.2rem; padding:0 2rem; text-align:center;}
+/* 상품명 + 가격이 잘리지 않도록 고정 높이 대신 최소 높이로 둔다 */
+.bs-body{margin-top:3.4rem; min-height:5.2rem; padding:0 2rem 0.6rem; text-align:center;}
 .bs-name{display:block; font-size:2.8rem; font-weight:700; line-height:1.2; color:var(--ink-color); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 .bs-item:hover .bs-name{text-decoration:underline; text-underline-offset:4px;}
 .bs-body .sh-card-price{margin-top:0.6rem; font-size:1.6rem;}
 
-/* 이미지 사이 여백에 놓이는 원형 버튼 */
-.bs-navs{position:absolute; left:0; right:0; top:0; height:0; padding-bottom:31.57%; z-index:4; pointer-events:none;}
-.bs-navs .sh-nav-btn{position:absolute; top:50%; width:4.4rem; height:4.4rem; margin-top:-2.2rem; border:0; border-radius:100%; background:#fff; font-size:2rem; box-shadow:0 5px 30px 0 rgba(0,0,0,0.1); pointer-events:auto; transform:translateX(-50%);}
-.bs-navs .js-prev{left:33.333%;}
-.bs-navs .js-next{left:66.667%;}
-.bs-navs .sh-nav-btn:hover{background:var(--main-color); color:#0E2A2B;}
-.bs-navs .sh-nav-btn:disabled{opacity:0.35; background:#fff; color:var(--sub-color);}
-
-.bs-bar{display:block; position:relative; width:60rem; max-width:100%; height:4px; margin:5rem auto 0; border-radius:4px; background:rgba(62,77,84,0.1); overflow:hidden;}
+/* 진행바 + 좌우 버튼 : 개원 준비(.mp-ctrl) 와 같은 스타일 · 같은 위치로 맞춘다 */
+.bs-ctrl{margin-top:4rem; display:flex; align-items:center; gap:2.4rem;}
+.bs-bar{flex:1 1 auto; position:relative; height:4px; border-radius:4px; background:rgba(62,77,84,0.1); overflow:hidden;}
 .bs-bar i{position:absolute; left:0; top:0; height:100%; border-radius:4px; background:var(--ink-color); transition:width 0.4s ease;}
+.bs-ctrl .sh-navs{flex:none; gap:2.4rem;}
 
 /* ========================================================
  * 6. 템플릿 미리보기 — 상품에 템플릿을 입혀 비교한다
 ======================================================== */
 .tp-sec{padding:14rem 0 0;}
 .tp-inner{max-width:var(--area-width); margin:0 auto;}
-.tp-panel{margin-top:2.4rem; border-radius:2rem; background:var(--sh-panel); padding:2.6rem 3rem 3rem;}
+/* 제목과 패널 사이 세로 여백을 넉넉히 준다 */
+.tp-panel{margin-top:6rem; border-radius:2rem; background:var(--sh-panel); padding:4rem 3rem 3rem;}
 
 /* 탭 */
 .tp-tabs{display:flex; align-items:flex-end; gap:0.6rem; border-bottom:1px solid #DCE5E7; overflow-x:auto; scrollbar-width:none;}
@@ -265,15 +261,8 @@
 .tp-tabs > li.on .tp-tab .lb{color:var(--ink-color); font-weight:700;}
 .tp-tabs > li.on .tp-tab:after{left:1rem; right:1rem; opacity:1;}
 
-/* 칩 */
-.tp-chips{margin-top:2rem; display:flex; flex-wrap:wrap; gap:0.8rem;}
-.tp-chip{height:3.6rem; padding:0 1.4rem; border-radius:1.8rem; border:1px solid #DCE5E7; background:#fff; color:var(--ink-color); font-size:1.4rem; font-weight:500; cursor:pointer; transition:all 0.2s; white-space:nowrap;}
-.tp-chip:hover{border-color:var(--main-color); color:var(--main-color);}
-.tp-chip.on{border-color:var(--main-color); background:rgba(100,211,206,0.14); color:#2E8A86; font-weight:700;}
-.tp-chip.all{color:var(--sub-color);}
-
 /* 본문 */
-.tp-body{margin-top:2rem; display:grid; grid-template-columns:52rem 1fr; gap:2.4rem; align-items:stretch;}
+.tp-body{margin-top:3rem; display:grid; grid-template-columns:52rem 1fr; gap:2.4rem; align-items:stretch;}
 
 /* 좌 : 목업 무대 */
 .tp-stage{position:relative; border-radius:1.4rem; overflow:hidden; background:#DDE5E7; min-height:54rem; display:flex; align-items:center; justify-content:center; perspective:1400px;}
@@ -331,7 +320,6 @@
 .tp-tpl.on{border-color:var(--main-color); background:rgba(100,211,206,0.14);}
 .tp-tpl .chk{position:absolute; left:0.6rem; top:0.6rem; width:2.2rem; height:2.2rem; border-radius:50%; background:var(--main-color); color:#fff; font-size:1.3rem; display:none; align-items:center; justify-content:center;}
 .tp-tpl.on .chk{display:flex;}
-.tp-tpl .nm{position:absolute; left:0; right:0; bottom:0; padding:1.6rem 0.6rem 0.5rem; font-size:1.15rem; font-weight:600; color:#fff; text-align:center; background:linear-gradient(180deg, rgba(12,26,30,0) 0%, rgba(12,26,30,0.7) 100%); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 
 /* ========================================================
  * 7. 스탯 밴드
@@ -444,11 +432,8 @@
 	.bs-item{width:50%;}
 	.bs-name{font-size:2.2rem;}
 	.bs-body{margin-top:2.4rem;}
-	.bs-navs{padding-bottom:47.36%;}
-	.bs-navs .sh-nav-btn{width:3.8rem; height:3.8rem; margin-top:-1.9rem; font-size:1.7rem;}
-	.bs-navs .js-prev{left:0; transform:none;}
-	.bs-navs .js-next{left:auto; right:0; transform:none;}
-	.bs-bar{margin-top:3.4rem;}
+	.bs-ctrl{margin-top:3.4rem; gap:1.6rem;}
+	.bs-ctrl .sh-navs{gap:0.8rem;}
 }
 @media all and (max-width:767px){
 	.sh-wrap{--sh-gap:1.4rem;}
@@ -523,7 +508,6 @@
 	.bs-sec{padding:6rem 0 8rem;}
 	.bs-bg{width:70%; height:46rem; border-radius:0 5rem 5rem 0;}
 	.bs-item{width:100%;}
-	.bs-navs{padding-bottom:94.71%;}
 	.bs-name{font-size:2rem;}
 	/* 세로로 쌓이면 그라데이션 오버레이가 없으므로 이미지 마스크도 함께 끈다 */
 	.sh-hero-pic{-webkit-mask-image:none; mask-image:none;}

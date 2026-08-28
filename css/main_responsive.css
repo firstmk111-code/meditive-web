@@ -44,7 +44,7 @@
 /* -------- 메인 컨텐츠 :: 컨텐츠1(About Us) -------- */
 @media all and ( max-width: 1280px ){
 	.main-about-wrap .main-tit-box .main-tit {font-size: 5.5rem;}
-	.main-about-point {    margin-left: -11rem;}
+	.main-about-point {    margin-left: -26rem;}
 }
 @media all and ( max-width: 800px ){
 	.main-about-wrap .main-tit-box .main-tit {font-size: 3.8rem;}
