@@ -1,5 +1,8 @@
-# 개발용 스크립트 (호스팅 대상 아님)
+# 개발용 스크립트 · 점검용 페이지 (호스팅 대상 아님)
 _*.ps1
+_*.pl
+_enginetest.html
+_uitest.html
 _pf_*.csv
 _expr*.txt
 _home_full_backup.html

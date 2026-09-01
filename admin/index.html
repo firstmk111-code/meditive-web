@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 <meta name="googlebot" content="noindex, nofollow, noarchive">
 <meta name="referrer" content="no-referrer">
-<link rel="stylesheet" href="css/admin.css?ver=260901">
+<link rel="stylesheet" href="css/admin.css?ver=260902">
 </head>
 <body>
 
@@ -18,28 +18,20 @@
 		<p class="login-sub">홈페이지 내용을 직접 수정하고 발행합니다.</p>
 
 		<div class="field">
-			<label for="fId">아이디</label>
-			<input type="text" id="fId" value="admin" autocomplete="username">
-		</div>
-		<div class="field">
 			<label for="fPw">비밀번호</label>
-			<input type="password" id="fPw" placeholder="초기 비밀번호 1111" autocomplete="current-password">
+			<input type="password" id="fPw" placeholder="초기 비밀번호 1111" autocomplete="current-password" autofocus>
 		</div>
-		<div class="field">
-			<label for="fTok">GitHub Access Token</label>
-			<input type="password" id="fTok" placeholder="ghp_ 또는 github_pat_ 로 시작" autocomplete="off">
-			<p class="hint">
-				내용을 발행할 때 필요합니다. 토큰은 서버에 저장되지 않고
-				<b>이 브라우저 안에만</b> 보관됩니다. 저장에 체크하지 않으면 창을 닫을 때 사라집니다.
-			</p>
-		</div>
-		<label class="check"><input type="checkbox" id="fRemember"> 이 브라우저에 저장</label>
 
 		<div class="msg" id="loginMsg"></div>
 
 		<div style="margin-top:22px;">
 			<button type="submit" class="btn primary lg block" id="loginBtn">로그인</button>
 		</div>
+
+		<p class="hint" style="margin-top:16px; text-align:center;">
+			내용을 <b>발행</b>할 때만 GitHub 토큰이 한 번 필요합니다.<br>
+			토큰은 서버에 저장되지 않고 이 브라우저 안에만 보관됩니다.
+		</p>
 	</form>
 </div>
 
@@ -49,15 +41,20 @@
 	<aside class="side" id="side">
 		<div class="brand">MEDI<b>TIVE</b><small>CONTENT MANAGER</small></div>
 		<nav id="nav">
-			<p class="nav-tit">시작</p>
-			<a href="#dashboard" data-view="dashboard">대시보드</a>
-			<p class="nav-tit">콘텐츠 편집</p>
-			<a href="#banner" data-view="banner">홈 배너</a>
-			<a href="#text" data-view="text">텍스트 관리</a>
-			<a href="#image" data-view="image">이미지 관리</a>
+			<p class="nav-tit">현황</p>
+			<a href="#dashboard" data-view="dashboard"><span class="ic">▤</span>대시보드</a>
+
+			<p class="nav-tit">콘텐츠 관리</p>
+			<a href="#image" data-view="image"><span class="ic">▣</span>이미지 관리<em class="n" id="nImg">0</em></a>
+			<a href="#text" data-view="text"><span class="ic">≡</span>텍스트 관리<em class="n" id="nTxt">0</em></a>
+
 			<p class="nav-tit">확인 · 발행</p>
-			<a href="#preview" data-view="preview">미리보기</a>
-			<a href="#changes" data-view="changes">변경사항 <span class="cnt" id="navCnt">0</span></a>
+			<a href="#changes" data-view="changes"><span class="ic">◈</span>변경사항<em class="n hot" id="navCnt">0</em></a>
+			<a href="#history" data-view="history"><span class="ic">◷</span>발행 이력</a>
+
+			<p class="nav-tit">설정</p>
+			<a href="#token" data-view="token"><span class="ic">◎</span>GitHub 연결<em class="n" id="nTok">미연결</em></a>
+			<a href="#pw" data-view="pw"><span class="ic">✻</span>비밀번호 변경</a>
 		</nav>
 		<div class="side-foot">
 			<a href="../home.html" target="_blank" rel="noopener">공개 사이트 열기</a><br>
@@ -70,7 +67,6 @@
 		<h1 id="topTit">대시보드</h1>
 		<span class="dirty" id="topDirty" hidden>저장하지 않은 변경 <b id="topDirtyN">0</b>건</span>
 		<span class="who" id="topWho"></span>
-		<button type="button" class="btn" id="btnPreviewTop">미리보기</button>
 		<button type="button" class="btn primary" id="btnPublish">저장하고 발행</button>
 	</header>
 
@@ -89,23 +85,30 @@
 				<div class="card stat"><div class="k">최근 발행</div><div class="v" id="dsPub" style="font-size:15px;">-</div></div>
 			</div>
 			<div class="quick">
-				<a class="card" href="#banner" data-view="banner"><strong>홈 배너</strong><span>첫 화면 제목과 비주얼 이미지를 바꿉니다.</span></a>
-				<a class="card" href="#text" data-view="text"><strong>텍스트 관리</strong><span>홈의 모든 문구를 항목별로 수정합니다.</span></a>
-				<a class="card" href="#image" data-view="image"><strong>이미지 관리</strong><span>이미지를 교체하거나 새로 올립니다.</span></a>
-				<a class="card" href="#preview" data-view="preview"><strong>미리보기</strong><span>발행 전 실제 화면으로 확인합니다.</span></a>
+				<a class="card" href="#image" data-view="image"><strong>이미지 관리</strong><span>홈 · 상품몰 · 포트폴리오 · 배너를 분류별로 교체합니다.</span></a>
+				<a class="card" href="#text" data-view="text"><strong>텍스트 관리</strong><span>모든 문구를 분류별로 찾아 수정합니다.</span></a>
+				<a class="card" href="#changes" data-view="changes"><strong>변경사항</strong><span>발행 전에 무엇이 바뀌는지 확인합니다.</span></a>
+				<a class="card" href="#token" data-view="token"><strong>GitHub 연결</strong><span>발행에 필요한 토큰을 등록합니다.</span></a>
 			</div>
 			<div class="msg info show" id="dsNote" style="margin-top:22px;"></div>
 		</section>
 
-		<!-- ---------- 홈 배너 ---------- -->
-		<section class="view" id="v-banner">
+		<!-- ---------- 이미지 관리 ---------- -->
+		<section class="view" id="v-image">
 			<div class="sec-head">
-				<h2>홈 배너</h2>
-				<p>첫 화면에 보이는 제목·문구와 흐르는 비주얼 이미지 15장을 관리합니다.</p>
+				<h2>이미지 관리</h2>
+				<p>왼쪽에서 분류를 고르면 그 안의 이미지만 모아서 보여 줍니다.</p>
 			</div>
-			<div id="bannerText"></div>
-			<div class="sec-head" style="margin-top:28px;"><h2 style="font-size:16px;">비주얼 이미지</h2></div>
-			<div class="img-grid" id="bannerImgs"></div>
+			<div class="split">
+				<div class="cat-pane">
+					<div class="cat-search"><input type="search" id="imgSearch" placeholder="분류 이름 검색"></div>
+					<div class="cat-list" id="imgCats"></div>
+				</div>
+				<div class="work-pane">
+					<div class="work-head" id="imgHead"></div>
+					<div class="img-grid" id="imgBody"></div>
+				</div>
+			</div>
 		</section>
 
 		<!-- ---------- 텍스트 관리 ---------- -->
@@ -114,39 +117,23 @@
 				<h2>텍스트 관리</h2>
 				<p>줄을 바꾸려면 Enter 를 누르고, 굵게 강조할 부분은 <b>**두 별표**</b> 로 감싸 주세요.</p>
 			</div>
-			<div id="textGroups"></div>
-		</section>
-
-		<!-- ---------- 이미지 관리 ---------- -->
-		<section class="view" id="v-image">
-			<div class="sec-head">
-				<h2>이미지 관리</h2>
-				<p>이미 올라간 이미지 중에서 고르거나, 새 파일을 올려 교체합니다.</p>
+			<div class="split">
+				<div class="cat-pane">
+					<div class="cat-search"><input type="search" id="txtSearch" placeholder="분류 이름 검색"></div>
+					<div class="cat-list" id="txtCats"></div>
+				</div>
+				<div class="work-pane">
+					<div class="work-head" id="txtHead"></div>
+					<div id="txtBody"></div>
+				</div>
 			</div>
-			<div id="imageGroups"></div>
-		</section>
-
-		<!-- ---------- 미리보기 ---------- -->
-		<section class="view" id="v-preview">
-			<div class="sec-head">
-				<h2>미리보기</h2>
-				<p>발행했을 때와 똑같은 결과를 보여 줍니다. 아직 발행된 것은 아닙니다.</p>
-			</div>
-			<div class="pv-bar">
-				<button type="button" class="btn sm primary" data-pw="100%">PC</button>
-				<button type="button" class="btn sm" data-pw="820px">태블릿</button>
-				<button type="button" class="btn sm" data-pw="390px">모바일</button>
-				<span class="sp"></span>
-				<button type="button" class="btn sm" id="pvReload">새로고침</button>
-			</div>
-			<div class="pv-stage"><iframe id="pvFrame" title="미리보기"></iframe></div>
 		</section>
 
 		<!-- ---------- 변경사항 ---------- -->
 		<section class="view" id="v-changes">
 			<div class="sec-head">
 				<h2>변경사항</h2>
-				<p>발행하면 아래 내용이 한 번에 반영됩니다.</p>
+				<p>발행하면 아래 내용이 커밋 한 개로 한 번에 반영됩니다.</p>
 			</div>
 			<div class="pv-bar">
 				<button type="button" class="btn danger sm" id="btnResetAll">전체 되돌리기</button>
@@ -154,6 +141,71 @@
 				<button type="button" class="btn primary sm" id="btnPublish2">저장하고 발행</button>
 			</div>
 			<div id="changeBox"></div>
+		</section>
+
+		<!-- ---------- 발행 이력 ---------- -->
+		<section class="view" id="v-history">
+			<div class="sec-head">
+				<h2>발행 이력</h2>
+				<p>최근에 저장된 내역입니다.</p>
+			</div>
+			<div class="pv-bar">
+				<button type="button" class="btn sm" id="btnHistReload">새로고침</button>
+			</div>
+			<div id="histBox"></div>
+		</section>
+
+		<!-- ---------- GitHub 연결 ---------- -->
+		<section class="view" id="v-token">
+			<div class="sec-head">
+				<h2>GitHub 연결</h2>
+				<p>내용을 <b>발행</b>할 때만 필요합니다. 수정과 확인은 토큰 없이도 됩니다.</p>
+			</div>
+			<div class="card" style="padding:22px 20px; max-width:640px;">
+				<div class="field">
+					<label for="fTok">GitHub Access Token</label>
+					<input type="password" id="fTok" placeholder="ghp_ 또는 github_pat_ 로 시작" autocomplete="off">
+					<p class="hint">
+						토큰은 서버에 저장되지 않고 <b>이 브라우저 안에만</b> 보관됩니다.
+						저장에 체크하지 않으면 창을 닫을 때 사라집니다.
+					</p>
+				</div>
+				<label class="check"><input type="checkbox" id="fRemember"> 이 브라우저에 저장</label>
+				<div class="msg" id="tokMsg"></div>
+				<div style="margin-top:18px; display:flex; gap:8px;">
+					<button type="button" class="btn primary" id="btnTokSave">연결 확인하고 저장</button>
+					<button type="button" class="btn ghost" id="btnTokClear">연결 끊기</button>
+				</div>
+			</div>
+		</section>
+
+		<!-- ---------- 비밀번호 변경 ---------- -->
+		<section class="view" id="v-pw">
+			<div class="sec-head">
+				<h2>비밀번호 변경</h2>
+				<p>이 브라우저에서 관리자 화면을 열 때 쓰는 비밀번호입니다.</p>
+			</div>
+			<div class="card" style="padding:22px 20px; max-width:520px;">
+				<div class="field">
+					<label for="pwOld">현재 비밀번호</label>
+					<input type="password" id="pwOld" autocomplete="off">
+				</div>
+				<div class="field">
+					<label for="pwNew">새 비밀번호</label>
+					<input type="password" id="pwNew" autocomplete="off">
+				</div>
+				<div class="field">
+					<label for="pwNew2">새 비밀번호 확인</label>
+					<input type="password" id="pwNew2" autocomplete="off">
+				</div>
+				<div class="msg" id="pwMsg"></div>
+				<div style="margin-top:18px;">
+					<button type="button" class="btn primary" id="btnPwSave">비밀번호 바꾸기</button>
+				</div>
+				<p class="hint" style="margin-top:14px;">
+					비밀번호는 이 브라우저에만 저장됩니다. 다른 컴퓨터에서는 초기 비밀번호(1111)가 그대로 쓰입니다.
+				</p>
+			</div>
 		</section>
 
 	</main>
@@ -175,7 +227,7 @@
 				</div>
 				<input type="file" id="pickFile" accept="image/*" hidden>
 			</div>
-			<div class="field" style="margin-top:20px;">
+			<div class="field" id="pickLibrary" style="margin-top:20px;">
 				<label>이미 올라간 이미지에서 고르기</label>
 				<div class="pick-tabs" id="pickTabs"></div>
 				<div class="pick-grid" id="pickGrid"></div>
@@ -212,10 +264,11 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="js/html.js?ver=260901"></script>
-<script src="js/schema.js?ver=260901"></script>
-<script src="js/gh.js?ver=260901"></script>
-<script src="js/store.js?ver=260901"></script>
-<script src="js/app.js?ver=260901"></script>
+<script src="js/html.js?ver=260902"></script>
+<script src="js/js.js?ver=260902"></script>
+<script src="js/schema.js?ver=260902"></script>
+<script src="js/gh.js?ver=260902"></script>
+<script src="js/store.js?ver=260902"></script>
+<script src="js/app.js?ver=260902"></script>
 </body>
 </html>

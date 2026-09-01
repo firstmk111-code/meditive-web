@@ -3,22 +3,22 @@
  *
  * 운영자가 고친 내용을 여기에 쌓아 두었다가
  * "저장하고 발행" 을 누를 때 한 번에 내보낸다.
- *   - 원본 HTML 은 발행 대상(GitHub)에서 그대로 가져와 보관
- *   - 미리보기와 발행이 같은 함수로 만들어지므로 결과가 어긋나지 않는다
+ *   - 원본은 발행 대상(GitHub)에서 그대로 가져와 보관한다
+ *   - HTML 은 CMSHtml, 상품 데이터(js/shop.js)는 CMSJs 가 고친다
  *   - 저장하지 않은 변경이 있으면 창을 닫을 때 경고한다
 ======================================================== */
 (function (w) {
 	'use strict';
 
-	var H = w.CMSHtml, S = w.CMSSchema, G = w.CMSGit;
+	var H = w.CMSHtml, J = w.CMSJs, S = w.CMSSchema, G = w.CMSGit;
 	var DRAFT_KEY = 'meditive.admin.draft';
 
 	var state = {
 		baseSha: '',          /* 편집을 시작한 시점의 커밋 */
-		origin: {},           /* 페이지별 원본 HTML  { home: '...' } */
+		origin: {},           /* 파일별 원본 내용 { home:'...', pf:'...', shop:'...' } */
 		originFrom: {},       /* 원본을 어디서 읽었는지 (github / local) */
-		edits: {},            /* key -> { page, type, attr, value } */
-		uploads: {},          /* 저장경로 -> { b64, size, type, dataUrl, name } */
+		edits: {},            /* key -> { page, value } */
+		uploads: {},          /* 저장경로 -> { b64, size, type, dataUrl, name, replace } */
 		listeners: []
 	};
 
@@ -39,6 +39,10 @@
 			state.origin[pageId] = r.text;
 			state.originFrom[pageId] = r.from;
 			return r.text;
+		}).catch(function () {
+			state.origin[pageId] = '';
+			state.originFrom[pageId] = 'fail';
+			return '';
 		});
 	}
 
@@ -48,16 +52,27 @@
 			state.baseSha = sha;
 			return Promise.all(ids.map(loadPage));
 		}).then(function () {
+			/* 원본을 읽은 뒤에야 상품몰 · 포트폴리오 카테고리를 만들 수 있다 */
+			S.buildShop(state.origin.shop || '');
+			S.buildPortfolio(state.origin.pf || '');
 			restoreDraft();
 			return true;
 		});
 	}
 
-	function pageOf(key) { return key.split('.')[0]; }
 	function origin(pageId) { return state.origin[pageId] || ''; }
+	function pageOf(key) {
+		var def = S.get(key);
+		return def ? def.page : key.split('.')[0];
+	}
+
+	/* 상품 Key 를 쪼갠다 : shop.pr01.name -> { id:'pr01', field:'name' } */
+	function shopParts(key) {
+		var p = String(key).split('.');
+		return { id: p[1], field: p[2] };
+	}
 
 	/* ---------------------------------------------- 현재 값 읽기 */
-	/* 편집 중인 값이 있으면 그것을, 없으면 원본 값을 돌려준다 */
 	function value(key) {
 		if (state.edits[key]) return state.edits[key].value;
 		return original(key);
@@ -66,11 +81,24 @@
 	function original(key) {
 		var def = S.get(key);
 		if (!def) return '';
-		var html = origin(pageOf(key));
-		if (!html) return '';
-		if (def.type === 'image') return H.readAttr(html, key, 'src') || '';
-		if (def.type === 'url') return H.readAttr(html, key, 'href') || '';
-		var inner = H.readInner(html, key);
+
+		/* 서브 배너처럼 파일 자체를 갈아 끼우는 항목은 경로가 곧 값이다 */
+		if (def.type === 'file') return def.path || '';
+
+		var page = def.page;
+		var src = origin(page);
+		if (!src) return '';
+
+		if (page === 'shop') {
+			var sp = shopParts(key);
+			var raw = J.read(src, sp.id, sp.field);
+			if (raw == null) return '';
+			return (def.type === 'image' && def.base) ? (def.base + raw) : raw;
+		}
+
+		if (def.type === 'image') return H.readAttr(src, key, 'src') || '';
+		if (def.type === 'url') return H.readAttr(src, key, 'href') || '';
+		var inner = H.readInner(src, key);
 		return inner == null ? '' : H.htmlToPlain(inner);
 	}
 
@@ -79,21 +107,20 @@
 	/* ---------------------------------------------- 값 쓰기 */
 	function set(key, val) {
 		var def = S.get(key);
-		if (!def) return;
+		if (!def || def.type === 'file') return false;
 		val = String(val == null ? '' : val);
 
 		if (def.type === 'url') val = safeUrl(val);
 		if (def.type === 'line') val = val.replace(/[\r\n]+/g, ' ');
 
-		if (val === original(key)) { delete state.edits[key]; emit(); return; }
+		/* 상품 이미지는 정해진 폴더 안에서만 고를 수 있다 */
+		if (def.base && val.indexOf(def.base) !== 0) return false;
 
-		state.edits[key] = {
-			page: pageOf(key),
-			type: (def.type === 'image') ? 'img' : (def.type === 'url' ? 'attr' : 'inner'),
-			attr: (def.type === 'image') ? 'src' : (def.type === 'url' ? 'href' : ''),
-			value: val
-		};
+		if (val === original(key)) { delete state.edits[key]; emit(); return true; }
+
+		state.edits[key] = { page: def.page, value: val };
 		emit();
+		return true;
 	}
 
 	function reset(key) {
@@ -122,12 +149,15 @@
 			size: (meta && meta.size) || 0,
 			type: (meta && meta.type) || '',
 			name: (meta && meta.name) || '',
-			dataUrl: (meta && meta.dataUrl) || ''
+			dataUrl: (meta && meta.dataUrl) || '',
+			replace: !!(meta && meta.replace),
+			label: (meta && meta.label) || ''
 		};
 		emit();
 	}
 
 	function dropUpload(path) {
+		if (!state.uploads[path]) return;
 		delete state.uploads[path];
 		emit();
 	}
@@ -141,29 +171,29 @@
 
 	/* ---------------------------------------------- 변경 목록 */
 	function changeList() {
-		var out = [], k, e, def;
+		var out = [], k, def;
 		for (k in state.edits) {
 			if (!state.edits.hasOwnProperty(k)) continue;
-			e = state.edits[k];
 			def = S.get(k);
 			out.push({
 				key: k,
-				page: e.page,
+				top: def ? def.top : '',
 				label: S.label(k),
 				kind: def ? def.type : 'line',
 				before: original(k),
-				after: e.value
+				after: state.edits[k].value
 			});
 		}
 		for (k in state.uploads) {
 			if (!state.uploads.hasOwnProperty(k)) continue;
+			var u = state.uploads[k];
 			out.push({
 				key: '@upload:' + k,
-				page: '-',
-				label: '이미지 파일 올리기 · ' + k,
+				top: u.replace ? '공통' : '이미지 파일',
+				label: (u.replace ? '배너 이미지 교체 · ' : '새 이미지 올리기 · ') + (u.label || k),
 				kind: 'file',
-				before: '',
-				after: state.uploads[k].name || k
+				before: u.replace ? k : '',
+				after: u.name || k
 			});
 		}
 		out.sort(function (a, b) { return a.label < b.label ? -1 : 1; });
@@ -173,50 +203,51 @@
 	function count() { return changeList().length; }
 	function isDirty() { return count() > 0; }
 
-	/* ---------------------------------------------- HTML 만들기 */
-	function buildHtml(pageId) {
-		var html = origin(pageId);
-		if (!html) return '';
-		var edits = [], k, e;
+	/* ---------------------------------------------- 결과 파일 만들기 */
+	function buildPage(pageId) {
+		var src = origin(pageId);
+		if (!src) return '';
+		var k, e, def;
+
+		if (S.PAGES[pageId].kind === 'js') {
+			var jsEdits = [];
+			for (k in state.edits) {
+				if (!state.edits.hasOwnProperty(k) || state.edits[k].page !== pageId) continue;
+				def = S.get(k);
+				var sp = shopParts(k);
+				var v = state.edits[k].value;
+				if (def && def.base) v = v.slice(def.base.length);
+				jsEdits.push({ id: sp.id, field: sp.field, value: v });
+			}
+			return J.applyEdits(src, jsEdits);
+		}
+
+		var edits = [];
 		for (k in state.edits) {
-			if (!state.edits.hasOwnProperty(k)) continue;
+			if (!state.edits.hasOwnProperty(k) || state.edits[k].page !== pageId) continue;
 			e = state.edits[k];
-			if (e.page !== pageId) continue;
-			if (e.type === 'inner') {
-				var srcInner = H.readInner(html, k) || '';
-				edits.push({ type: 'inner', key: k, value: H.plainToHtml(e.value, H.detectBr(srcInner)) });
+			def = S.get(k);
+			if (def.type === 'image') {
+				edits.push({ type: 'attr', key: k, attr: 'src', value: e.value });
+			} else if (def.type === 'url') {
+				edits.push({ type: 'attr', key: k, attr: 'href', value: e.value });
 			} else {
-				edits.push({ type: 'attr', key: k, attr: e.attr, value: e.value });
+				var srcInner = H.readInner(src, k) || '';
+				edits.push({ type: 'inner', key: k, value: H.plainToHtml(e.value, H.detectBr(srcInner)) });
 			}
 		}
-		return H.applyEdits(html, edits);
-	}
-
-	/* 미리보기용 : 상대경로가 실제 사이트를 가리키도록 기준 주소를 넣는다 */
-	function previewHtml(pageId) {
-		var html = buildHtml(pageId);
-		var base = new URL('../', location.href).href;
-		var tag = '<base href="' + base + '">';
-		var up = state.uploads;
-
-		/* 아직 올리지 않은 이미지는 미리보기에서만 임시 주소로 바꿔 보여준다 */
-		for (var p in up) {
-			if (!up.hasOwnProperty(p) || !up[p].dataUrl) continue;
-			html = html.split('"' + p + '"').join('"' + up[p].dataUrl + '"');
-		}
-		if (/<head[^>]*>/i.test(html)) return html.replace(/<head([^>]*)>/i, '<head$1>' + tag);
-		return tag + html;
+		return H.applyEdits(src, edits);
 	}
 
 	/* 발행할 파일 묶음 */
 	function files() {
-		var out = [], id, p;
+		var out = [], id, p, k;
 		for (id in S.PAGES) {
 			if (!S.PAGES.hasOwnProperty(id)) continue;
-			var changed = false, k;
+			var changed = false;
 			for (k in state.edits) { if (state.edits[k].page === id) { changed = true; break; } }
 			if (!changed) continue;
-			out.push({ path: S.PAGES[id].file, text: buildHtml(id) });
+			out.push({ path: S.PAGES[id].file, text: buildPage(id) });
 		}
 		for (p in state.uploads) {
 			if (!state.uploads.hasOwnProperty(p)) continue;
@@ -225,23 +256,37 @@
 		return out;
 	}
 
+	/* 상품 데이터는 따옴표 하나만 어긋나도 사이트가 멈추므로 미리 검사한다 */
+	function check() {
+		var k, need = false;
+		for (k in state.edits) { if (state.edits[k].page === 'shop') { need = true; break; } }
+		if (!need) return { ok: true, message: '' };
+		var r = J.validate(buildPage('shop'));
+		if (r.ok) return r;
+		return { ok: false, message: '상품 데이터에 문제가 있어 발행할 수 없습니다. (' + r.message + ') 따옴표(’)나 역슬래시를 지우고 다시 시도해 주세요.' };
+	}
+
 	function message() {
 		var list = changeList();
 		var groups = {}, i, g;
 		for (i = 0; i < list.length; i++) {
-			g = (S.get(list[i].key) || {}).groupName || '이미지 파일';
+			g = list[i].top || '기타';
 			groups[g] = (groups[g] || 0) + 1;
 		}
 		var names = Object.keys(groups);
-		var head = '홈 콘텐츠 수정 (' + list.length + '건)';
+		var head = '콘텐츠 수정 (' + list.length + '건)';
 		var body = names.map(function (n) { return '- ' + n + ' ' + groups[n] + '건'; }).join('\n');
 		return head + '\n\n' + body + '\n\n관리자 페이지에서 발행';
 	}
 
 	/* ---------------------------------------------- 발행 */
 	function publish(onStep) {
+		var v = check();
+		if (!v.ok) return Promise.reject(new Error(v.message));
+
 		var f = files();
 		if (!f.length) return Promise.reject(new Error('발행할 변경사항이 없습니다.'));
+
 		return G.publish(f, message(), state.baseSha, onStep).then(function (r) {
 			/* 발행한 내용을 새 원본으로 삼는다 */
 			for (var i = 0; i < f.length; i++) {
@@ -322,8 +367,8 @@
 		changeList: changeList,
 		count: count,
 		isDirty: isDirty,
-		buildHtml: buildHtml,
-		previewHtml: previewHtml,
+		buildPage: buildPage,
+		check: check,
 		files: files,
 		message: message,
 		publish: publish,

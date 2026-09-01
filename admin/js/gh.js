@@ -50,6 +50,8 @@
 
 	function clearToken() { setToken('', false); }
 
+	function hasToken() { return !!getToken(); }
+
 	/* ---------------------------------------------- 통신 기본 */
 	function req(path, opt) {
 		opt = opt || {};
@@ -148,6 +150,41 @@
 		});
 	}
 
+	/* 토큰이 실제로 쓸 수 있는지 확인한다 (저장 권한까지) */
+	function verify(tok, remember) {
+		var before = getToken(), beforeRemember = isRemembered();
+		setToken(tok, remember);
+		return whoAmI().then(function (me) {
+			return checkRepo().then(function (repo) {
+				if (!repo.permissions || !repo.permissions.push) {
+					throw new Error('이 토큰에는 저장 권한(Contents: write)이 없습니다.');
+				}
+				return me;
+			});
+		}).catch(function (err) {
+			setToken(before, beforeRemember);
+			throw err;
+		});
+	}
+
+	/* 최근 발행 이력 */
+	function history(n) {
+		return req(repoPath('/commits?sha=' + encodeURIComponent(CFG.branch) + '&per_page=' + (n || 10) + '&t=' + Date.now()))
+			.then(function (r) {
+				return (r || []).map(function (c) {
+					return {
+						sha: c.sha,
+						short: c.sha.slice(0, 7),
+						message: (c.commit && c.commit.message) || '',
+						date: (c.commit && c.commit.author && c.commit.author.date) || '',
+						author: (c.commit && c.commit.author && c.commit.author.name) || '',
+						url: c.html_url
+					};
+				});
+			})
+			.catch(function () { return []; });
+	}
+
 	/* 폴더 목록 */
 	function listDir(path) {
 		return req(repoPath('/contents/' + encodeURI(path) + '?ref=' + encodeURIComponent(CFG.branch) + '&t=' + Date.now()))
@@ -222,9 +259,12 @@
 		setToken: setToken,
 		getToken: getToken,
 		clearToken: clearToken,
+		hasToken: hasToken,
 		isRemembered: isRemembered,
 		whoAmI: whoAmI,
 		checkRepo: checkRepo,
+		verify: verify,
+		history: history,
 		headSha: headSha,
 		readText: readText,
 		listDir: listDir,

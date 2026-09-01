@@ -3,6 +3,9 @@
  *
  * 운영자에게 HTML 코드를 보여주지 않는다.
  * 모든 편집은 일반 입력창(한 줄 / 여러 줄 / 링크 / 이미지)으로만 이루어진다.
+ *
+ * 로그인은 비밀번호만으로 한다. GitHub 토큰은 "발행" 할 때만 필요하며
+ * 설정 > GitHub 연결 에서 한 번 등록해 두면 된다.
 ======================================================== */
 (function (w, d) {
 	'use strict';
@@ -41,86 +44,69 @@
 		el.className = 'msg ' + (kind || 'info') + (text ? ' show' : '');
 	}
 
-	/* ---------------------------------------------- 로그인 */
+	/* ---------------------------------------------- 로그인 (비밀번호만) */
 	function currentPw() {
 		try { return localStorage.getItem(PW_KEY) || DEFAULT_PW; } catch (e) { return DEFAULT_PW; }
 	}
 
 	function initLogin() {
-		var tok = G.getToken();
-		if (tok) $('#fTok').value = tok;
-		$('#fRemember').checked = G.isRemembered();
-
 		$('#loginForm').addEventListener('submit', function (ev) {
 			ev.preventDefault();
-			var pw = $('#fPw').value;
-			var tk = $('#fTok').value.trim();
-			var remember = $('#fRemember').checked;
-
-			if (pw !== currentPw()) { say('#loginMsg', '비밀번호가 올바르지 않습니다.', 'err'); return; }
-			if (!tk) { say('#loginMsg', 'GitHub Access Token 을 입력해 주세요.', 'err'); return; }
-
+			if ($('#fPw').value !== currentPw()) {
+				say('#loginMsg', '비밀번호가 올바르지 않습니다.', 'err');
+				return;
+			}
 			var btn = $('#loginBtn');
-			btn.disabled = true; btn.textContent = '확인하는 중...';
-			say('#loginMsg', '토큰과 저장소 권한을 확인하고 있습니다.', 'info');
-
-			G.setToken(tk, remember);
-			G.whoAmI().then(function (me) {
-				return G.checkRepo().then(function (repo) {
-					if (!repo.permissions || !repo.permissions.push) {
-						throw new Error('이 토큰에는 저장 권한(Contents: write)이 없습니다.');
-					}
-					return me;
-				});
-			}).then(function (me) {
-				say('#loginMsg', '', 'info');
-				start(me);
-			}).catch(function (err) {
-				G.setToken('', false);
-				btn.disabled = false; btn.textContent = '로그인';
-				say('#loginMsg', err.message || '연결에 실패했습니다.', 'err');
-			});
+			btn.disabled = true; btn.textContent = '불러오는 중...';
+			say('#loginMsg', '', 'info');
+			start();
 		});
 	}
 
 	function logout() {
 		if (ST.isDirty() && !confirm('저장하지 않은 변경사항이 있습니다. 그래도 로그아웃할까요?')) return;
-		G.clearToken();
 		ST.clearDraft();
 		location.reload();
 	}
 
 	/* ---------------------------------------------- 시작 */
-	var me = null;
-
-	function start(user) {
-		me = user;
+	function start() {
 		$('#loginView').hidden = true;
 		$('#loginView').style.display = 'none';
 		$('#app').classList.add('on');
-		$('#topWho').textContent = (user && user.login) ? user.login : '';
 
 		ST.loadAll().then(function () {
-			buildBanner();
-			buildText();
-			buildImages();
+			renderCats('image');
+			renderCats('text');
 			loadGallery();
 			ST.onChange(syncAll);
 			syncAll();
 			route();
+
 			var from = ST.state.originFrom.home;
 			$('#dsNote').innerHTML = from === 'github'
 				? '원본을 GitHub 저장소(<b>' + esc(G.CFG.branch) + '</b> 브랜치)에서 불러왔습니다. 발행하면 같은 곳에 커밋 한 개로 저장됩니다.'
 				: 'GitHub 에서 원본을 읽지 못해 <b>내 컴퓨터의 파일</b>을 불러왔습니다. 발행 전에 연결 상태를 확인해 주세요.';
+
+			showWho();
 		}).catch(function (err) {
 			toast(err.message || '내용을 불러오지 못했습니다.', 'err');
+			var btn = $('#loginBtn');
+			btn.disabled = false; btn.textContent = '로그인';
 		});
+	}
+
+	function showWho() {
+		if (!G.hasToken()) { $('#topWho').textContent = ''; return; }
+		G.whoAmI().then(function (me) {
+			$('#topWho').textContent = (me && me.login) ? me.login : '';
+		}).catch(function () { $('#topWho').textContent = ''; });
 	}
 
 	/* ---------------------------------------------- 화면 이동 */
 	var TITLES = {
-		dashboard: '대시보드', banner: '홈 배너', text: '텍스트 관리',
-		image: '이미지 관리', preview: '미리보기', changes: '변경사항'
+		dashboard: '대시보드', image: '이미지 관리', text: '텍스트 관리',
+		changes: '변경사항', history: '발행 이력', token: 'GitHub 연결', pw: '비밀번호 변경'
 	};
 
 	function route() {
@@ -130,8 +116,9 @@
 		$$('#nav a').forEach(function (a) { a.classList.toggle('on', a.getAttribute('data-view') === id); });
 		$('#topTit').textContent = TITLES[id];
 		$('#side').classList.remove('open');
-		if (id === 'preview') renderPreview();
 		if (id === 'changes') renderChanges();
+		if (id === 'history') renderHistory();
+		if (id === 'token') fillToken();
 		w.scrollTo(0, 0);
 	}
 
@@ -185,28 +172,33 @@
 	}
 
 	/* ---------------------------------------------- 이미지 칸 만들기 */
+	function isSlotChanged(def) {
+		if (def.type === 'file') return !!ST.state.uploads[def.path];
+		return ST.isChanged(def.key);
+	}
+
 	function imageSlot(def) {
 		var box = d.createElement('div');
 		box.className = 'card img-slot';
 		box.dataset.key = def.key;
 		box.innerHTML =
-			'<div class="thumb"><img alt=""></div>' +
+			'<div class="thumb"><img alt="" loading="lazy"></div>' +
 			'<div class="nm">' + esc(def.label) + '</div>' +
 			'<div class="pt" data-pt></div>' +
 			'<div class="acts">' +
-				'<button type="button" class="btn sm" data-act="pick">교체</button>' +
+				'<button type="button" class="btn sm" data-act="pick">' + (def.type === 'file' ? '파일 올리기' : '교체') + '</button>' +
 				'<button type="button" class="btn ghost sm" data-act="undo" hidden>되돌리기</button>' +
 			'</div>';
 
 		$('[data-act=pick]', box).addEventListener('click', function () { openPicker(def); });
 		$('[data-act=undo]', box).addEventListener('click', function () {
-			var cur = ST.value(def.key);
-			ST.dropUpload(cur);
+			if (def.type === 'file') { ST.dropUpload(def.path); return; }
+			ST.dropUpload(ST.value(def.key));
 			ST.reset(def.key);
 		});
 
 		box._sync = function () {
-			var changed = ST.isChanged(def.key);
+			var changed = isSlotChanged(def);
 			box.classList.toggle('changed', changed);
 			$('[data-act=undo]', box).hidden = !changed;
 			$('[data-pt]', box).textContent = ST.value(def.key);
@@ -217,101 +209,147 @@
 		return box;
 	}
 
-	/* ---------------------------------------------- 각 화면 구성 */
-	var rows = [];
+	/* ---------------------------------------------- 카테고리 · 작업 영역 */
+	var rows = [];                       /* 지금 화면에 그려진 입력줄 */
+	var sel = { image: '', text: '' };   /* 분류별 현재 선택 */
+	var filter = { image: '', text: '' };
 
-	function group(name, desc, open) {
-		var det = d.createElement('details');
-		det.className = 'card grp';
-		if (open) det.open = true;
-		det.innerHTML = '<summary>' + esc(name) + '<span class="desc">' + esc(desc || '') + '</span></summary>' +
-			'<div class="grp-body"></div>';
-		return det;
+	function paneIds(kind) {
+		return (kind === 'image')
+			? { cats: '#imgCats', head: '#imgHead', body: '#imgBody' }
+			: { cats: '#txtCats', head: '#txtHead', body: '#txtBody' };
 	}
 
-	function buildBanner() {
-		var g = null, i;
-		for (i = 0; i < S.GROUPS.length; i++) if (S.GROUPS[i].id === 'hero') g = S.GROUPS[i];
-		if (!g) return;
-
-		var box = $('#bannerText');
-		box.innerHTML = '';
-		var card = d.createElement('div');
-		card.className = 'card';
-		card.style.padding = '4px 20px';
-		g.fields.forEach(function (f) {
-			var r = fieldRow(f);
-			card.appendChild(r);
-			rows.push(r);
-		});
-		box.appendChild(card);
-
-		var grid = $('#bannerImgs');
-		grid.innerHTML = '';
-		g.images.forEach(function (f) {
-			var s = imageSlot(f);
-			grid.appendChild(s);
-			rows.push(s);
-		});
+	function changedIn(s) {
+		var n = 0;
+		s.fields.forEach(function (f) { if (isSlotChanged(f)) n++; });
+		return n;
 	}
 
-	function buildText() {
-		var wrap = $('#textGroups');
-		wrap.innerHTML = '';
-		S.GROUPS.forEach(function (g, gi) {
-			if (!g.fields.length) return;
-			var det = group(g.name, g.desc, gi === 0);
-			var body = $('.grp-body', det);
-			g.fields.forEach(function (f) {
-				var r = fieldRow(f);
-				body.appendChild(r);
-				rows.push(r);
+	function renderCats(kind) {
+		var ids = paneIds(kind);
+		var wrap = $(ids.cats);
+		var list = S.sections(kind);
+		var q = (filter[kind] || '').trim();
+		if (q) {
+			list = list.filter(function (s) {
+				return (s.top + ' ' + s.name).toLowerCase().indexOf(q.toLowerCase()) > -1;
 			});
-			wrap.appendChild(det);
+		}
+		if (!list.length) {
+			wrap.innerHTML = '<p class="hint" style="padding:14px 16px;">찾는 분류가 없습니다.</p>';
+			return;
+		}
+		if (!sel[kind] || !list.some(function (s) { return s.id === sel[kind]; })) sel[kind] = list[0].id;
+
+		var html = '', lastTop = '';
+		list.forEach(function (s) {
+			if (s.top !== lastTop) {
+				html += '<p class="cat-tit">' + esc(s.top) + '</p>';
+				lastTop = s.top;
+			}
+			var ch = changedIn(s);
+			html += '<button type="button" data-sec="' + esc(s.id) + '" class="' + (s.id === sel[kind] ? 'on' : '') + '">' +
+				'<span class="t">' + esc(s.name) + '</span>' +
+				'<em class="c">' + s.fields.length + '</em>' +
+				(ch ? '<em class="dot" title="수정함">' + ch + '</em>' : '') +
+				'</button>';
 		});
+		wrap.innerHTML = html;
+		$$('button[data-sec]', wrap).forEach(function (b) {
+			b.addEventListener('click', function () {
+				sel[kind] = b.getAttribute('data-sec');
+				renderCats(kind);
+				renderBody(kind);
+			});
+		});
+		renderBody(kind);
 	}
 
-	function buildImages() {
-		var wrap = $('#imageGroups');
-		wrap.innerHTML = '';
-		S.GROUPS.forEach(function (g, gi) {
-			if (!g.images.length) return;
-			var det = group(g.name, g.images.length + '장', gi === 0);
-			var body = $('.grp-body', det);
-			var grid = d.createElement('div');
-			grid.className = 'img-grid';
-			grid.style.paddingTop = '14px';
-			g.images.forEach(function (f) {
-				var s = imageSlot(f);
-				grid.appendChild(s);
-				rows.push(s);
+	function renderBody(kind) {
+		var ids = paneIds(kind);
+		var s = S.section(sel[kind]);
+		var head = $(ids.head), body = $(ids.body);
+
+		/* 다른 화면의 입력줄은 목록에서 뺀다 */
+		rows = rows.filter(function (r) { return r._kind !== kind; });
+
+		if (!s) { head.innerHTML = ''; body.innerHTML = ''; return; }
+
+		head.innerHTML = '<h3>' + esc(s.top) + ' · ' + esc(s.name) + '</h3>' +
+			'<p>' + esc(s.desc || '') + '</p>';
+
+		body.innerHTML = '';
+		if (kind === 'image') {
+			s.fields.forEach(function (f) {
+				var el = imageSlot(f);
+				el._kind = kind;
+				body.appendChild(el);
+				rows.push(el);
 			});
-			body.appendChild(grid);
-			wrap.appendChild(det);
-		});
+		} else {
+			var card = d.createElement('div');
+			card.className = 'card';
+			card.style.padding = '4px 20px';
+			s.fields.forEach(function (f) {
+				var el = fieldRow(f);
+				el._kind = kind;
+				card.appendChild(el);
+				rows.push(el);
+			});
+			body.appendChild(card);
+		}
+		rows.forEach(function (r) { if (r._sync) r._sync(); });
 	}
 
 	/* ---------------------------------------------- 상태 반영 */
 	function syncAll() {
 		var n = ST.count();
 		$('#navCnt').textContent = n;
+		$('#navCnt').classList.toggle('off', !n);
 		$('#dsChg').innerHTML = n + '<small>건</small>';
 		$('#topDirty').hidden = !n;
 		$('#topDirtyN').textContent = n;
-		$('#btnPublish').disabled = !n;
-		$('#btnPublish2').disabled = !n;
 
-		var txt = 0, img = 0;
-		S.GROUPS.forEach(function (g) { txt += g.fields.length; img += g.images.length; });
-		$('#dsTxt').innerHTML = txt + '<small>개</small>';
-		$('#dsImg').innerHTML = img + '<small>개</small>';
-		try {
-			var lp = localStorage.getItem(LAST_PUB);
-			$('#dsPub').textContent = lp || '-';
-		} catch (e) {}
+		var ci = 0, ct = 0;
+		S.sections('image').forEach(function (s) { ci += changedIn(s); });
+		S.sections('text').forEach(function (s) { ct += changedIn(s); });
+		$('#nImg').textContent = ci;
+		$('#nImg').classList.toggle('off', !ci);
+		$('#nTxt').textContent = ct;
+		$('#nTxt').classList.toggle('off', !ct);
+
+		$('#nTok').textContent = G.hasToken() ? '연결됨' : '미연결';
+		$('#nTok').classList.toggle('off', !G.hasToken());
+
+		$('#dsTxt').innerHTML = S.countOf('text') + '<small>개</small>';
+		$('#dsImg').innerHTML = S.countOf('image') + '<small>개</small>';
+		try { $('#dsPub').textContent = localStorage.getItem(LAST_PUB) || '-'; } catch (e) {}
 
 		rows.forEach(function (r) { if (r._sync) r._sync(); });
+		refreshCatCounts('image');
+		refreshCatCounts('text');
 		if ($('#v-changes').classList.contains('on')) renderChanges();
+	}
+
+	/* 분류 목록의 "수정함" 표시만 다시 그린다 (목록 전체를 새로 만들지 않는다) */
+	function refreshCatCounts(kind) {
+		var wrap = $(paneIds(kind).cats);
+		$$('button[data-sec]', wrap).forEach(function (b) {
+			var s = S.section(b.getAttribute('data-sec'));
+			if (!s) return;
+			var ch = changedIn(s);
+			var dot = $('.dot', b);
+			if (ch && !dot) {
+				dot = d.createElement('em');
+				dot.className = 'dot';
+				b.appendChild(dot);
+			}
+			if (dot) {
+				dot.textContent = ch;
+				dot.hidden = !ch;
+			}
+		});
 	}
 
 	/* ---------------------------------------------- 변경사항 */
@@ -323,7 +361,7 @@
 			return;
 		}
 		var h = '<table class="chg-tbl"><thead><tr>' +
-			'<th style="width:26%">항목</th><th style="width:30%">이전</th><th>변경 후</th><th style="width:80px"></th>' +
+			'<th style="width:28%">항목</th><th style="width:28%">이전</th><th>변경 후</th><th style="width:80px"></th>' +
 			'</tr></thead><tbody>';
 		list.forEach(function (c) {
 			h += '<tr><td><b>' + esc(c.label) + '</b></td>' +
@@ -341,23 +379,38 @@
 		});
 	}
 
-	/* ---------------------------------------------- 미리보기 */
-	function renderPreview() {
-		var f = $('#pvFrame');
-		f.srcdoc = ST.previewHtml('home');
+	/* ---------------------------------------------- 발행 이력 */
+	function renderHistory() {
+		var box = $('#histBox');
+		box.innerHTML = '<div class="card empty">불러오는 중...</div>';
+		G.history(15).then(function (list) {
+			if (!list.length) {
+				box.innerHTML = '<div class="card empty">이력을 불러오지 못했습니다.</div>';
+				return;
+			}
+			box.innerHTML = '<table class="chg-tbl"><thead><tr>' +
+				'<th style="width:150px">날짜</th><th>내용</th><th style="width:110px">커밋</th>' +
+				'</tr></thead><tbody>' +
+				list.map(function (c) {
+					var t = c.date ? new Date(c.date).toLocaleString('ko-KR') : '-';
+					return '<tr><td>' + esc(t) + '</td>' +
+						'<td>' + esc(c.message.split('\n')[0]) + '</td>' +
+						'<td><a href="' + esc(c.url) + '" target="_blank" rel="noopener">' + esc(c.short) + '</a></td></tr>';
+				}).join('') + '</tbody></table>';
+		});
 	}
 
 	/* ---------------------------------------------- 이미지 고르기 */
 	var GALLERY = { all: [] };
 	var CATS = [
 		{ id: 'main', name: '홈 · 메인', test: function (p) { return p.indexOf('images/main/') === 0; } },
-		{ id: 'portfolio', name: '포트폴리오', test: function (p) { return p.indexOf('images/portfolio/') === 0; } },
+		{ id: 'portfolio', name: '포트폴리오 · 상품', test: function (p) { return p.indexOf('images/portfolio/') === 0; } },
 		{ id: 'banners', name: '서브 배너', test: function (p) { return p.indexOf('images/banners/') === 0; } },
 		{ id: 'brand', name: '브랜드 · 공통', test: function (p) { return p.indexOf('images/brand/') === 0 || p.indexOf('images/common/') === 0; } }
 	];
 
 	function loadGallery() {
-		var dirs = ['images/main', 'images/portfolio', 'images/banners', 'images/brand', 'images/common'];
+		var dirs = ['images/main', 'images/portfolio', 'images/portfolio/poster', 'images/banners', 'images/brand', 'images/common'];
 		Promise.all(dirs.map(function (dir) {
 			return G.listDir(dir).then(function (items) {
 				return items.filter(function (it) {
@@ -378,8 +431,8 @@
 
 	var picking = null;      /* 지금 교체 중인 항목 정의 */
 	var pickSel = '';        /* 고른 기존 이미지 경로 */
-	var pickUpload = null;   /* 새로 올린 파일 { path, b64, dataUrl, name, size, type } */
-	var DROP_HTML = '';      /* 파일 올리기 안내문 원본 */
+	var pickUpload = null;   /* 새로 올린 파일 */
+	var DROP_HTML = '';
 
 	function resetDrop() {
 		var drop = $('#pickDrop');
@@ -390,12 +443,26 @@
 
 	function openPicker(def) {
 		picking = def;
-		pickSel = ST.value(def.key);
+		pickSel = (def.type === 'file') ? '' : ST.value(def.key);
 		pickUpload = null;
-		$('#pickTit').textContent = def.groupName + ' · ' + def.label + ' 교체';
+		$('#pickTit').textContent = def.sectionName + ' · ' + def.label + ' 교체';
 		resetDrop();
-		renderPickTabs(CATS[0].id);
+
+		if (def.type === 'file') {
+			/* 배너는 같은 파일 이름으로 덮어써야 하므로 새 파일만 받는다 */
+			$('#pickLibrary').hidden = true;
+		} else {
+			$('#pickLibrary').hidden = false;
+			var only = def.base ? catForPath(def.base) : null;
+			renderPickTabs(only ? only.id : CATS[0].id, def);
+		}
 		$('#pickDim').classList.add('on');
+	}
+
+	function catForPath(p) {
+		var i;
+		for (i = 0; i < CATS.length; i++) if (CATS[i].test(p)) return CATS[i];
+		return null;
 	}
 
 	function closePicker() {
@@ -403,24 +470,32 @@
 		picking = null; pickUpload = null;
 	}
 
-	function renderPickTabs(active) {
+	function renderPickTabs(active, def) {
 		var tabs = $('#pickTabs');
+		var list = CATS;
+		/* 상품 이미지는 정해진 폴더 안에서만 고를 수 있다 */
+		if (def && def.base) list = CATS.filter(function (c) { return c.test(def.base); });
 		tabs.innerHTML = '';
-		CATS.forEach(function (c) {
+		tabs.hidden = list.length < 2;
+		list.forEach(function (c) {
 			var b = d.createElement('button');
 			b.type = 'button';
 			b.textContent = c.name;
 			b.className = (c.id === active ? 'on' : '');
-			b.addEventListener('click', function () { renderPickTabs(c.id); });
+			b.addEventListener('click', function () { renderPickTabs(c.id, def); });
 			tabs.appendChild(b);
 		});
-		renderPickGrid(active);
+		renderPickGrid(active, def);
 	}
 
-	function renderPickGrid(catId) {
+	function renderPickGrid(catId, def) {
 		var cat = null, i;
 		for (i = 0; i < CATS.length; i++) if (CATS[i].id === catId) cat = CATS[i];
-		var list = GALLERY.all.filter(function (p) { return cat ? cat.test(p) : true; });
+		var list = GALLERY.all.filter(function (p) {
+			if (def && def.base && p.indexOf(def.base) !== 0) return false;
+			if (def && def.base && p.slice(def.base.length).indexOf('/') > -1) return false;  /* 하위 폴더 제외 */
+			return cat ? cat.test(p) : true;
+		});
 		var grid = $('#pickGrid');
 		if (!list.length) {
 			grid.innerHTML = '<p class="hint" style="grid-column:1/-1;">이 분류에 등록된 이미지가 없습니다.</p>';
@@ -454,47 +529,126 @@
 	}
 
 	function takeFile(file) {
-		if (!file) return;
+		if (!file || !picking) return;
 		if (!/^image\//.test(file.type)) { toast('이미지 파일만 올릴 수 있습니다.', 'err'); return; }
 		if (file.size > 8 * 1024 * 1024) { toast('파일이 너무 큽니다. 8MB 이하로 올려 주세요.', 'err'); return; }
 
-		var cur = ST.value(picking.key) || 'images/main/new.jpg';
-		var dir = cur.slice(0, cur.lastIndexOf('/')) || 'images/main';
+		var def = picking, path, replace = false;
+		if (def.type === 'file') {
+			/* 배너는 이름을 바꾸면 CSS 에서 못 찾으므로 같은 이름으로 덮어쓴다 */
+			path = def.path;
+			replace = true;
+			var want = (def.path.split('.').pop() || '').toLowerCase();
+			var got = (file.name.split('.').pop() || '').toLowerCase();
+			if (want === 'jpg') want = 'jpeg';
+			if (got === 'jpg') got = 'jpeg';
+			if (want !== got) {
+				toast('이 배너는 ' + def.path.split('.').pop().toUpperCase() + ' 파일로만 바꿀 수 있습니다.', 'err');
+				return;
+			}
+		} else {
+			var dir = def.base
+				? def.base.replace(/\/$/, '')
+				: (function () {
+					var cur = ST.value(def.key) || 'images/main/new.jpg';
+					return cur.slice(0, cur.lastIndexOf('/')) || 'images/main';
+				})();
+			path = uniquePath(dir, file.name);
+		}
 
 		var fr = new FileReader();
 		fr.onload = function () {
 			var dataUrl = fr.result;
-			var b64 = String(dataUrl).split(',')[1] || '';
 			pickUpload = {
-				path: uniquePath(dir, file.name),
-				b64: b64, dataUrl: dataUrl,
-				name: file.name, size: file.size, type: file.type
+				path: path, replace: replace,
+				b64: String(dataUrl).split(',')[1] || '',
+				dataUrl: dataUrl,
+				name: file.name, size: file.size, type: file.type,
+				label: def.label
 			};
-			pickSel = pickUpload.path;
+			pickSel = path;
 			$$('#pickGrid button').forEach(function (x) { x.classList.remove('on'); });
 			$('#pickDrop').classList.add('over');
 			$('#pickDrop').innerHTML = '<b>' + esc(file.name) + '</b> 준비됨 · ' + Math.round(file.size / 1024) + 'KB' +
-				'<div class="hint" style="margin-top:6px;">발행할 때 <b>' + esc(pickUpload.path) + '</b> 로 저장됩니다.</div>';
+				'<div class="hint" style="margin-top:6px;">발행할 때 <b>' + esc(path) + '</b> 로 저장됩니다.</div>';
 		};
 		fr.readAsDataURL(file);
 	}
 
 	function applyPick() {
 		if (!picking) return;
+		var def = picking;
 		if (pickUpload) {
 			ST.addUpload(pickUpload.path, pickUpload.b64, pickUpload);
-			ST.set(picking.key, pickUpload.path);
-		} else if (pickSel) {
-			ST.set(picking.key, pickSel);
+			if (def.type !== 'file') ST.set(def.key, pickUpload.path);
+		} else if (pickSel && def.type !== 'file') {
+			if (!ST.set(def.key, pickSel)) { toast('이 항목은 ' + def.base + ' 폴더의 이미지만 쓸 수 있습니다.', 'err'); return; }
+		} else {
+			toast('바꿀 이미지를 골라 주세요.');
+			return;
 		}
 		closePicker();
 		toast('이미지를 바꿨습니다. 발행해야 실제로 반영됩니다.');
+	}
+
+	/* ---------------------------------------------- GitHub 연결 */
+	function fillToken() {
+		var tok = G.getToken();
+		$('#fTok').value = tok || '';
+		$('#fRemember').checked = G.isRemembered();
+		say('#tokMsg', tok ? '토큰이 이 브라우저에 등록되어 있습니다.' : '아직 토큰이 등록되지 않았습니다. 발행하려면 등록해 주세요.', tok ? 'ok' : 'info');
+	}
+
+	function saveToken() {
+		var tk = $('#fTok').value.trim();
+		if (!tk) { say('#tokMsg', '토큰을 입력해 주세요.', 'err'); return Promise.reject(); }
+		var btn = $('#btnTokSave');
+		btn.disabled = true;
+		say('#tokMsg', '토큰과 저장소 권한을 확인하고 있습니다.', 'info');
+		return G.verify(tk, $('#fRemember').checked).then(function (me) {
+			btn.disabled = false;
+			say('#tokMsg', '연결되었습니다. (' + ((me && me.login) || '') + ')', 'ok');
+			showWho();
+			syncAll();
+			return me;
+		}).catch(function (err) {
+			btn.disabled = false;
+			say('#tokMsg', (err && err.message) || '연결에 실패했습니다.', 'err');
+			syncAll();
+			throw err;
+		});
+	}
+
+	/* ---------------------------------------------- 비밀번호 변경 */
+	function savePw() {
+		var o = $('#pwOld').value, n = $('#pwNew').value, n2 = $('#pwNew2').value;
+		if (o !== currentPw()) { say('#pwMsg', '현재 비밀번호가 올바르지 않습니다.', 'err'); return; }
+		if (n.length < 4) { say('#pwMsg', '새 비밀번호는 4자 이상으로 정해 주세요.', 'err'); return; }
+		if (n !== n2) { say('#pwMsg', '새 비밀번호가 서로 다릅니다.', 'err'); return; }
+		try { localStorage.setItem(PW_KEY, n); } catch (e) {
+			say('#pwMsg', '이 브라우저에 저장할 수 없습니다.', 'err');
+			return;
+		}
+		$('#pwOld').value = $('#pwNew').value = $('#pwNew2').value = '';
+		say('#pwMsg', '비밀번호를 바꿨습니다.', 'ok');
+		toast('비밀번호를 바꿨습니다.', 'ok');
 	}
 
 	/* ---------------------------------------------- 발행 */
 	function openPublish() {
 		var list = ST.changeList();
 		if (!list.length) { toast('발행할 변경사항이 없습니다.'); return; }
+
+		var v = ST.check();
+		if (!v.ok) { toast(v.message, 'err'); return; }
+
+		if (!G.hasToken()) {
+			toast('발행하려면 GitHub 토큰을 먼저 등록해 주세요.', 'err');
+			location.hash = '#token';
+			setTimeout(function () { $('#fTok').focus(); }, 120);
+			return;
+		}
+
 		$('#pubN').textContent = list.length;
 		$('#pubList').innerHTML = list.map(function (c) { return '· ' + esc(c.label); }).join('<br>');
 		say('#pubMsg', '', 'info');
@@ -522,10 +676,7 @@
 				var b = d.createElement('button');
 				b.type = 'button'; b.className = 'btn sm'; b.style.marginTop = '8px';
 				b.textContent = '최신 내용 불러오기';
-				b.addEventListener('click', function () {
-					ST.clearDraft();
-					location.reload();
-				});
+				b.addEventListener('click', function () { ST.clearDraft(); location.reload(); });
 				$('#pubMsg').appendChild(d.createElement('br'));
 				$('#pubMsg').appendChild(b);
 			} else {
@@ -541,7 +692,7 @@
 		$$('[data-view]').forEach(function (a) {
 			a.addEventListener('click', function (ev) {
 				var v = a.getAttribute('data-view');
-				if (a.tagName === 'A' && a.getAttribute('href')) return;   /* 해시로 이동 */
+				if (a.tagName === 'A' && a.getAttribute('href')) return;
 				ev.preventDefault();
 				location.hash = '#' + v;
 			});
@@ -549,22 +700,36 @@
 
 		$('#menuBtn').addEventListener('click', function () { $('#side').classList.toggle('open'); });
 		$('#logoutBtn').addEventListener('click', logout);
-		$('#btnPreviewTop').addEventListener('click', function () { location.hash = '#preview'; });
-		$('#pvReload').addEventListener('click', renderPreview);
 		$('#btnPublish').addEventListener('click', openPublish);
 		$('#btnPublish2').addEventListener('click', openPublish);
 		$('#pubGo').addEventListener('click', doPublish);
+		$('#btnHistReload').addEventListener('click', renderHistory);
+		$('#btnTokSave').addEventListener('click', function () { saveToken().catch(function () {}); });
+		$('#btnTokClear').addEventListener('click', function () {
+			G.clearToken();
+			$('#fTok').value = '';
+			$('#topWho').textContent = '';
+			say('#tokMsg', '연결을 끊었습니다.', 'info');
+			syncAll();
+		});
+		$('#btnPwSave').addEventListener('click', savePw);
+
 		$('#btnResetAll').addEventListener('click', function () {
 			if (!ST.isDirty()) return;
 			if (confirm('수정한 내용을 모두 되돌립니다. 계속할까요?')) { ST.resetAll(); toast('모두 되돌렸습니다.'); }
 		});
 
-		$$('.pv-bar [data-pw]').forEach(function (b) {
-			b.addEventListener('click', function () {
-				$$('.pv-bar [data-pw]').forEach(function (x) { x.classList.remove('primary'); });
-				b.classList.add('primary');
-				$('#pvFrame').style.width = b.getAttribute('data-pw');
-			});
+		var t1;
+		$('#imgSearch').addEventListener('input', function () {
+			clearTimeout(t1);
+			var v = this.value;
+			t1 = setTimeout(function () { filter.image = v; renderCats('image'); }, 150);
+		});
+		var t2;
+		$('#txtSearch').addEventListener('input', function () {
+			clearTimeout(t2);
+			var v = this.value;
+			t2 = setTimeout(function () { filter.text = v; renderCats('text'); }, 150);
 		});
 
 		$$('[data-close]').forEach(function (b) {
