@@ -155,7 +155,7 @@
 			spec: { '규격': '210 × 297 mm (A4)', '페이지': '8p / 12p / 16p', '제본': '중철 제본', '제작기간': '10~14일' }
 		},
 		{
-			id: 'pm02', cat: 'promo', name: '3단 리플렛', img: 'niz01.jpg',
+			id: 'pm02', cat: 'promo', name: '3단 리플렛', img: 'img-260901131847.png',
 			desc: '진료 항목과 시술 안내를 간결하게 정리한 3단 리플렛.',
 			depts: ALL_DEPT, best: true,
 			qty: qty([{ label: '500부', price: 138000 }, { label: '1,000부', price: 198000 }, { label: '3,000부', price: 438000 }]),
@@ -287,7 +287,7 @@
 			spec: { '규격': '90 × 50 mm', '인쇄': '단면 / 양면 선택', '제작기간': '4~6일', '최소수량': '200매' }
 		},
 		{
-			id: 'cd03', cat: 'card', name: '소봉투 (서양 봉투)', img: 'niz04.jpg',
+			id: 'cd03', cat: 'card', name: '소봉투 (서양 봉투)', img: 'img-260901131912.png',
 			desc: '안내문 · 영수증을 담아 전달하는 병원 소봉투.',
 			depts: ALL_DEPT, reorder: true,
 			qty: qty([{ label: '1,000매', price: 86000 }, { label: '3,000매', price: 208000 }, { label: '5,000매', price: 318000 }]),
@@ -295,7 +295,7 @@
 			spec: { '규격': '120 × 235 mm', '인쇄': '단면 1도', '제작기간': '5~7일', '최소수량': '1,000매' }
 		},
 		{
-			id: 'cd04', cat: 'card', name: '대봉투 (각대 봉투)', img: 'p33.jpg',
+			id: 'cd04', cat: 'card', name: '대봉투 (각대 봉투)', img: 'chatgpt-image-2026-8-14-09-56-16-260901131938.png',
 			desc: '서류 · 브로슈어를 담는 A4 규격 병원 대봉투.',
 			depts: ALL_DEPT,
 			qty: qty([{ label: '500매', price: 118000 }, { label: '1,000매', price: 188000 }, { label: '3,000매', price: 438000 }]),
@@ -311,7 +311,7 @@
 			spec: { '규격': '105 × 175 mm', '인쇄': '양면 1도', '제작기간': '5~7일', '최소수량': '2,000매' }
 		},
 		{
-			id: 'cd06', cat: 'card', name: '진료비 영수증 봉투', img: 'p35.jpg',
+			id: 'cd06', cat: 'card', name: '진료비 영수증 봉투', img: 'img-260901131921.png',
 			desc: '수납 후 영수증과 안내문을 함께 담는 전용 봉투.',
 			depts: ALL_DEPT,
 			qty: qty([{ label: '1,000매', price: 82000 }, { label: '3,000매', price: 196000 }]),
@@ -321,7 +321,7 @@
 
 		/* ===== 개원 패키지 ===== */
 		{
-			id: 'pk01', cat: 'package', name: '개원 베이직 패키지', img: 'p02.jpg',
+			id: 'pk01', cat: 'package', name: '개원 베이직 패키지', img: '52-thumb-260901132004.png',
 			desc: '개원에 꼭 필요한 인쇄물을 하나의 톤으로 묶은 기본 구성.',
 			depts: ALL_DEPT, best: true, badge: 'PACKAGE',
 			qty: qty([{ label: '기본 구성', price: 1280000 }, { label: '수량 2배 구성', price: 1980000 }]),
@@ -330,7 +330,7 @@
 			include: ['원장 · 직원 명함 각 500매', '진료카드 1,000매', '소봉투 1,000매', '초진 문진표 1,000매', '3단 리플렛 500부']
 		},
 		{
-			id: 'pk02', cat: 'package', name: '개원 프리미엄 패키지', img: 'p03.jpg',
+			id: 'pk02', cat: 'package', name: '개원 프리미엄 패키지', img: '47-thumb-260901132008.png',
 			desc: '브랜딩부터 사인물까지, 개원 전 과정을 한 번에 정리하는 구성.',
 			depts: ALL_DEPT, best: true, badge: 'PACKAGE',
 			qty: qty([{ label: '기본 구성', price: 2680000 }, { label: '사인물 확장 구성', price: 3480000 }]),
@@ -339,7 +339,7 @@
 			include: ['베이직 패키지 전체 구성', '병원 소개 브로슈어 300부', '데스크 사인 · 도어 사인 세트', '실내 X배너 2개', '개원 현수막 1장']
 		},
 		{
-			id: 'pk03', cat: 'package', name: '리뉴얼 패키지', img: 'p06.jpg',
+			id: 'pk03', cat: 'package', name: '리뉴얼 패키지', img: 'img-260901132029.png',
 			desc: '운영 중인 병원의 인쇄물 톤을 하나로 다시 정리하는 구성.',
 			depts: ALL_DEPT, badge: 'PACKAGE',
 			qty: qty([{ label: '기본 구성', price: 1680000 }, { label: '사인물 포함 구성', price: 2280000 }]),
@@ -348,7 +348,7 @@
 			include: ['명함 리디자인 (원장 · 직원)', '진료카드 1,000매', '서식류 3종 리디자인', '3단 리플렛 500부']
 		},
 		{
-			id: 'pk04', cat: 'package', name: '브랜딩 풀패키지', img: 'niz05.jpg',
+			id: 'pk04', cat: 'package', name: '브랜딩 풀패키지', img: 'niz03.jpg',
 			desc: 'CI부터 인쇄물 · 디지털까지 병원 브랜드 전체를 설계합니다.',
 			depts: ALL_DEPT, badge: 'PACKAGE',
 			qty: qty([{ label: '기본 구성', price: 4800000 }, { label: '홈페이지 포함 구성', price: 7800000 }]),
