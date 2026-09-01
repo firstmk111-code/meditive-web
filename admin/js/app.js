@@ -535,7 +535,7 @@
 
 		var def = picking, path, replace = false;
 		if (def.type === 'file') {
-			/* 배너는 이름을 바꾸면 CSS 에서 못 찾으므로 같은 이름으로 덮어쓴다 */
+			/* 배너 · Service 배경은 이름을 바꾸면 CSS 에서 못 찾으므로 같은 이름으로 덮어쓴다 */
 			path = def.path;
 			replace = true;
 			var want = (def.path.split('.').pop() || '').toLowerCase();
@@ -543,7 +543,7 @@
 			if (want === 'jpg') want = 'jpeg';
 			if (got === 'jpg') got = 'jpeg';
 			if (want !== got) {
-				toast('이 배너는 ' + def.path.split('.').pop().toUpperCase() + ' 파일로만 바꿀 수 있습니다.', 'err');
+				toast('이 항목은 ' + def.path.split('.').pop().toUpperCase() + ' 파일로만 바꿀 수 있습니다.', 'err');
 				return;
 			}
 		} else {

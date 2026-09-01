@@ -24,7 +24,10 @@
 	var PAGES = {
 		home: { file: 'home.html', name: '홈', kind: 'html' },
 		pf: { file: 'kr/portfolio/all.html', name: '포트폴리오', kind: 'html' },
-		shop: { file: 'js/shop.js', name: '상품몰 상품', kind: 'js' }
+		shop: { file: 'js/shop.js', name: '상품몰 상품', kind: 'js' },
+		shopHome: { file: 'js/shop_home.js', name: '상품몰 홈', kind: 'js2' },
+		/* 홈 Service 배경을 갈아 끼웠을 때 브라우저 캐시를 비우기 위해서만 손댄다 */
+		css: { file: 'css/main.css', name: '메인 스타일', kind: 'css' }
 	};
 
 	/* 상품 이미지가 실제로 놓여 있는 폴더 (shop.js 에는 파일명만 적힌다) */
@@ -187,6 +190,33 @@
 		})
 	});
 
+	/* 홈 Service 3칸 배경 — 스타일시트에서 부르는 배경이라 파일을 같은 이름으로 덮어쓴다 */
+	var SERVICE_BG = [
+		{ path: 'images/main/main_service_bg01.jpg', label: '1번 칸 · Brochure & Catalog 배경' },
+		{ path: 'images/main/main_service_bg02.jpg', label: '2번 칸 · Digital Contents 배경' },
+		{ path: 'images/main/main_service_bg03.jpg', label: '3번 칸 · Website 배경' }
+	];
+
+	sec({
+		id: 'i-home-service', top: '홈', name: 'Service 3칸 배경', kind: 'image', page: '@file',
+		desc: '홈 "하나의 방향으로 완성합니다" 영역 3칸에 깔리는 배경 사진입니다. 같은 파일 이름으로 덮어쓰며, 마우스를 올렸을 때 커지는 배경도 같이 바뀝니다. 세로로 긴 사진을 올려 주세요.',
+		fields: SERVICE_BG.map(function (b, i) {
+			var def = f('file.svcbg' + nn(i + 1), b.label, 'file');
+			def.path = b.path;
+			def.bump = 'css';   /* 갈아 끼우면 스타일시트의 캐시 번호를 올린다 */
+			return def;
+		})
+	});
+
+	sec({
+		id: 'i-home-pkg', top: '홈', name: '개원 준비 패키지', kind: 'image', page: 'home',
+		desc: '홈 "개원과 리뉴얼에 필요한 모든 것을" 영역의 카드 사진 2장입니다.',
+		fields: [
+			(function () { var d = f('home.shopPkg.item01.img', '개원 패키지', 'image'); d.base = SHOP_IMG_DIR; d.bg = true; return d; })(),
+			(function () { var d = f('home.shopPkg.item02.img', '리뉴얼 패키지', 'image'); d.base = SHOP_IMG_DIR; d.bg = true; return d; })()
+		]
+	});
+
 	/* ============ 서브 배너 (파일 통째 교체) ============ */
 	var BANNERS = [
 		{ path: 'images/banners/sub_visual_service_main.jpg', label: '서비스 페이지 상단 배너' },
@@ -209,7 +239,73 @@
 	/* ----------------------------------------------------
 	 * 원본 파일을 읽어 자동으로 만드는 카테고리
 	---------------------------------------------------- */
-	var built = { shop: false, pf: false };
+	var built = { shop: false, pf: false, shopHome: false };
+
+	/* ===== 상품몰 홈 : js/shop_home.js 의 배너 · 무료 템플릿 ===== */
+	var POOL_NAME = {
+		card: '명함 · 진료카드', env: '봉투', holder: '차트홀더', form: '문진표 · 서식',
+		leaflet: '리플렛', brochure: '브로슈어', poster: '포스터 · 배너',
+		sign: '병원 안내물', pack: '개원 패키지', best: '베스트'
+	};
+
+	function buildShopHome(text) {
+		if (built.shopHome) return;
+		var P = w.CMSShopHome;
+		if (!P || !text) return;
+
+		var heroes = P.heroList(text);
+		if (heroes.length) {
+			sec({
+				id: 'i-shophome-hero', top: '상품몰', name: '상품몰 배너', kind: 'image', page: 'shopHome',
+				desc: '상품몰 첫 화면에서 넘어가는 큰 배너 ' + heroes.length + '장의 오른쪽 사진입니다.',
+				fields: heroes.map(function (h, i) {
+					var def = f('shopHome.hero' + nn(i + 1) + '.pic', '배너 ' + (i + 1) + ' · ' + (h.label || h.tit2), 'image');
+					def.base = SHOP_IMG_DIR;
+					return def;
+				})
+			});
+
+			sec({
+				id: 't-shophome-hero', top: '상품몰', name: '상품몰 배너', kind: 'text', page: 'shopHome',
+				desc: '상품몰 첫 화면 큰 배너 ' + heroes.length + '장의 문구입니다. 제목은 두 줄로 나뉘며 둘째 줄이 굵게 나옵니다.',
+				fields: (function () {
+					var out = [];
+					heroes.forEach(function (h, i) {
+						var p = nn(i + 1), t = '배너 ' + (i + 1) + ' · ';
+						out.push(f('shopHome.hero' + p + '.label', t + '말머리 꼬리표', 'line'));
+						out.push(f('shopHome.hero' + p + '.tit1', t + '제목 첫 줄', 'line'));
+						out.push(f('shopHome.hero' + p + '.tit2', t + '제목 둘째 줄 (굵게)', 'line'));
+						out.push(f('shopHome.hero' + p + '.desc', t + '설명', 'line'));
+						out.push(f('shopHome.hero' + p + '.cta', t + '버튼 문구', 'line'));
+					});
+					return out;
+				})()
+			});
+		}
+
+		var pools = P.poolList(text);
+		if (pools.length) {
+			sec({
+				id: 'i-shophome-tpl', top: '상품몰', name: '무료 템플릿', kind: 'image', page: 'shopHome',
+				desc: '"무료 템플릿을 상품에 미리 입혀보세요" 영역에서 목업 위에 입혀지는 디자인 사진입니다. 상품군별로 묶여 있습니다.',
+				fields: (function () {
+					var out = [];
+					pools.forEach(function (pl) {
+						var nm = POOL_NAME[pl.key] || pl.key;
+						pl.files.forEach(function (fn, k) {
+							var def = f('shopHome.tpl.' + pl.key + '.' + nn(k + 1), nm + ' ' + (k + 1), 'image');
+							def.base = SHOP_IMG_DIR;
+							out.push(def);
+						});
+					});
+					return out;
+				})()
+			});
+		}
+
+		built.shopHome = true;
+		reindex();
+	}
 
 	/* ===== 상품몰 : js/shop.js 의 상품 배열에서 ===== */
 	function buildShop(text) {
@@ -358,9 +454,11 @@
 		PAGES: PAGES,
 		SHOP_IMG_DIR: SHOP_IMG_DIR,
 		BANNERS: BANNERS,
+		SERVICE_BG: SERVICE_BG,
 		SECTIONS: SECTIONS,
 		buildShop: buildShop,
 		buildPortfolio: buildPortfolio,
+		buildShopHome: buildShopHome,
 		get: get,
 		label: label,
 		sections: sections,

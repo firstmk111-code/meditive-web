@@ -10,7 +10,7 @@
 (function (w) {
 	'use strict';
 
-	var H = w.CMSHtml, J = w.CMSJs, S = w.CMSSchema, G = w.CMSGit;
+	var H = w.CMSHtml, J = w.CMSJs, P = w.CMSShopHome, S = w.CMSSchema, G = w.CMSGit;
 	var DRAFT_KEY = 'meditive.admin.draft';
 
 	var state = {
@@ -53,7 +53,10 @@
 			return Promise.all(ids.map(loadPage));
 		}).then(function () {
 			/* 원본을 읽은 뒤에야 상품몰 · 포트폴리오 카테고리를 만들 수 있다 */
+			/* 왼쪽 분류 목록에서 같은 큰 묶음끼리 붙어 있어야 하므로
+			 * 상품몰 → 상품몰 홈 → 포트폴리오 순서로 만든다 */
 			S.buildShop(state.origin.shop || '');
+			S.buildShopHome(state.origin.shopHome || '');
 			S.buildPortfolio(state.origin.pf || '');
 			restoreDraft();
 			return true;
@@ -70,6 +73,15 @@
 	function shopParts(key) {
 		var p = String(key).split('.');
 		return { id: p[1], field: p[2] };
+	}
+
+	/* 상품몰 홈 Key 를 쪼갠다
+	 *   shopHome.hero02.pic      -> 배너 2번의 사진
+	 *   shopHome.tpl.card.03     -> 무료 템플릿 '명함' 묶음의 3번째 사진 */
+	function shopHomeParts(key) {
+		var p = String(key).split('.');
+		if (p[1] === 'tpl') return { kind: 'pool', pool: p[2], idx: parseInt(p[3], 10) };
+		return { kind: 'hero', n: parseInt(String(p[1]).replace('hero', ''), 10), field: p[2] };
 	}
 
 	/* ---------------------------------------------- 현재 값 읽기 */
@@ -95,6 +107,16 @@
 			if (raw == null) return '';
 			return (def.type === 'image' && def.base) ? (def.base + raw) : raw;
 		}
+
+		if (page === 'shopHome') {
+			var hp = shopHomeParts(key);
+			var hraw = (hp.kind === 'pool') ? P.poolRead(src, hp.pool, hp.idx) : P.heroRead(src, hp.n, hp.field);
+			if (hraw == null) return '';
+			return (def.type === 'image' && def.base) ? (def.base + hraw) : hraw;
+		}
+
+		/* 인라인 배경 사진 (홈 패키지 카드) */
+		if (def.type === 'image' && def.bg) return H.readBg(src, key) || '';
 
 		if (def.type === 'image') return H.readAttr(src, key, 'src') || '';
 		if (def.type === 'url') return H.readAttr(src, key, 'href') || '';
@@ -190,7 +212,7 @@
 			out.push({
 				key: '@upload:' + k,
 				top: u.replace ? '공통' : '이미지 파일',
-				label: (u.replace ? '배너 이미지 교체 · ' : '새 이미지 올리기 · ') + (u.label || k),
+				label: (u.replace ? '이미지 파일 교체 · ' : '새 이미지 올리기 · ') + (u.label || k),
 				kind: 'file',
 				before: u.replace ? k : '',
 				after: u.name || k
@@ -222,12 +244,28 @@
 			return J.applyEdits(src, jsEdits);
 		}
 
+		if (S.PAGES[pageId].kind === 'js2') {
+			var hEdits = [];
+			for (k in state.edits) {
+				if (!state.edits.hasOwnProperty(k) || state.edits[k].page !== pageId) continue;
+				def = S.get(k);
+				var hp = shopHomeParts(k);
+				var hv = state.edits[k].value;
+				if (def && def.base) hv = hv.slice(def.base.length);
+				if (hp.kind === 'pool') hEdits.push({ kind: 'pool', pool: hp.pool, idx: hp.idx, value: hv });
+				else hEdits.push({ kind: 'hero', n: hp.n, field: hp.field, value: hv });
+			}
+			return P.applyEdits(src, hEdits);
+		}
+
 		var edits = [];
 		for (k in state.edits) {
 			if (!state.edits.hasOwnProperty(k) || state.edits[k].page !== pageId) continue;
 			e = state.edits[k];
 			def = S.get(k);
-			if (def.type === 'image') {
+			if (def.type === 'image' && def.bg) {
+				edits.push({ type: 'bg', key: k, value: e.value });
+			} else if (def.type === 'image') {
 				edits.push({ type: 'attr', key: k, attr: 'src', value: e.value });
 			} else if (def.type === 'url') {
 				edits.push({ type: 'attr', key: k, attr: 'href', value: e.value });
@@ -237,6 +275,33 @@
 			}
 		}
 		return H.applyEdits(src, edits);
+	}
+
+	/* 파일 자체를 갈아 끼우는 항목의 정의를 저장 경로로 찾는다 */
+	function fileDefByPath(path) {
+		var found = null;
+		S.SECTIONS.forEach(function (s) {
+			s.fields.forEach(function (fd) { if (fd.type === 'file' && fd.path === path) found = fd; });
+		});
+		return found;
+	}
+
+	/* Service 배경처럼 스타일시트가 부르는 사진은 파일 이름이 그대로라
+	 * 방문자 브라우저가 옛 사진을 계속 보여줄 수 있다.
+	 * 그래서 주소 뒤에 붙은 캐시 번호(?ver=)만 새 번호로 올려 준다.
+	 * 색·크기·위치 등 디자인 값은 건드리지 않는다. */
+	function stamp() {
+		var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; };
+		return String(d.getFullYear()).slice(2) + p(d.getMonth() + 1) + p(d.getDate()) + p(d.getHours()) + p(d.getMinutes());
+	}
+
+	function bumpCss(css, paths) {
+		var out = String(css || ''), v = stamp();
+		paths.forEach(function (path) {
+			var name = path.split('/').pop().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+			out = out.replace(new RegExp('(' + name + ')\\?ver=[0-9]+', 'g'), '$1?ver=' + v);
+		});
+		return out;
 	}
 
 	/* 발행할 파일 묶음 */
@@ -249,21 +314,35 @@
 			if (!changed) continue;
 			out.push({ path: S.PAGES[id].file, text: buildPage(id) });
 		}
+
+		var bump = [];
 		for (p in state.uploads) {
 			if (!state.uploads.hasOwnProperty(p)) continue;
 			out.push({ path: p, b64: state.uploads[p].b64 });
+			var fd = fileDefByPath(p);
+			if (fd && fd.bump === 'css') bump.push(p);
+		}
+		if (bump.length && origin('css')) {
+			var css = bumpCss(origin('css'), bump);
+			if (css !== origin('css')) out.push({ path: S.PAGES.css.file, text: css });
 		}
 		return out;
 	}
 
 	/* 상품 데이터는 따옴표 하나만 어긋나도 사이트가 멈추므로 미리 검사한다 */
 	function check() {
-		var k, need = false;
-		for (k in state.edits) { if (state.edits[k].page === 'shop') { need = true; break; } }
-		if (!need) return { ok: true, message: '' };
-		var r = J.validate(buildPage('shop'));
-		if (r.ok) return r;
-		return { ok: false, message: '상품 데이터에 문제가 있어 발행할 수 없습니다. (' + r.message + ') 따옴표(’)나 역슬래시를 지우고 다시 시도해 주세요.' };
+		var k, need = {}, r;
+		for (k in state.edits) { need[state.edits[k].page] = true; }
+
+		if (need.shop) {
+			r = J.validate(buildPage('shop'));
+			if (!r.ok) return { ok: false, message: '상품 데이터에 문제가 있어 발행할 수 없습니다. (' + r.message + ') 따옴표(’)나 역슬래시를 지우고 다시 시도해 주세요.' };
+		}
+		if (need.shopHome) {
+			r = P.validate(buildPage('shopHome'));
+			if (!r.ok) return { ok: false, message: '상품몰 배너 · 무료 템플릿 내용에 문제가 있어 발행할 수 없습니다. (' + r.message + ') 따옴표(’)나 역슬래시를 지우고 다시 시도해 주세요.' };
+		}
+		return { ok: true, message: '' };
 	}
 
 	function message() {

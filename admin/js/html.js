@@ -92,9 +92,45 @@
 		return m ? m[1] : null;
 	}
 
+	/* style="background-image:url(....)" 안쪽 주소만 뽑는다
+	 * (url 앞뒤 따옴표 유무 · 그 밖의 배경 속성은 원본 그대로 둔다) */
+	var BG_RE = /(background(?:-image)?\s*:[^;"]*?url\()(['"]?)([^)'"]*)(\2\))/i;
+
+	function styleOf(html, at) {
+		var openEnd = endOfOpenTag(html, at);
+		if (openEnd < 0) return null;
+		var open = html.slice(at, openEnd);
+		var m = /\sstyle="([^"]*)"/.exec(open);
+		return m ? { openEnd: openEnd, open: open, style: m[1], at: m.index, len: m[0].length } : null;
+	}
+
+	function readBg(html, key) {
+		var marks = findMarks(html, 'data-cms-bg', key);
+		if (!marks.length) return null;
+		var s = styleOf(html, marks[0]);
+		if (!s) return null;
+		var g = BG_RE.exec(s.style);
+		return g ? g[3] : null;
+	}
+
 	/* ----------------------------------------------------
 	 * 3. 쓰기
 	---------------------------------------------------- */
+	function writeBg(html, key, value) {
+		var marks = findMarks(html, 'data-cms-bg', key);
+		if (!marks.length) return html;
+		for (var i = marks.length - 1; i >= 0; i--) {
+			var s = styleOf(html, marks[i]);
+			if (!s || !BG_RE.test(s.style)) continue;
+			var style = s.style.replace(BG_RE, function (all, head, q, old, tail) {
+				return head + q + value + tail;
+			});
+			var open = s.open.slice(0, s.at) + ' style="' + style + '"' + s.open.slice(s.at + s.len);
+			html = html.slice(0, marks[i]) + open + html.slice(s.openEnd);
+		}
+		return html;
+	}
+
 	function writeInner(html, key, innerHtml) {
 		var marks = findMarks(html, 'data-cms', key);
 		if (!marks.length) return html;
@@ -175,13 +211,14 @@
 
 	/* ----------------------------------------------------
 	 * 5. 변경 묶음을 원본 HTML 에 한 번에 적용
-	 *    edits = [{ type:'inner'|'attr', key, attr, value }]
+	 *    edits = [{ type:'inner'|'attr'|'bg', key, attr, value }]
 	---------------------------------------------------- */
 	function applyEdits(html, edits) {
 		var out = html, i, e;
 		for (i = 0; i < edits.length; i++) {
 			e = edits[i];
 			if (e.type === 'attr') out = writeAttr(out, e.key, e.attr, e.value);
+			else if (e.type === 'bg') out = writeBg(out, e.key, e.value);
 			else out = writeInner(out, e.key, e.value);
 		}
 		return out;
@@ -190,8 +227,10 @@
 	w.CMSHtml = {
 		readInner: readInner,
 		readAttr: readAttr,
+		readBg: readBg,
 		writeInner: writeInner,
 		writeAttr: writeAttr,
+		writeBg: writeBg,
 		htmlToPlain: htmlToPlain,
 		plainToHtml: plainToHtml,
 		detectBr: detectBr,
