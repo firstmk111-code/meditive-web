@@ -3,6 +3,7 @@ _*.ps1
 _*.pl
 _enginetest.html
 _uitest.html
+_shot.html
 _pf_*.csv
 _expr*.txt
 _home_full_backup.html
