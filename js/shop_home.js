@@ -72,51 +72,29 @@
 	 *   price: 가격 문구를 직접 적을 때만 (예: '견적 문의')
 	 * 이름과 사진을 여기에서 바꿔도 상품몰 상품 정보는 그대로 남는다. */
 
+	/* PICK — 개원 준비 구성 8가지.
+	 * 해시태그 칩 4개가 모두 아래 한 목록을 함께 쓰므로, 여기만 고치면 전부 바뀐다.
+	 * 사진은 세로 박스(345 : 400)에 맞춰 만든 것을 images/shop 에 넣고 연결한다. */
+	var PICK_ITEMS = [
+		{ id: 'pk04', nm: '브랜딩 패키지',      pic: 'images/shop/brand_package.jpg' },
+		{ id: 'pm02', nm: '3단 리플렛',        pic: 'niz01.jpg' },
+		{ id: 'cd01', nm: '명함',             pic: 'niz02.jpg' },
+		{ id: 'pk01', nm: '개원 베이직 패키지',  pic: 'p02.jpg' },
+		{ id: 'pk02', nm: '개원 프리미엄 패키지', pic: 'p03.jpg' },
+		{ id: 'pk03', nm: '리뉴얼 패키지',      pic: 'p06.jpg' },
+		{ id: 'pk05', nm: '로고 리뉴얼',        pic: 'p11.jpg' },
+		{ id: 'pm01', nm: '브로슈어',          pic: 'p01.jpg' }
+	];
+
 	/* PICK — 해시태그로 골라 보는 큐레이션 */
 	var PICK = {
 		tit: '개원 준비, 이 구성이면 충분해요',
 		more: shopUrl('package'),
 		tags: [
-			{ lb: '#개원 패키지', items: [
-				{ id: 'pk04', nm: '브랜딩 풀패키지',   pic: 'images/shop/brand_package.jpg' },
-				{ id: 'pm02', nm: '3단 리플렛',       pic: 'niz01.jpg' },
-				{ id: 'cd01', nm: '원장 명함',        pic: 'niz02.jpg' },
-				{ id: 'pk01', nm: '개원 베이직 패키지', pic: 'p02.jpg' },
-				{ id: 'pk02', nm: '개원 프리미엄 패키지', pic: 'p03.jpg' },
-				{ id: 'pk03', nm: '리뉴얼 패키지',     pic: 'p06.jpg' },
-				{ id: 'pr01', nm: '진료카드',         pic: 'p05.jpg' },
-				{ id: 'fm01', nm: '초진 문진표',       pic: 'p15.jpg' }
-			] },
-			{ lb: '#진료 · 예약카드', items: [
-				{ id: 'pr01', nm: '진료카드',          pic: 'p05.jpg' },
-				{ id: 'pr02', nm: '예약카드',          pic: 'p44.jpg' },
-				{ id: 'fm07', nm: '시술 후 주의사항 카드', pic: 'p17.jpg' },
-				{ id: 'cd01', nm: '원장 명함',         pic: 'niz02.jpg' },
-				{ id: 'cd02', nm: '직원 명함',         pic: 'niz03.jpg' },
-				{ id: 'pr04', nm: '차트홀더 · 파일',    pic: 'p24.jpg' },
-				{ id: 'pr03', nm: '처방전 봉투',        pic: 'p21.jpg' },
-				{ id: 'fm03', nm: '진료기록지',        pic: 'p22.jpg' }
-			] },
-			{ lb: '#문진표 · 서식', items: [
-				{ id: 'fm01', nm: '초진 문진표',        pic: 'p15.jpg' },
-				{ id: 'fm02', nm: '시술 · 수술 동의서',  pic: 'p20.jpg' },
-				{ id: 'fm03', nm: '진료기록지',         pic: 'p22.jpg' },
-				{ id: 'fm04', nm: '검사결과 안내지',     pic: 'p23.jpg' },
-				{ id: 'fm05', nm: '수납 영수증 양식',    pic: 'p25.jpg' },
-				{ id: 'fm06', nm: '복약 · 처방 안내문',  pic: 'p13.jpg' },
-				{ id: 'fm07', nm: '시술 후 주의사항 카드', pic: 'p17.jpg' },
-				{ id: 'pr04', nm: '차트홀더 · 파일',     pic: 'p24.jpg' }
-			] },
-			{ lb: '#명함 · 봉투', items: [
-				{ id: 'cd01', nm: '원장 명함',          pic: 'niz02.jpg' },
-				{ id: 'cd02', nm: '직원 명함',          pic: 'niz03.jpg' },
-				{ id: 'cd03', nm: '소봉투 (서양 봉투)',  pic: 'niz04.jpg' },
-				{ id: 'cd04', nm: '대봉투 (각대 봉투)',  pic: 'p33.jpg' },
-				{ id: 'cd05', nm: '약봉투',            pic: 'p34.jpg' },
-				{ id: 'cd06', nm: '진료비 영수증 봉투',  pic: 'p35.jpg' },
-				{ id: 'pr03', nm: '처방전 봉투',        pic: 'p21.jpg' },
-				{ id: 'pr01', nm: '진료카드',          pic: 'p05.jpg' }
-			] }
+			{ lb: '#개원 패키지',     items: PICK_ITEMS },
+			{ lb: '#진료 · 예약카드', items: PICK_ITEMS },
+			{ lb: '#문진표 · 서식',   items: PICK_ITEMS },
+			{ lb: '#명함 · 봉투',     items: PICK_ITEMS }
 		]
 	};
 
@@ -131,10 +109,7 @@
 				{ id: 'pm01', nm: '병원 소개 브로슈어',   pic: 'p01.jpg' },
 				{ id: 'pm03', nm: '2단 리플렛',         pic: 'p07.jpg' },
 				{ id: 'pm04', nm: '진료과목 포스터',     pic: 'p09.jpg' },
-				{ id: 'pm05', nm: '실내용 X배너',        pic: 'p26.jpg' },
-				{ id: 'pm06', nm: '개원 안내 현수막',     pic: 'p28.jpg' },
-				{ id: 'pm07', nm: '이벤트 전단지',       pic: 'p16.jpg' },
-				{ id: 'pm08', nm: '엘리베이터 광고 패널', pic: 'p41.jpg' }
+				{ id: 'pm07', nm: '이벤트 전단지',       pic: 'p16.jpg' }
 			] },
 			{ cat: 'print', lb: '병원 인쇄물', items: [
 				{ id: 'pr01', nm: '진료카드',           pic: 'p05.jpg' },
