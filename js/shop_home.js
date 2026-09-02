@@ -82,8 +82,8 @@
 		{ id: 'pk01', nm: '개원 베이직 패키지',  pic: 'p02.jpg' },
 		{ id: 'pk02', nm: '개원 프리미엄 패키지', pic: 'p03.jpg' },
 		{ id: 'pk03', nm: '리뉴얼 패키지',      pic: 'p06.jpg' },
-		{ id: 'pk05', nm: '로고 리뉴얼',        pic: 'p11.jpg' },
-		{ id: 'pm01', nm: '브로슈어',          pic: 'p01.jpg' }
+		{ id: 'pk05', nm: '로고 리뉴얼',        pic: 'images/shop/logo_renewal.jpg' },
+		{ id: 'pm01', nm: '브로슈어',          pic: 'images/shop/brochure.jpg' }
 	];
 
 	/* PICK — 해시태그로 골라 보는 큐레이션 */

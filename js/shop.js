@@ -357,7 +357,7 @@
 			include: ['CI · 로고 디자인 (3안 제안)', '브랜드 가이드북 제작', '프리미엄 패키지 전체 구성', 'SNS · 카드뉴스 템플릿 10종']
 		},
 		{
-			id: 'pk05', cat: 'package', name: '로고 리뉴얼', img: 'img-260901132029.png',
+			id: 'pk05', cat: 'package', name: '로고 리뉴얼', img: 'logo_renewal.jpg',
 			desc: '병원 이름은 그대로 두고 로고만 지금 톤에 맞게 다시 다듬습니다.',
 			depts: ALL_DEPT, badge: 'PACKAGE',
 			qty: qty([{ label: '기본 구성', price: 0 }]),
