@@ -81,7 +81,7 @@
 	var PRODUCTS = [
 		/* ===== 병원 인쇄물 ===== */
 		{
-			id: 'pr01', cat: 'print', name: '진료카드', img: 'p05.jpg',
+			id: 'pr01', cat: 'print', name: '진료카드', img: 'niz03.jpg',
 			desc: '재방문을 부르는 첫 접점. 병원 로고와 진료시간을 담은 카드.',
 			depts: ALL_DEPT, best: true, reorder: true, badge: 'BEST',
 			qty: qty([{ label: '500매', price: 39000 }, { label: '1,000매', price: 62000 }, { label: '2,000매', price: 104000 }, { label: '5,000매', price: 218000 }]),
@@ -97,7 +97,7 @@
 			spec: { '규격': '90 × 50 mm', '인쇄': '단면 / 양면 선택', '제작기간': '3~4일', '최소수량': '500매' }
 		},
 		{
-			id: 'pr03', cat: 'print', name: '처방전 봉투', img: 'p21.jpg',
+			id: 'pr03', cat: 'print', name: '처방전 봉투', img: 'chatgpt-image-2026-8-14-09-56-16-260901131938.png',
 			desc: '처방전과 안내문을 함께 담는 병원 전용 봉투.',
 			depts: ['dental', 'derma', 'internal', 'ortho', 'oriental'], reorder: true,
 			qty: qty([{ label: '1,000매', price: 88000 }, { label: '3,000매', price: 214000 }, { label: '5,000매', price: 328000 }]),
@@ -105,7 +105,7 @@
 			spec: { '규격': '120 × 235 mm (서양2호)', '인쇄': '1도 / 컬러 선택', '제작기간': '4~5일', '최소수량': '1,000매' }
 		},
 		{
-			id: 'pr04', cat: 'print', name: '차트홀더 · 파일', img: 'p24.jpg',
+			id: 'pr04', cat: 'print', name: '차트홀더 · 파일', img: 'p42.jpg',
 			desc: '진료 서류를 정리해 전달하는 병원 브랜드 홀더.',
 			depts: ALL_DEPT,
 			qty: qty([{ label: '200부', price: 268000 }, { label: '500부', price: 520000 }, { label: '1,000부', price: 890000 }]),
@@ -113,7 +113,7 @@
 			spec: { '규격': '220 × 310 mm', '형태': '이단 접지 + 포켓', '제작기간': '7~9일', '최소수량': '200부' }
 		},
 		{
-			id: 'pr05', cat: 'print', name: '진료 안내 데스크 사인', img: 'p27.jpg',
+			id: 'pr05', cat: 'print', name: '진료 안내 데스크 사인', img: 'p46.jpg',
 			desc: '접수 데스크에 놓는 진료시간 · 안내 사인물.',
 			depts: ALL_DEPT,
 			qty: qty([{ label: '1개', price: 128000 }, { label: '2개', price: 232000 }, { label: '4개', price: 428000 }]),
@@ -121,7 +121,7 @@
 			spec: { '규격': '200 × 300 mm', '소재': '아크릴 / 우드', '제작기간': '7~10일', '최소수량': '1개' }
 		},
 		{
-			id: 'pr06', cat: 'print', name: '진료실 도어 사인', img: 'p30.jpg',
+			id: 'pr06', cat: 'print', name: '진료실 도어 사인', img: 'p47.jpg',
 			desc: '진료실 · 상담실 · 처치실을 구분하는 미니멀 사인.',
 			depts: ALL_DEPT,
 			qty: qty([{ label: '3개 세트', price: 168000 }, { label: '6개 세트', price: 298000 }, { label: '10개 세트', price: 452000 }]),
@@ -129,7 +129,7 @@
 			spec: { '규격': '150 × 60 mm', '부착': '양면 폼테이프', '제작기간': '7~10일', '최소수량': '3개' }
 		},
 		{
-			id: 'pr07', cat: 'print', name: '수납 · 대기 안내판', img: 'p32.jpg',
+			id: 'pr07', cat: 'print', name: '수납 · 대기 안내판', img: 'p26.jpg',
 			desc: '대기 공간의 안내 문구를 정돈된 톤으로 정리한 안내판.',
 			depts: ALL_DEPT,
 			qty: qty([{ label: '1개', price: 148000 }, { label: '2개', price: 268000 }]),
@@ -137,7 +137,7 @@
 			spec: { '규격': '400 × 600 mm', '소재': '포맥스 / 아크릴', '제작기간': '7~10일', '최소수량': '1개' }
 		},
 		{
-			id: 'pr08', cat: 'print', name: '진료 안내 리플렛 (내부 비치용)', img: 'p18.jpg',
+			id: 'pr08', cat: 'print', name: '진료 안내 리플렛 (내부 비치용)', img: 'p04.jpg',
 			desc: '대기실에 비치해 진료 과정을 설명하는 안내 리플렛.',
 			depts: ALL_DEPT,
 			qty: qty([{ label: '500부', price: 118000 }, { label: '1,000부', price: 178000 }, { label: '3,000부', price: 398000 }]),
