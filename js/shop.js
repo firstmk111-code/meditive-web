@@ -121,7 +121,7 @@
 			spec: { '규격': '200 × 300 mm', '소재': '아크릴 / 우드', '제작기간': '7~10일', '최소수량': '1개' }
 		},
 		{
-			id: 'pr06', cat: 'print', name: '진료실 도어 사인', img: 'p47.jpg',
+			id: 'pr06', cat: 'print', name: '진료실 도어 사인', img: 'chatgpt-image-2026-8-14-09-55-54-260902165524.png',
 			desc: '진료실 · 상담실 · 처치실을 구분하는 미니멀 사인.',
 			depts: ALL_DEPT,
 			qty: qty([{ label: '3개 세트', price: 168000 }, { label: '6개 세트', price: 298000 }, { label: '10개 세트', price: 452000 }]),
@@ -179,7 +179,7 @@
 			spec: { '규격': 'A2 / A1 / B1', '인쇄': '단면 컬러', '제작기간': '4~6일', '최소수량': '10매' }
 		},
 		{
-			id: 'pm05', cat: 'promo', name: '실내용 X배너', img: 'p26.jpg',
+			id: 'pm05', cat: 'promo', name: '실내용 X배너', img: '02-260902171513.jpg',
 			desc: '접수처 · 대기실에 세우는 진료 안내 배너. 거치대 포함.',
 			depts: ALL_DEPT,
 			qty: qty([{ label: '1개', price: 92000 }, { label: '2개', price: 168000 }, { label: '4개', price: 312000 }]),
@@ -213,7 +213,7 @@
 
 		/* ===== 서식류 ===== */
 		{
-			id: 'fm01', cat: 'form', name: '초진 문진표', img: 'p15.jpg',
+			id: 'fm01', cat: 'form', name: '초진 문진표', img: 'img-260902171538.png',
 			desc: '첫 내원 환자의 정보를 정돈된 서식으로 받는 문진표.',
 			depts: ALL_DEPT, best: true, reorder: true,
 			qty: qty([{ label: '1,000매', price: 64000 }, { label: '3,000매', price: 148000 }, { label: '5,000매', price: 218000 }]),
@@ -221,7 +221,7 @@
 			spec: { '규격': 'A4 (210 × 297 mm)', '인쇄': '단면 / 양면 선택', '제작기간': '4~5일', '최소수량': '1,000매' }
 		},
 		{
-			id: 'fm02', cat: 'form', name: '시술 · 수술 동의서', img: 'p20.jpg',
+			id: 'fm02', cat: 'form', name: '시술 · 수술 동의서', img: 'img-260902171551.png',
 			desc: '설명 의무를 충족하면서 읽기 쉬운 구조의 동의서 서식.',
 			depts: ['derma', 'plastic', 'dental', 'ortho'], reorder: true,
 			qty: qty([{ label: '1,000매', price: 68000 }, { label: '3,000매', price: 156000 }, { label: '5,000매', price: 228000 }]),
@@ -245,7 +245,7 @@
 			spec: { '규격': 'A4', '인쇄': '단면 컬러', '제작기간': '4~6일', '최소수량': '500매' }
 		},
 		{
-			id: 'fm05', cat: 'form', name: '수납 영수증 양식', img: 'p25.jpg',
+			id: 'fm05', cat: 'form', name: '수납 영수증 양식', img: 'img-260902171558.png',
 			desc: '병원 로고가 들어간 수납 · 진료비 영수증 서식.',
 			depts: ALL_DEPT, reorder: true,
 			qty: qty([{ label: '2,000매', price: 72000 }, { label: '5,000매', price: 148000 }, { label: '10,000매', price: 268000 }]),
@@ -279,7 +279,7 @@
 			spec: { '규격': '90 × 50 mm', '인쇄': '단면 / 양면 선택', '제작기간': '4~6일', '최소수량': '200매' }
 		},
 		{
-			id: 'cd02', cat: 'card', name: '직원 명함', img: 'niz03.jpg',
+			id: 'cd02', cat: 'card', name: '직원 명함', img: 'p44.jpg',
 			desc: '원장 명함과 톤을 맞춘 상담실장 · 간호팀 명함.',
 			depts: ALL_DEPT, reorder: true,
 			qty: qty([{ label: '200매', price: 34000 }, { label: '500매', price: 54000 }, { label: '1,000매', price: 86000 }]),
@@ -295,7 +295,7 @@
 			spec: { '규격': '120 × 235 mm', '인쇄': '단면 1도', '제작기간': '5~7일', '최소수량': '1,000매' }
 		},
 		{
-			id: 'cd04', cat: 'card', name: '대봉투 (각대 봉투)', img: 'chatgpt-image-2026-8-14-09-56-16-260901131938.png',
+			id: 'cd04', cat: 'card', name: '대봉투 (각대 봉투)', img: 'img-260902171656.png',
 			desc: '서류 · 브로슈어를 담는 A4 규격 병원 대봉투.',
 			depts: ALL_DEPT,
 			qty: qty([{ label: '500매', price: 118000 }, { label: '1,000매', price: 188000 }, { label: '3,000매', price: 438000 }]),
@@ -311,7 +311,7 @@
 			spec: { '규격': '105 × 175 mm', '인쇄': '양면 1도', '제작기간': '5~7일', '최소수량': '2,000매' }
 		},
 		{
-			id: 'cd06', cat: 'card', name: '진료비 영수증 봉투', img: 'img-260901131921.png',
+			id: 'cd06', cat: 'card', name: '진료비 영수증 봉투', img: 'chatgpt-image-2026-8-14-09-56-16-260901131938.png',
 			desc: '수납 후 영수증과 안내문을 함께 담는 전용 봉투.',
 			depts: ALL_DEPT,
 			qty: qty([{ label: '1,000매', price: 82000 }, { label: '3,000매', price: 196000 }]),
@@ -348,7 +348,7 @@
 			include: ['명함 리디자인 (원장 · 직원)', '진료카드 1,000매', '서식류 3종 리디자인', '3단 리플렛 500부']
 		},
 		{
-			id: 'pk04', cat: 'package', name: '브랜딩 풀패키지', img: 'niz03.jpg',
+			id: 'pk04', cat: 'package', name: '브랜딩 풀패키지', img: 'img-260902171741.png',
 			desc: 'CI부터 인쇄물 · 디지털까지 병원 브랜드 전체를 설계합니다.',
 			depts: ALL_DEPT, badge: 'PACKAGE',
 			qty: qty([{ label: '기본 구성', price: 4800000 }, { label: '홈페이지 포함 구성', price: 7800000 }]),
