@@ -147,7 +147,7 @@
 
 		/* ===== 홍보물 ===== */
 		{
-			id: 'pm01', cat: 'promo', name: '병원 소개 브로슈어', img: 'p01.jpg',
+			id: 'pm01', cat: 'promo', name: '병원 소개 브로슈어', img: '2-260902160235.png',
 			desc: '병원의 철학과 진료 영역을 한 권에 담는 대표 브로슈어.',
 			depts: ALL_DEPT, best: true, badge: 'BEST',
 			qty: qty([{ label: '300부', price: 480000 }, { label: '500부', price: 680000 }, { label: '1,000부', price: 1080000 }]),
@@ -155,7 +155,7 @@
 			spec: { '규격': '210 × 297 mm (A4)', '페이지': '8p / 12p / 16p', '제본': '중철 제본', '제작기간': '10~14일' }
 		},
 		{
-			id: 'pm02', cat: 'promo', name: '3단 리플렛', img: 'img-260901131847.png',
+			id: 'pm02', cat: 'promo', name: '3단 리플렛', img: 'img-260902160251.png',
 			desc: '진료 항목과 시술 안내를 간결하게 정리한 3단 리플렛.',
 			depts: ALL_DEPT, best: true,
 			qty: qty([{ label: '500부', price: 138000 }, { label: '1,000부', price: 198000 }, { label: '3,000부', price: 438000 }]),
@@ -163,7 +163,7 @@
 			spec: { '규격': 'A4 → 3단 접지', '인쇄': '양면 컬러', '제작기간': '5~7일', '최소수량': '500부' }
 		},
 		{
-			id: 'pm03', cat: 'promo', name: '2단 리플렛', img: 'p07.jpg',
+			id: 'pm03', cat: 'promo', name: '2단 리플렛', img: 'img-260902160302.png',
 			desc: '하나의 시술 · 이벤트를 집중해서 소개하는 2단 리플렛.',
 			depts: ALL_DEPT,
 			qty: qty([{ label: '500부', price: 118000 }, { label: '1,000부', price: 168000 }, { label: '3,000부', price: 378000 }]),
@@ -195,7 +195,7 @@
 			spec: { '소재': '방수 현수막 원단', '마감': '고리 + 로프 마감', '제작기간': '4~6일', '최소수량': '1장' }
 		},
 		{
-			id: 'pm07', cat: 'promo', name: '이벤트 전단지', img: 'p16.jpg',
+			id: 'pm07', cat: 'promo', name: '이벤트 전단지', img: '4-260902160327.png',
 			desc: '시즌 프로모션 · 시술 이벤트를 알리는 배포용 전단.',
 			depts: ['derma', 'plastic', 'dental', 'oriental'],
 			qty: qty([{ label: '1,000부', price: 98000 }, { label: '3,000부', price: 198000 }, { label: '5,000부', price: 288000 }]),
