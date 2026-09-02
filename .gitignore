@@ -17,6 +17,8 @@ images/**/_backup_*/
 images/portfolio/_dl/
 images/portfolio/_shared/
 images/portfolio/_src/
+# 원본 사진을 받아 두는 폴더 (웹용으로 줄여 images/shop 에 넣는다)
+images/개원준비 섹션 이미지/
 
 # 에디터 / OS
 .claude/

@@ -27,6 +27,23 @@
 		return '<span class="sh-card-price">' + S.won(S.minPrice(p)) + '<span class="u">원~</span></span>';
 	}
 
+	/* ---- 직접 적은 이름 · 사진을 먼저 쓰고, 없으면 상품 정보로 채운다 ----
+	 * 개원 준비(PICK) · 베스트 상품(BEST) 두 영역이 이 함수들을 쓴다. */
+	function itNm(it, p) { return (it && it.nm) ? it.nm : (p ? p.name : ''); }
+	/* pic 에 폴더까지 적으면 그 경로를 그대로 쓰고, 파일 이름만 적으면 작업물 폴더에서 찾는다 */
+	function picPath(v) { return String(v).indexOf('/') > -1 ? (BASE + v) : img(v); }
+	function itPic(it, p) { return (it && it.pic) ? picPath(it.pic) : (p ? S.imgPath(p) : ''); }
+	function itHref(it, p) { return (it && it.href) ? it.href : (p ? S.detailUrl(p) : '#'); }
+	function itPrice(it, p) {
+		if (it && it.price) return '<span class="sh-card-price is-quote">' + esc(it.price) + '</span>';
+		return p ? priceHTML(p) : '';
+	}
+	/* 장바구니 담기 버튼 — 상품과 이어져 있고 견적 상품이 아닐 때만 */
+	function itAdd(it, p) {
+		if (!p || S.isQuote(p)) return '';
+		return '<button type="button" class="sh-card-add js-add" data-id="' + p.id + '" title="장바구니에 담기"><i class="xi-cart-o"></i></button>';
+	}
+
 	/* ====================================================
 	 * 1. 콘텐츠 정의
 	==================================================== */
@@ -44,28 +61,108 @@
 	var TILES = ['pm02', 'cd01', 'cd02', 'cd03', 'pk04', 'pr01', 'pr02', 'pr03', 'pr04', 'fm01',
 		'fm02', 'fm03', 'cd05', 'pm01', 'pm03', 'pm04', 'pm05', 'pm06', 'pm07', 'pr05'];
 
+	/* ---- 개원 준비(PICK) · 베스트 상품(BEST) ----
+	 * 이 두 영역은 상품 목록(js/shop.js)에서 떼어내 여기에서 따로 관리한다.
+	 *   nm  : 화면에 보일 이름     (적지 않으면 상품 이름을 그대로 쓴다)
+	 *   pic : 사진 파일 이름. 이름만 적으면 images/portfolio 에서,
+	 *         'images/shop/aaa.jpg' 처럼 폴더까지 적으면 그 경로에서 찾는다.
+	 *         (이 두 영역 전용 사진은 images/shop 에 넣는다)
+	 *   id  : 눌렀을 때 갈 상품 · 가격 표기 · 장바구니 담기에만 쓴다
+	 *   href: 상품이 아닌 다른 곳으로 보낼 때만 적는다
+	 *   price: 가격 문구를 직접 적을 때만 (예: '견적 문의')
+	 * 이름과 사진을 여기에서 바꿔도 상품몰 상품 정보는 그대로 남는다. */
+
 	/* PICK — 해시태그로 골라 보는 큐레이션 */
 	var PICK = {
 		tit: '개원 준비, 이 구성이면 충분해요',
 		more: shopUrl('package'),
 		tags: [
-			{ lb: '#개원 패키지',    ids: ['pk04', 'pm02', 'cd01', 'pk01', 'pk02', 'pk03', 'pr01', 'fm01'] },
-			{ lb: '#진료 · 예약카드', ids: ['pr01', 'pr02', 'fm07', 'cd01', 'cd02', 'pr04', 'pr03', 'fm03'] },
-			{ lb: '#문진표 · 서식',  ids: ['fm01', 'fm02', 'fm03', 'fm04', 'fm05', 'fm06', 'fm07', 'pr04'] },
-			{ lb: '#명함 · 봉투',    ids: ['cd01', 'cd02', 'cd03', 'cd04', 'cd05', 'cd06', 'pr03', 'pr01'] }
+			{ lb: '#개원 패키지', items: [
+				{ id: 'pk04', nm: '브랜딩 풀패키지',   pic: 'images/shop/brand_package.jpg' },
+				{ id: 'pm02', nm: '3단 리플렛',       pic: 'niz01.jpg' },
+				{ id: 'cd01', nm: '원장 명함',        pic: 'niz02.jpg' },
+				{ id: 'pk01', nm: '개원 베이직 패키지', pic: 'p02.jpg' },
+				{ id: 'pk02', nm: '개원 프리미엄 패키지', pic: 'p03.jpg' },
+				{ id: 'pk03', nm: '리뉴얼 패키지',     pic: 'p06.jpg' },
+				{ id: 'pr01', nm: '진료카드',         pic: 'p05.jpg' },
+				{ id: 'fm01', nm: '초진 문진표',       pic: 'p15.jpg' }
+			] },
+			{ lb: '#진료 · 예약카드', items: [
+				{ id: 'pr01', nm: '진료카드',          pic: 'p05.jpg' },
+				{ id: 'pr02', nm: '예약카드',          pic: 'p44.jpg' },
+				{ id: 'fm07', nm: '시술 후 주의사항 카드', pic: 'p17.jpg' },
+				{ id: 'cd01', nm: '원장 명함',         pic: 'niz02.jpg' },
+				{ id: 'cd02', nm: '직원 명함',         pic: 'niz03.jpg' },
+				{ id: 'pr04', nm: '차트홀더 · 파일',    pic: 'p24.jpg' },
+				{ id: 'pr03', nm: '처방전 봉투',        pic: 'p21.jpg' },
+				{ id: 'fm03', nm: '진료기록지',        pic: 'p22.jpg' }
+			] },
+			{ lb: '#문진표 · 서식', items: [
+				{ id: 'fm01', nm: '초진 문진표',        pic: 'p15.jpg' },
+				{ id: 'fm02', nm: '시술 · 수술 동의서',  pic: 'p20.jpg' },
+				{ id: 'fm03', nm: '진료기록지',         pic: 'p22.jpg' },
+				{ id: 'fm04', nm: '검사결과 안내지',     pic: 'p23.jpg' },
+				{ id: 'fm05', nm: '수납 영수증 양식',    pic: 'p25.jpg' },
+				{ id: 'fm06', nm: '복약 · 처방 안내문',  pic: 'p13.jpg' },
+				{ id: 'fm07', nm: '시술 후 주의사항 카드', pic: 'p17.jpg' },
+				{ id: 'pr04', nm: '차트홀더 · 파일',     pic: 'p24.jpg' }
+			] },
+			{ lb: '#명함 · 봉투', items: [
+				{ id: 'cd01', nm: '원장 명함',          pic: 'niz02.jpg' },
+				{ id: 'cd02', nm: '직원 명함',          pic: 'niz03.jpg' },
+				{ id: 'cd03', nm: '소봉투 (서양 봉투)',  pic: 'niz04.jpg' },
+				{ id: 'cd04', nm: '대봉투 (각대 봉투)',  pic: 'p33.jpg' },
+				{ id: 'cd05', nm: '약봉투',            pic: 'p34.jpg' },
+				{ id: 'cd06', nm: '진료비 영수증 봉투',  pic: 'p35.jpg' },
+				{ id: 'pr03', nm: '처방전 봉투',        pic: 'p21.jpg' },
+				{ id: 'pr01', nm: '진료카드',          pic: 'p05.jpg' }
+			] }
 		]
 	};
 
 	/* 베스트 상품 — 카테고리 탭
 	 * 대표 작업물(리플렛)이 맨 처음 보이도록 홍보물 탭을 앞에 둔다.
-	 * first : 해당 탭에서 맨 앞으로 끌어올릴 대표 작업물 상품 id */
+	 * cat : '전체보기' 를 눌렀을 때 갈 카테고리 (목록 내용과는 무관하다) */
 	var BEST = {
 		tit: '베스트 상품',
 		tabs: [
-			{ cat: 'promo',   lb: '홍보물',      first: 'pm02' },
-			{ cat: 'print',   lb: '병원 인쇄물' },
-			{ cat: 'form',    lb: '서식류' },
-			{ cat: 'card',    lb: '명함 · 봉투',  first: 'cd01' }
+			{ cat: 'promo', lb: '홍보물', items: [
+				{ id: 'pm02', nm: '3단 리플렛',         pic: 'niz01.jpg' },
+				{ id: 'pm01', nm: '병원 소개 브로슈어',   pic: 'p01.jpg' },
+				{ id: 'pm03', nm: '2단 리플렛',         pic: 'p07.jpg' },
+				{ id: 'pm04', nm: '진료과목 포스터',     pic: 'p09.jpg' },
+				{ id: 'pm05', nm: '실내용 X배너',        pic: 'p26.jpg' },
+				{ id: 'pm06', nm: '개원 안내 현수막',     pic: 'p28.jpg' },
+				{ id: 'pm07', nm: '이벤트 전단지',       pic: 'p16.jpg' },
+				{ id: 'pm08', nm: '엘리베이터 광고 패널', pic: 'p41.jpg' }
+			] },
+			{ cat: 'print', lb: '병원 인쇄물', items: [
+				{ id: 'pr01', nm: '진료카드',           pic: 'p05.jpg' },
+				{ id: 'pr02', nm: '예약카드',           pic: 'p44.jpg' },
+				{ id: 'pr03', nm: '처방전 봉투',         pic: 'p21.jpg' },
+				{ id: 'pr04', nm: '차트홀더 · 파일',     pic: 'p24.jpg' },
+				{ id: 'pr05', nm: '진료 안내 데스크 사인', pic: 'p27.jpg' },
+				{ id: 'pr06', nm: '진료실 도어 사인',     pic: 'p30.jpg' },
+				{ id: 'pr07', nm: '수납 · 대기 안내판',   pic: 'p32.jpg' },
+				{ id: 'pr08', nm: '진료 안내 리플렛 (내부 비치용)', pic: 'p18.jpg' }
+			] },
+			{ cat: 'form', lb: '서식류', items: [
+				{ id: 'fm01', nm: '초진 문진표',         pic: 'p15.jpg' },
+				{ id: 'fm02', nm: '시술 · 수술 동의서',   pic: 'p20.jpg' },
+				{ id: 'fm03', nm: '진료기록지',          pic: 'p22.jpg' },
+				{ id: 'fm04', nm: '검사결과 안내지',      pic: 'p23.jpg' },
+				{ id: 'fm05', nm: '수납 영수증 양식',     pic: 'p25.jpg' },
+				{ id: 'fm06', nm: '복약 · 처방 안내문',   pic: 'p13.jpg' },
+				{ id: 'fm07', nm: '시술 후 주의사항 카드', pic: 'p17.jpg' }
+			] },
+			{ cat: 'card', lb: '명함 · 봉투', items: [
+				{ id: 'cd01', nm: '원장 명함',          pic: 'niz02.jpg' },
+				{ id: 'cd02', nm: '직원 명함',          pic: 'niz03.jpg' },
+				{ id: 'cd03', nm: '소봉투 (서양 봉투)',  pic: 'niz04.jpg' },
+				{ id: 'cd04', nm: '대봉투 (각대 봉투)',  pic: 'p33.jpg' },
+				{ id: 'cd05', nm: '약봉투',            pic: 'p34.jpg' },
+				{ id: 'cd06', nm: '진료비 영수증 봉투',  pic: 'p35.jpg' }
+			] }
 		]
 	};
 
@@ -252,20 +349,21 @@
 	}
 
 	/* PICK — 해시태그 칩으로 상품 묶음을 바꿔 본다 */
-	function pickItemHTML(p) {
-		if (!p) return '';
-		var add = S.isQuote(p) ? '' :
-			'<button type="button" class="sh-card-add js-add" data-id="' + p.id + '" title="장바구니에 담기"><i class="xi-cart-o"></i></button>';
+	function pickItemHTML(it) {
+		if (!it) return '';
+		var p = it.id ? P(it.id) : null;
+		var nm = itNm(it, p), href = itHref(it, p);
+		if (!nm) return '';
 		return '<li class="mp-item">' +
 			'<div class="mp-thumb-wrap">' +
-				'<a href="' + S.detailUrl(p) + '" class="mp-thumb">' +
-					'<span class="mp-img"><img src="' + S.imgPath(p) + '" alt="' + esc(p.name) + '" loading="lazy"></span>' +
+				'<a href="' + href + '" class="mp-thumb">' +
+					'<span class="mp-img"><img src="' + itPic(it, p) + '" alt="' + esc(nm) + '" loading="lazy"></span>' +
 					'<span class="mp-dim"></span>' +
-				'</a>' + add +
+				'</a>' + itAdd(it, p) +
 			'</div>' +
 			'<div class="mp-body">' +
-				'<a href="' + S.detailUrl(p) + '" class="mp-name">' + esc(p.name) + '</a>' +
-				priceHTML(p) +
+				'<a href="' + href + '" class="mp-name">' + esc(nm) + '</a>' +
+				itPrice(it, p) +
 			'</div>' +
 		'</li>';
 	}
@@ -284,19 +382,20 @@
 	}
 
 	/* 베스트 상품 — 카테고리 탭 */
-	function bestItemHTML(p) {
-		if (!p) return '';
-		var add = S.isQuote(p) ? '' :
-			'<button type="button" class="sh-card-add js-add" data-id="' + p.id + '" title="장바구니에 담기"><i class="xi-cart-o"></i></button>';
+	function bestItemHTML(it) {
+		if (!it) return '';
+		var p = it.id ? P(it.id) : null;
+		var nm = itNm(it, p), href = itHref(it, p);
+		if (!nm) return '';
 		/* 리플렛 · 브로슈어 썸네일은 펼침면 사진이라 가운데를 자르면 접지선이 걸린다 */
-		var cover = /리플렛|브로슈어/.test(p.name) ? ' is-cover' : '';
+		var cover = /리플렛|브로슈어/.test(nm) ? ' is-cover' : '';
 		return '<li class="bs-item"><div class="bs-box">' +
 			'<div class="bs-thumb-wrap">' +
-				'<a href="' + S.detailUrl(p) + '" class="bs-img' + cover + '"><img src="' + S.imgPath(p) + '" alt="' + esc(p.name) + '" loading="lazy"></a>' + add +
+				'<a href="' + href + '" class="bs-img' + cover + '"><img src="' + itPic(it, p) + '" alt="' + esc(nm) + '" loading="lazy"></a>' + itAdd(it, p) +
 			'</div>' +
 			'<div class="bs-body">' +
-				'<a href="' + S.detailUrl(p) + '" class="bs-name">' + esc(p.name) + '</a>' +
-				priceHTML(p) +
+				'<a href="' + href + '" class="bs-name">' + esc(nm) + '</a>' +
+				itPrice(it, p) +
 			'</div>' +
 		'</div></li>';
 	}
@@ -582,8 +681,8 @@
 		var pager = makePager(sec, '.mp-view', '.js-mplist');
 
 		function fill(i) {
-			var t = PICK.tags[i], s = '', k;
-			for (k = 0; k < t.ids.length; k++) s += pickItemHTML(P(t.ids[k]));
+			var t = PICK.tags[i], arr = t.items || [], s = '', k;
+			for (k = 0; k < arr.length; k++) s += pickItemHTML(arr[k]);
 			list.innerHTML = s;
 			var bs = tags.querySelectorAll('.js-mptag');
 			for (k = 0; k < bs.length; k++) bs[k].className = 'mp-tag js-mptag' + (k === i ? ' on' : '');
@@ -605,13 +704,7 @@
 		var pager = makePager(sec, '.bs-view', '.js-bslist');
 
 		function fill(i) {
-			var t = BEST.tabs[i], arr = S.filterList(t.cat, 'all'), s = '', k;
-			/* 대표 작업물이 지정된 탭은 그 상품을 맨 앞으로 끌어올린다 */
-			if (t.first) {
-				for (k = 0; k < arr.length; k++) {
-					if (arr[k].id === t.first) { arr = arr.slice(); arr.unshift(arr.splice(k, 1)[0]); break; }
-				}
-			}
+			var t = BEST.tabs[i], arr = t.items || [], s = '', k;
 			for (k = 0; k < arr.length && k < 9; k++) s += bestItemHTML(arr[k]);
 			list.innerHTML = s;
 			for (k = 0; k < tabs.children.length; k++) tabs.children[k].className = (k === i ? 'on' : '');
