@@ -1,4 +1,4 @@
-﻿@charset "utf-8";
+@charset "utf-8";
 /* *******************************************************
  * filename : main.css
  * description : 硫붿씤 ?덉씠?꾩썐 諛?而⑦뀗痢?CSS
@@ -276,16 +276,16 @@
 /* nth-child */
 .service-cover-list .list-item:nth-child(1){ border-radius:4rem 0 0 4rem}
 .service-cover-list .list-item:nth-child(3){ border-radius:0 4rem 4rem 0}
-.service-cover-list .list-item:nth-child(1) .bg{background-image:url('../images/main/main_service_bg01.jpg?ver=260805'); background-position: 50% center;}
-.service-cover-list .list-item:nth-child(2) .bg{background-image:url('../images/main/main_service_bg02.jpg?ver=260805'); background-position: 50% center;}
-.service-cover-list .list-item:nth-child(3) .bg{background-image:url('../images/main/main_service_bg03.jpg?ver=260805'); background-position: 50% center;}
+.service-cover-list .list-item:nth-child(1) .bg{background-image:url('../images/main/main_service_bg01.jpg?ver=2609030952'); background-position: 50% center;}
+.service-cover-list .list-item:nth-child(2) .bg{background-image:url('../images/main/main_service_bg02.jpg?ver=2609030952'); background-position: 50% center;}
+.service-cover-list .list-item:nth-child(3) .bg{background-image:url('../images/main/main_service_bg03.jpg?ver=2609030952'); background-position: 50% center;}
 /* cover */
 .main-service-img-box{position: relative; background:#fff;}
 .service-hover-bg{position: absolute; top:0; left:0; width:100%; height:100%; border-radius:4rem; overflow:hidden;}
 .service-hover-bg .list-item{position: absolute; width:calc(100% - 1px); height:calc(100% + 20rem); top:-20rem; left:0; background:no-repeat; background-size:cover; transition:opacity 0.4s; opacity:0;}
-.service-hover-bg .list-item:nth-child(1){background-image:url('../images/main/main_service_bg01.jpg?ver=260805'); background-position: 50% center;}
-.service-hover-bg .list-item:nth-child(2){background-image:url('../images/main/main_service_bg02.jpg?ver=260805'); background-position: 50% center;}
-.service-hover-bg .list-item:nth-child(3){background-image:url('../images/main/main_service_bg03.jpg?ver=260805'); background-position: 50% center;}
+.service-hover-bg .list-item:nth-child(1){background-image:url('../images/main/main_service_bg01.jpg?ver=2609030952'); background-position: 50% center;}
+.service-hover-bg .list-item:nth-child(2){background-image:url('../images/main/main_service_bg02.jpg?ver=2609030952'); background-position: 50% center;}
+.service-hover-bg .list-item:nth-child(3){background-image:url('../images/main/main_service_bg03.jpg?ver=2609030952'); background-position: 50% center;}
 
 
 /* -------- 硫붿씤 而⑦뀗痢?:: 而⑦뀗痢?(Product) -------- */
